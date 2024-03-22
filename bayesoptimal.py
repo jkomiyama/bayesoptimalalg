@@ -6,7 +6,9 @@ from scipy import stats
 from scipy.stats import truncnorm
 from scipy.stats import norm
 
-def approximateSimpleRegret(hatmus, Ns):
+VERBOSE = False
+
+def approximateSimpleRegret(hatmus, Ns): #obsolate todo delete
 
     K = len(hatmus)
     sorted_hatmus = sorted(hatmus)[::-1]
@@ -17,8 +19,8 @@ def approximateSimpleRegret(hatmus, Ns):
     asr_part = []
     for i in range(K):
         if i == j: #max
-            continue
-            #gap = sorted_hatmus[0] - sorted_hatmus[1]
+            #continue #same as the 2nd
+            gap = sorted_hatmus[0] - sorted_hatmus[1]
         else:
             gap = sorted_hatmus[0] - hatmus[i]
         val = truncnorm.stats(gap, gap+10000, moments='mvsk')[0] #mvsk = mean,variance,stddev,kurtosis
@@ -37,7 +39,8 @@ def run(initial_minus, Ninit, mus, T = 100, alg = "SR", rs = None):
         if initial_minus > 0:
             #b = norm.ppf(1.0/T)
             #r = truncnorm.rvs(-100, b) #lower 1/T quantile
-            val = rng.normal(0, 1) + mus[i] -  np.sqrt(initial_minus * np.log(T))
+            #val = rng.normal(0, 1) + mus[i] -  np.sqrt(initial_minus * np.log(T))
+            val = truncnorm.rvs(-1000, -np.sqrt(initial_minus * np.log(T)), loc=0, scale=1, size=1)
             #print(f"val = {val}")
             #sys.stdout.flush()
             return val
@@ -57,7 +60,7 @@ def run(initial_minus, Ninit, mus, T = 100, alg = "SR", rs = None):
     #def get_regret(t, Ns):
     #    return max(mus)*(t+1) - Ns[0] * mus[0] - Ns[1] * mus[1]
     if alg == "ABO": # Bayes Optimal, Myopic
-        # initial sample 
+        # initial sample (uniform)
         for t in range(K*Ninit):
             i = t % K #for each arm
             Ns[i] += 1
@@ -69,13 +72,16 @@ def run(initial_minus, Ninit, mus, T = 100, alg = "SR", rs = None):
             hatmus = Xs / Ns
             # posterior N(mu, 1/N)
             asrs = []
-            for i in range(K):
+            for i in range(K): # calculate the index of each arm
                 Nbak = Ns[i]
                 Ns[i] += 1
                 vd = approximateSimpleRegret(hatmus, Ns)
                 Ns[i] = Nbak
                 v = approximateSimpleRegret(hatmus, Ns)
                 asrs.append(v - vd)
+                if ((10 * t) % T) == 0 and VERBOSE:
+                    print(f"hatmus = {hatmus} Ns={Ns} asrs={asrs}");sys.stdout.flush()
+                        #assert(False)
             #print(f"hatmus = {hatmus}, Ns = {Ns}, asrs = {asrs}")
             I = np.argmax(asrs)
             Ns[I] += 1
@@ -130,8 +136,8 @@ import multiprocessing as mp
 print("Number of processors: ", mp.cpu_count())
 NUM_PARALLEL = int(mp.cpu_count() * 0.8)
 
-#Runnum = 100
-Runnum = 1000
+Runnum = 100
+#Runnum = 1000
 #Ts = [100, 300, 1000]
 Ts = [30, 100, 300, 1000, 3000, 10000] 
 
