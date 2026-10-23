@@ -1,8 +1,0 @@
-'Junpei.Probability.exactRateConstant_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.f1_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.f3_le_half_f2' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.f2_minus_f3_square_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.f1_polynomial_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.exact_factor_rate_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.exact_factor_rate_eventually' depends on axioms: [propext, Classical.choice, Quot.sound]
-'Junpei.Probability.rawBadEvent_exact_rate_eventually' depends on axioms: [propext, Classical.choice, Quot.sound]

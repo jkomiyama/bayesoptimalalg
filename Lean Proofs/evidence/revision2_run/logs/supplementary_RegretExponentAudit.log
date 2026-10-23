@@ -1,6 +1,0 @@
-Junpei.RegretExponent.rate (r : ℕ → ℝ) (T : ℕ) : EReal
-Junpei.RegretExponent.liminf_rate_eq_zero (r : ℕ → ℝ) (Δ c : ℝ) (C : ℕ) (hΔ : 0 < Δ) (hc : 0 < c)
-  (hbound : ∀ (T : ℕ), 0 ≤ r T ∧ r T ≤ Δ)
-  (hpoly : ∀ᶠ (T : ℕ) in Filter.atTop, Odd T → c * Draft0.Rates.invPower C T ≤ r T) :
-  Filter.liminf (Junpei.RegretExponent.rate r) Filter.atTop = 0
-'Junpei.RegretExponent.liminf_rate_eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]

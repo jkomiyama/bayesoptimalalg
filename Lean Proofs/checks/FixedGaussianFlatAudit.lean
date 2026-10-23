@@ -1,9 +1,0 @@
-import Junpei.FixedGaussianFlatInitialization
-
-#check Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law
-#check Junpei.FixedGaussian.FlatInitialization.flat_randomizedRisk_eq
-#check Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq
-
-#print axioms Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law
-#print axioms Junpei.FixedGaussian.FlatInitialization.flat_randomizedRisk_eq
-#print axioms Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq
