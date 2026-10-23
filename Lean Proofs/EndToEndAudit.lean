@@ -1,0 +1,95 @@
+import Junpei.SequentialRisk
+import Junpei.FixedGaussianMain
+import Junpei.InitialOptimalTrace
+import Junpei.InitialHistoryMain
+import Junpei.RealPrecisionMain
+
+-- Inspect the actual-risk definition and its complete route to the main result.
+#print Junpei.SequentialRisk.MinimizesActualRisk
+#print Junpei.SequentialRisk.SequentialRiskOptimal
+#check Junpei.PolicyContinuation.rawTree_run_measurable
+#check Junpei.PolicyContinuation.rawTree_regular
+#check Junpei.CountModelBridge.actionLoss_eq_loss_iff
+#check Junpei.SequentialRisk.familyRisk_eq_joint
+#check Junpei.SequentialRisk.familyRisk_ge_loss
+#check Junpei.SequentialRisk.canonicalFamily_risk
+#check Junpei.SequentialRisk.minimizing_draw_ae
+#check Junpei.SequentialRisk.minimizing_recommend_ae
+#check Junpei.SequentialRisk.sequentialRiskOptimal_implies_aeOptimal
+#check Junpei.PolicyContinuationOptimal.deterministicBellman_rawRisk
+#check Junpei.SequentialRisk.deterministicBellman_sequentialRiskOptimal
+#check Junpei.SequentialRisk.exists_sequentialRiskOptimal
+#check Junpei.SequentialRisk.theorem2_sequentialRiskOptimal
+#check Junpei.SequentialRisk.theorem2_paper_exponent_sequentialRiskOptimal
+#check Junpei.SequentialRisk.theorem2_exponential_rate_sequentialRiskOptimal
+#check Junpei.SequentialRisk.remark2_sequentialRiskOptimal
+
+#print axioms Junpei.PolicyContinuation.rawTree_run_measurable
+#print axioms Junpei.PolicyContinuation.rawTree_regular
+#print axioms Junpei.SequentialRisk.familyRisk_eq_joint
+#print axioms Junpei.SequentialRisk.minimizing_draw_ae
+#print axioms Junpei.SequentialRisk.minimizing_recommend_ae
+#print axioms Junpei.SequentialRisk.sequentialRiskOptimal_implies_aeOptimal
+#print axioms Junpei.PolicyContinuationOptimal.deterministicBellman_rawRisk
+#print axioms Junpei.SequentialRisk.deterministicBellman_sequentialRiskOptimal
+#print axioms Junpei.SequentialRisk.exists_sequentialRiskOptimal
+#print axioms Junpei.SequentialRisk.theorem2_sequentialRiskOptimal
+#print axioms Junpei.SequentialRisk.theorem2_paper_exponent_sequentialRiskOptimal
+#print axioms Junpei.SequentialRisk.theorem2_exponential_rate_sequentialRiskOptimal
+#print axioms Junpei.SequentialRisk.remark2_sequentialRiskOptimal
+
+-- Initialization-only optimality, derived repair, fixed-parameter transport,
+-- and exact identification with the existing reward-stack regret definition.
+#print Junpei.InitialOptimal.InitialRiskOptimal
+#check Junpei.InitialOptimal.minimizing_seed_risk_eq
+#check Junpei.InitialOptimal.minimizing_rawTree_repair_ae
+#check Junpei.InitialOptimal.minimizing_trace_repair_ae
+#check Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae
+#check Junpei.FixedGaussian.rawTree_stack_law_eq
+#check Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq
+#check Junpei.FixedGaussian.theorem2_initialRiskOptimal
+#check Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal
+#check Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal
+#check Junpei.FixedGaussian.remark2_initialRiskOptimal
+#check Junpei.FixedGaussian.exists_initialRiskOptimal
+
+#print axioms Junpei.InitialOptimal.minimizing_rawTree_repair_ae
+#print axioms Junpei.InitialOptimal.minimizing_trace_repair_ae
+#print axioms Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq
+#print axioms Junpei.FixedGaussian.theorem2_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.remark2_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.exists_initialRiskOptimal
+
+#print Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal
+#check Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff
+#check Junpei.PosteriorStateHistory.initialHistoryRiskOptimal_iff
+#check Junpei.InitialHistoryMain.regret_repair_eq
+#check Junpei.InitialHistoryMain.theorem2
+#check Junpei.InitialHistoryMain.theorem2_paper_exponent
+#check Junpei.InitialHistoryMain.theorem2_exponential_rate
+#check Junpei.InitialHistoryMain.remark2
+#check Junpei.InitialHistoryMain.exists_initialHistoryRiskOptimal
+#print axioms Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff
+#print axioms Junpei.InitialHistoryMain.theorem2
+#print axioms Junpei.InitialHistoryMain.theorem2_paper_exponent
+#print axioms Junpei.InitialHistoryMain.theorem2_exponential_rate
+#print axioms Junpei.InitialHistoryMain.remark2
+#print axioms Junpei.InitialHistoryMain.exists_initialHistoryRiskOptimal
+
+#print Junpei.RealPrecisionMain.InitialHistoryRiskOptimal
+#check Junpei.RealPrecisionMain.rawTree_restriction
+#check Junpei.RealPrecisionMain.continuationRisk_restriction
+#check Junpei.RealPrecisionMain.initialHistoryRiskOptimal_iff_restriction
+#check Junpei.RealPrecisionMain.theorem2
+#check Junpei.RealPrecisionMain.theorem2_paper_exponent
+#check Junpei.RealPrecisionMain.theorem2_exponential_rate
+#check Junpei.RealPrecisionMain.remark2
+#check Junpei.RealPrecisionMain.exists_initialHistoryRiskOptimal
+#print axioms Junpei.RealPrecisionMain.initialHistoryRiskOptimal_iff_restriction
+#print axioms Junpei.RealPrecisionMain.theorem2
+#print axioms Junpei.RealPrecisionMain.theorem2_paper_exponent
+#print axioms Junpei.RealPrecisionMain.theorem2_exponential_rate
+#print axioms Junpei.RealPrecisionMain.remark2
+#print axioms Junpei.RealPrecisionMain.exists_initialHistoryRiskOptimal

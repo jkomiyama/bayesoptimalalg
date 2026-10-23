@@ -1,0 +1,40 @@
+Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law.{u_1} {A : Type u_1} [Fintype A]
+  [Nonempty A] [DecidableEq A] (n : A → ℕ) (y : (a : A) → Fin (n a) → ℝ) (hn : ∀ (a : A), 0 < n a) (a : A) :
+  MeasureTheory.Measure.map (Junpei.ObservationBridge.rawObservation a)
+      ((Junpei.FixedGaussian.FlatInitialization.normalizedFlatLaw n y).prod (ProbabilityTheory.gaussianReal 0 1)) =
+    MeasureTheory.Measure.map
+      (Junpei.ObservationBridge.reconstructedObservation (fun b => ↑(n b))
+        (Junpei.FixedGaussian.FlatInitialization.dataMeans n y) a)
+      ((ProbabilityTheory.gaussianReal 0 (Junpei.FiniteGaussian.innovation (fun b => ↑(n b)) a)).prod
+        (Junpei.FinitePosterior.centeredLaw (Junpei.FiniteGaussian.advance (fun b => ↑(n b)) a)))
+Junpei.FixedGaussian.FlatInitialization.flat_randomizedRisk_eq.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] {S : Type u_2} [MeasurableSpace S] {H : ℕ}
+  (σ : MeasureTheory.Measure S) [MeasureTheory.IsProbabilityMeasure σ] (s : S → Junpei.FiniteGaussian.Strategy H)
+  (n : A → ℕ) (y : (a : A) → Fin (n a) → ℝ) (hn : ∀ (a : A), 0 < n a)
+  (hs : Measurable fun p => Junpei.EmbeddingRaw.run (s p.1) p.2) :
+  ∫ (p : S × Junpei.FiniteGaussian.Means A × Junpei.EmbeddingRaw.RawStream A H),
+      Junpei.EmbeddingRandomized.randomizedPayoff s
+        p ∂σ.prod (Junpei.FixedGaussian.FlatInitialization.flatWorldLaw H n y) =
+    ∫ (u : S),
+      Junpei.EmbeddingExecution.rawRisk (s u) (fun a => ↑(n a))
+        (Junpei.FixedGaussian.FlatInitialization.dataMeans n y) ∂σ
+Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq (π : Junpei.Policy.StatePolicy) (t H : ℕ)
+  (n : Draft0.BayesianModel.Counts) (y : (a : Draft0.BayesianModel.Arm) → Fin (n a) → ℝ)
+  (hn : ∀ (a : Draft0.BayesianModel.Arm), 0 < n a) :
+  ∫ (p :
+      Junpei.Policy.SeedArray (H + 1) ×
+        Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+          Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm H),
+      Junpei.EmbeddingRandomized.randomizedPayoff
+        (Junpei.PolicyContinuation.rawTree π t H n (Junpei.FixedGaussian.FlatInitialization.dataMeans n y))
+        p ∂(Junpei.Policy.seedLaw (H + 1)).prod (Junpei.FixedGaussian.FlatInitialization.flatWorldLaw H n y) =
+    Junpei.SequentialRisk.continuationRisk π t H n (Junpei.FixedGaussian.FlatInitialization.dataMeans n y)
+'Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.FixedGaussian.FlatInitialization.flat_randomizedRisk_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

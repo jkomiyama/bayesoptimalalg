@@ -1,0 +1,497 @@
+✔ [3287/3444] Built Draft0.BellmanAlgebra (33s)
+✔ [3288/3444] Built Draft0.Counts (56s)
+✔ [3289/3444] Built Draft0.Gaussian (44s)
+✔ [3290/3444] Built Draft0.Rates (47s)
+✔ [3291/3444] Built Draft0.Drift (27s)
+✔ [3292/3444] Built Draft0.BayesianModel (38s)
+✔ [3293/3444] Built Draft0.PredictiveLaw (38s)
+✔ [3294/3444] Built Draft0.TwoArmBellman (38s)
+✔ [3295/3444] Built Junpei.FiniteGaussian (42s)
+✔ [3296/3444] Built Junpei.TailRatio (42s)
+✔ [3297/3444] Built Draft0.SmallBall (42s)
+✔ [3298/3444] Built Draft0.TerminalBounds (44s)
+✔ [3299/3444] Built Draft0.MainBridge (44s)
+✔ [3300/3444] Built Junpei.RegretExponent (44s)
+✔ [3301/3444] Built Draft0.PredictiveBound (44s)
+✔ [3302/3444] Built Draft0.GaussianTail (28s)
+✔ [3303/3444] Built Draft0.ThreeArmComparison (24s)
+✔ [3304/3444] Built Draft0.TwoArmGain (26s)
+✔ [3305/3444] Built Draft0.PosteriorRegret (27s)
+✔ [3306/3444] Built Junpei.FinitePosterior (24s)
+✔ [3307/3444] Built Draft0.Regression (34s)
+✔ [3308/3444] Built Junpei.UniformSamplingTail (34s)
+✔ [3309/3444] Built Draft0.CorrectedLemma17 (41s)
+✔ [3310/3444] Built Draft0.BadEvent (41s)
+ℹ [3311/3444] Built Junpei.GaussianComparison (52s)
+info: Junpei/GaussianComparison.lean:139:0: JunpeiComparison.Gaussian.lemma15_repaired_event_bound (d l r : ℝ) (hd : 0 ≤ d) (hlow : 3 * d / 2 ≤ l)
+  (hupp : l ≤ 2 * d) (hr : d ≤ r) : d ≤ pointwiseImprovement d l r
+info: Junpei/GaussianComparison.lean:140:0: JunpeiComparison.Gaussian.lemma16_repaired_event_bound (d l g r : ℝ) (hd : 0 ≤ d) (hlow : d / 4 ≤ l) (hupp : l ≤ d / 3)
+  (hglow : 9 * d / 8 ≤ g) (hgupp : g ≤ 4 * d / 3) (hr : 3 * d / 4 ≤ r) : 2 * d / 3 ≤ pointwiseImprovement (d - l) g r
+info: Junpei/GaussianComparison.lean:141:0: JunpeiComparison.Gaussian.equal_count_right_action_optimal (k n n3 : ℕ) (m1 m2 : ℝ) (hn : 0 < n) :
+  payoff (k + 1) m1 m2 { n1 := n, n2 := n, n3 := n3 } = rightAction k m1 m2 { n1 := n, n2 := n, n3 := n3 }
+info: Junpei/GaussianComparison.lean:142:0: 'JunpeiComparison.Gaussian.lemma15_equal_before_crossing' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:143:0: 'JunpeiComparison.Gaussian.lemma15_pointwise_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:144:0: 'JunpeiComparison.Gaussian.lemma15_repaired_event_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:145:0: 'JunpeiComparison.Gaussian.lemma16_repaired_event_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:146:0: 'JunpeiComparison.Gaussian.equal_count_right_action_optimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:147:0: 'JunpeiComparison.Gaussian.exclusion_loss_pair_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:148:0: 'JunpeiComparison.Gaussian.newG1_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/GaussianComparison.lean:149:0: 'JunpeiComparison.Gaussian.newG2_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3312/3444] Built Draft0.PolicyPaths (36s)
+✔ [3313/3444] Built Draft0.Optimality (36s)
+✔ [3314/3444] Built Junpei.BayesOptimal (46s)
+✔ [3315/3444] Built Junpei.FiniteModelExclusion (49s)
+✔ [3316/3444] Built Junpei.FiniteModelMeasurable (49s)
+✔ [3317/3444] Built Junpei.Information (49s)
+✔ [3318/3444] Built Junpei.CountModelBridge (49s)
+✔ [3319/3444] Built Junpei.ObservationBridge (49s)
+✔ [3320/3444] Built Draft0.TerminalDrift (75s)
+✔ [3321/3444] Built Draft0.EvenCounts (63s)
+✔ [3322/3444] Built Junpei.TwoArmOptimal (40s)
+✔ [3323/3444] Built Junpei.Marginal (40s)
+✔ [3324/3444] Built Draft0.PosteriorLaw (42s)
+✔ [3325/3444] Built Draft0.PathInduction (44s)
+✔ [3326/3444] Built Junpei.Policy (44s)
+✔ [3327/3444] Built Draft0.FrequentistModel (44s)
+✔ [3328/3444] Built Junpei.MockStream (36s)
+✔ [3329/3444] Built Junpei.EmbeddingDirect (36s)
+✔ [3330/3444] Built Junpei.ProseCorollariesErrorRate (36s)
+✔ [3331/3444] Built Draft0.DynamicGain (67s)
+✔ [3332/3444] Built Draft0.BadEvent50 (70s)
+✔ [3333/3444] Built Junpei.Probability (70s)
+ℹ [3334/3444] Built Junpei.CountComparison (70s)
+info: Junpei/CountComparison.lean:196:0: 'JunpeiComparison.forecast_terminal_multiset' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/CountComparison.lean:197:0: 'JunpeiComparison.new_equation23_drift160' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/CountComparison.lean:198:0: 'JunpeiComparison.new_lemma18_fixed_tie170' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/CountComparison.lean:199:0: 'JunpeiComparison.new_density_exponent164' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3335/3444] Built Junpei.MarginalTerminal (46s)
+✔ [3336/3444] Built Junpei.MarginalRates (46s)
+✔ [3337/3444] Built Junpei.PolicyAE (31s)
+✔ [3338/3444] Built Draft0.Execution (32s)
+✔ [3339/3444] Built Draft0.EvenDrift (52s)
+✔ [3340/3444] Built Junpei.MockMeasure (35s)
+✔ [3341/3444] Built Junpei.MockSample (35s)
+✔ [3342/3444] Built Junpei.EmbeddingRaw (35s)
+ℹ [3343/3444] Built Junpei.TwoArmAudit (73s)
+info: Junpei/TwoArmAudit.lean:4:0: Junpei.TwoArmOptimal.lemma17_every_posterior (k : ℕ) (n : Fin 2 → ℕ) (m : Fin 2 → ℝ) (hn : ∀ (a : Fin 2), 0 < n a)
+  (i : Fin 2) (hi : ∀ (j : Fin 2), n i ≤ n j) (j : Fin 2) :
+  Junpei.FinitePosterior.actionLoss k (fun a => ↑(n a)) m i ≤ Junpei.FinitePosterior.actionLoss k (fun a => ↑(n a)) m j
+info: Junpei/TwoArmAudit.lean:5:0: Junpei.TwoArmOptimal.lemma17_balanced_policy (k n1 n2 : ℕ) (m1 m2 : ℝ) (h1 : 0 < n1) (h2 : 0 < n2) :
+  Draft0.TwoArmBellman.balancedPayoff k m1 m2 (Junpei.TwoArmOptimal.pairCounts n1 n2) =
+    Junpei.FiniteGaussian.value k (Junpei.TwoArmOptimal.pairPrecisions n1 n2) (Junpei.TwoArmOptimal.pairMeans m1 m2)
+info: Junpei/TwoArmAudit.lean:6:0: Junpei.TwoArmOptimal.lemma17_minimal_terminal_variance (k n1 n2 a b : ℕ) (h1 : 0 < n1) (h2 : 0 < n2) (ha : n1 ≤ a)
+  (hb : n2 ≤ b) (hs : a + b = n1 + n2 + k) :
+  Draft0.TwoArmBellman.variance (Draft0.Counts.balancedRun k (Junpei.TwoArmOptimal.pairCounts n1 n2)) ≤
+    Draft0.Gaussian.posteriorVariance ↑a ↑b
+info: Junpei/TwoArmAudit.lean:7:0: Junpei.TwoArmOptimal.lemma17_variance_identity (k n1 n2 : ℕ) (h1 : 0 < n1) (h2 : 0 < n2) :
+  ↑(Draft0.TwoArmBellman.cumulativeVariance k (Junpei.TwoArmOptimal.pairCounts n1 n2)) =
+    Draft0.Counts.transitionVariance k (Junpei.TwoArmOptimal.pairCounts n1 n2)
+info: Junpei/TwoArmAudit.lean:8:0: Junpei.TwoArmOptimal.lemma17_gaussian_forecast (k n1 n2 : ℕ) (delta : ℝ) :
+  Draft0.PredictiveLaw.balancedPredictiveLaw k (Junpei.TwoArmOptimal.pairCounts n1 n2) delta =
+    ProbabilityTheory.gaussianReal delta
+      (Draft0.PredictiveLaw.accumulatedVariance k (Junpei.TwoArmOptimal.pairCounts n1 n2))
+info: Junpei/TwoArmAudit.lean:9:0: Junpei.Information.expected_bellman_improvement_nonnegative.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] (k : ℕ) (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A)
+  (hc : 0 < c i) : 0 ≤ Junpei.FinitePosterior.loss k c m - Junpei.FinitePosterior.actionLoss k c m i
+info: Junpei/TwoArmAudit.lean:11:0: 'Junpei.TwoArmOptimal.value_eq_twoArm' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:12:0: 'Junpei.TwoArmOptimal.lemma17_every_posterior' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:13:0: 'Junpei.TwoArmOptimal.lemma17_balanced_policy' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:14:0: 'Junpei.TwoArmOptimal.lemma17_minimal_terminal_variance' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:15:0: 'Junpei.TwoArmOptimal.lemma17_variance_identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:16:0: 'Junpei.TwoArmOptimal.lemma17_gaussian_forecast' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:17:0: 'Junpei.Information.value_le_action' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/TwoArmAudit.lean:18:0: 'Junpei.Information.expected_bellman_improvement_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3344/3444] Built Junpei.Dynamic (46s)
+✔ [3345/3444] Built Junpei.Exclusion (46s)
+✔ [3346/3444] Built Junpei.ExclusionTail (46s)
+✔ [3347/3444] Built Junpei.PolicySeeds (29s)
+✔ [3348/3444] Built Junpei.MarginalCounts (31s)
+✔ [3349/3444] Built Junpei.ProbabilityModel (51s)
+✔ [3350/3444] Built Junpei.Forecast (51s)
+✔ [3351/3444] Built Draft0.DynamicPolicy (59s)
+✔ [3352/3444] Built Draft0.EvenDynamicGain (60s)
+✔ [3353/3444] Built Junpei.MockPolicy (27s)
+✔ [3354/3444] Built Junpei.EmbeddingExecution (32s)
+✔ [3355/3444] Built Junpei.PolicyAEExecution (33s)
+✔ [3356/3444] Built Junpei.ProseCorollariesRemark3 (41s)
+✔ [3357/3444] Built Junpei.ExclusionPerm (42s)
+✔ [3358/3444] Built Junpei.ExclusionLoss (42s)
+✔ [3359/3444] Built Junpei.MarginalStrict (40s)
+✔ [3360/3444] Built Junpei.ProbabilityPolynomial (47s)
+✔ [3361/3444] Built Junpei.ExclusionBounds (41s)
+✔ [3362/3444] Built Junpei.ForecastRules (47s)
+✔ [3363/3444] Built Junpei.ForecastTerminal (47s)
+✔ [3364/3444] Built Draft0.EvenDynamicPolicy (47s)
+✔ [3365/3444] Built Junpei.EmbeddingMeasurable (51s)
+✔ [3366/3444] Built Junpei.ProseCorollariesFootnote14 (39s)
+✔ [3367/3444] Built Junpei.ExclusionVarianceComparison (39s)
+✔ [3368/3444] Built Junpei.PolicyChoice (40s)
+✔ [3369/3444] Built Junpei.ExclusionAsymptotics (41s)
+✔ [3370/3444] Built Draft0.MainTheorem (36s)
+✔ [3371/3444] Built Junpei.ProbabilityExact (44s)
+✔ [3372/3444] Built Junpei.CommonSample (43s)
+✔ [3373/3444] Built Junpei.Coupling19Counts (43s)
+ℹ [3374/3444] Built Junpei.PolicyAEAudit (66s)
+info: Junpei/PolicyAEAudit.lean:3:0: Junpei.Policy.AEOptimal (π : Junpei.Policy.StatePolicy) (T : ℕ) : Prop
+info: Junpei/PolicyAEAudit.lean:4:0: Junpei.Policy.repair_pointwiseOptimal (π : Junpei.Policy.StatePolicy) (T : ℕ) :
+  Junpei.Policy.PointwiseOptimal (Junpei.Policy.repair π T) T
+info: Junpei/PolicyAEAudit.lean:5:0: Junpei.Policy.randomPath_measurable (T : ℕ) : Measurable (Junpei.Policy.randomPath T)
+info: Junpei/PolicyAEAudit.lean:6:0: Junpei.Policy.prefixCounts_repair_ae (π : Junpei.Policy.StatePolicy) (T : ℕ) (hπ : Junpei.Policy.AEOptimal π T)
+  (p : Junpei.Policy.Path) (s : ℕ) (hsT : s ≤ T) :
+  Junpei.Policy.prefixCounts π p s =ᵐ[Junpei.Policy.seedLaw s] Junpei.Policy.prefixCounts (Junpei.Policy.repair π T) p s
+info: Junpei/PolicyAEAudit.lean:7:0: Junpei.Policy.recommendation_repair_ae (π : Junpei.Policy.StatePolicy) (T : ℕ) (hπ : Junpei.Policy.AEOptimal π T)
+  (p : Junpei.Policy.Path) :
+  (fun u => Junpei.Policy.recommendation π T p (Junpei.Policy.randomPath T u)) =ᵐ[Junpei.Policy.randomizerLaw T]
+    fun u => Junpei.Policy.recommendation (Junpei.Policy.repair π T) T p (Junpei.Policy.randomPath T u)
+info: Junpei/PolicyAEAudit.lean:8:0: Junpei.Policy.recommendation_repair_joint_ae.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] (ν : MeasureTheory.Measure Ω)
+  [MeasureTheory.SFinite ν] (π : Junpei.Policy.StatePolicy) (T : ℕ) (hπ : Junpei.Policy.AEOptimal π T)
+  (p : Ω → Junpei.Policy.Path) (hp : Measurable p) :
+  (fun x =>
+      Junpei.Policy.recommendation π T (p x.1)
+        (Junpei.Policy.randomPath T x.2)) =ᵐ[ν.prod (Junpei.Policy.randomizerLaw T)]
+    fun x => Junpei.Policy.recommendation (Junpei.Policy.repair π T) T (p x.1) (Junpei.Policy.randomPath T x.2)
+info: Junpei/PolicyAEAudit.lean:9:0: Junpei.Policy.recommendation_integral_repair_eq.{u_1} {Ω : Type u_1} [MeasurableSpace Ω] (ν : MeasureTheory.Measure Ω)
+  [MeasureTheory.SFinite ν] (π : Junpei.Policy.StatePolicy) (T : ℕ) (hπ : Junpei.Policy.AEOptimal π T)
+  (p : Ω → Junpei.Policy.Path) (hp : Measurable p) (f : Draft0.BayesianModel.Arm → ℝ) :
+  ∫ (x : Ω × Junpei.Policy.SeedArray (T + 1)),
+      f
+        (Junpei.Policy.recommendation π T (p x.1)
+          (Junpei.Policy.randomPath T x.2)) ∂ν.prod (Junpei.Policy.randomizerLaw T) =
+    ∫ (x : Ω × Junpei.Policy.SeedArray (T + 1)),
+      f
+        (Junpei.Policy.recommendation (Junpei.Policy.repair π T) T (p x.1)
+          (Junpei.Policy.randomPath T x.2)) ∂ν.prod (Junpei.Policy.randomizerLaw T)
+info: Junpei/PolicyAEAudit.lean:11:0: 'Junpei.Policy.repair_pointwiseOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/PolicyAEAudit.lean:12:0: 'Junpei.Policy.prefixCounts_repair_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/PolicyAEAudit.lean:13:0: 'Junpei.Policy.recommendation_repair_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/PolicyAEAudit.lean:14:0: 'Junpei.Policy.recommendation_repair_joint_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/PolicyAEAudit.lean:15:0: 'Junpei.Policy.recommendation_integral_repair_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+ℹ [3375/3444] Built Junpei.MarginalAudit (69s)
+info: Junpei/MarginalAudit.lean:5:0: Junpei.Marginal.lemma14_normalized (m1 m2 : ℝ) (v1 v2 : NNReal) (hv : 0 < v1 + v2) :
+  Draft0.Gaussian.twoArmPosteriorLoss m1 m2 v1 v2 =
+    (√(2 * Real.pi * (↑v1 + ↑v2)))⁻¹ * Draft0.Gaussian.unnormalizedLoss (m1 - m2) (v1 + v2)
+info: Junpei/MarginalAudit.lean:6:0: Junpei.Marginal.lemma15_g1_count_lower (gap : ℝ) (ni nj : ℕ) :
+  Junpei.Marginal.g1Count gap ni nj ≤
+    Draft0.Gaussian.oneStepImprovement gap (Draft0.Gaussian.updateVariance ↑ni)
+      (Draft0.Gaussian.posteriorVariance (↑ni + 1) ↑nj)
+info: Junpei/MarginalAudit.lean:7:0: Junpei.Marginal.lemma15_g1_uniform6 (T ni nj : ℕ) (gap : ℝ) (hT : 5 ≤ T) (hi : 1 ≤ ni) (hj : 1 ≤ nj) (hiT : ni < T)
+  (hjT : nj < T) (hgapL : Draft0.Rates.invPower 2 T ≤ |gap|) (hgapU : |gap| ≤ 2 * Draft0.Rates.invPower 2 T) :
+  Junpei.Marginal.g1Constant * Draft0.Rates.invPower 6 T ≤ Junpei.Marginal.g1Count gap ni nj
+info: Junpei/MarginalAudit.lean:8:0: Junpei.Marginal.lemma15_terminal_uniform22 (T q n : ℕ) (gap : ℝ) (vR : NNReal) (hT : 5 ≤ T) (hodd : T = 2 * q + 1)
+  (hn : 1 ≤ n) (hnq : n ≤ q) (hgap : |gap| ≤ 10 * √(Real.log ↑T) / ↑T) :
+  Junpei.Marginal.terminalConstant * Draft0.Rates.invPower 22 T ≤
+    Draft0.Gaussian.oneStepImprovement gap (Draft0.Gaussian.updateVariance ↑n) vR
+info: Junpei/MarginalAudit.lean:9:0: Junpei.Marginal.lemma16_g2_count_strict (gap : ℝ) (ni nj : ℕ) (hj : 1 ≤ nj) (hstrict : nj < ni) :
+  Junpei.Marginal.g2Count gap ni nj <
+    Draft0.Gaussian.expectedLossAfterDraw gap (Draft0.Gaussian.updateVariance ↑ni)
+        (Draft0.Gaussian.posteriorVariance (↑ni + 1) ↑nj) -
+      Draft0.Gaussian.expectedLossAfterDraw gap (Draft0.Gaussian.updateVariance ↑nj)
+        (Draft0.Gaussian.posteriorVariance (↑nj + 1) ↑ni)
+info: Junpei/MarginalAudit.lean:10:0: Junpei.Marginal.lemma16_g2_uniform8 (T ni nj : ℕ) (gap : ℝ) (hT : 5 ≤ T) (hj : 1 ≤ nj) (hstrict : nj < ni)
+  (hiT : ni < T) (hgapL : Draft0.Rates.invPower 2 T ≤ |gap|) (hgapU : |gap| ≤ 2 * Draft0.Rates.invPower 2 T) :
+  Junpei.Marginal.g2Constant * Draft0.Rates.invPower 8 T ≤ Junpei.Marginal.g2Count gap ni nj
+info: Junpei/MarginalAudit.lean:11:0: Junpei.TailRatio.mills_lower (x : ℝ) (hx : 0 < x) :
+  (1 / x - 1 / x ^ 3) * Junpei.TailRatio.phi x ≤ Junpei.TailRatio.normalTail x
+info: Junpei/MarginalAudit.lean:12:0: Junpei.TailRatio.mills_upper (x : ℝ) (hx : 0 < x) : Junpei.TailRatio.normalTail x ≤ 1 / x * Junpei.TailRatio.phi x
+info: Junpei/MarginalAudit.lean:14:0: 'Junpei.Marginal.lemma14_normalized' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:15:0: 'Junpei.Marginal.lemma15_g1_count_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:16:0: 'Junpei.Marginal.lemma15_g1_uniform6' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:17:0: 'Junpei.Marginal.lemma15_terminal_uniform22' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:18:0: 'Junpei.Marginal.lemma16_g2_count_strict' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:19:0: 'Junpei.Marginal.lemma16_g2_uniform8' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:20:0: 'Junpei.TailRatio.mills_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MarginalAudit.lean:21:0: 'Junpei.TailRatio.mills_upper' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3376/3444] Built Junpei.Footnote14Scale (29s)
+✔ [3377/3444] Built Junpei.LemmaRates (27s)
+✔ [3378/3444] Built Junpei.Coupling19 (25s)
+✔ [3379/3444] Built Junpei.ChoiceAsymptotic (29s)
+✔ [3380/3444] Built Junpei.ProbabilityExactRate (28s)
+✔ [3381/3444] Built Junpei.EmbeddingRandomized (111s)
+✔ [3382/3444] Built Junpei.MockLaw (111s)
+✔ [3383/3444] Built Junpei.PolicyContinuation (111s)
+✔ [3384/3444] Built Junpei.FixedGaussianAbsoluteContinuous (111s)
+✔ [3385/3444] Built Junpei.MockMeasurable (111s)
+ℹ [3386/3444] Built Junpei.RateComparison (34s)
+info: Junpei/RateComparison.lean:106:0: 'NewVersionComparison.RateChecks.revised_margins_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/RateComparison.lean:107:0: 'NewVersionComparison.RateChecks.revised_interval_probability_conditional' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: Junpei/RateComparison.lean:108:0: 'Draft0.MainTheorem.end_to_end_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3387/3444] Built Junpei.Coupling19Rates (15s)
+✔ [3388/3444] Built Junpei.PathInduction (15s)
+✔ [3389/3444] Built Junpei.Footnote14Characterization (20s)
+✔ [3390/3444] Built Junpei.FixedGaussianLaws (16s)
+✔ [3391/3444] Built Junpei.PolicyContinuationOptimal (16s)
+✔ [3392/3444] Built Junpei.ProseCorollariesExclusion (17s)
+✔ [3393/3444] Built Junpei.MockRisk (17s)
+✔ [3394/3444] Built Junpei.EmbeddingCoupling (17s)
+ℹ [3395/3444] Built Junpei.ExclusionAudit (58s)
+info: Junpei/ExclusionAudit.lean:8:0: Junpei.ExclusionBounds.lemma11_from_equation11 (T q t : ℕ) (CU : ℝ) (p : Draft0.Counts.MeanPath)
+  (c : Draft0.Counts.Counts) (hT : 5 ≤ T) (hCU : 0 < CU) (hcondition : 180 < (CU - 6) ^ 2 / 4)
+  (hc : Draft0.Counts.horizonConsistent t c) (hW : JunpeiComparison.newW T q CU p c) :
+  Junpei.Exclusion.exclusion (Draft0.DynamicPolicy.modelCounts c) (Draft0.DynamicPolicy.modelMeans p c) 2 ≤
+    Junpei.ExclusionTail.paperG0 T CU
+info: Junpei/ExclusionAudit.lean:9:0: Junpei.ExclusionPerm.lemma12_k3 (k : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means)
+  (i : Draft0.BayesianModel.Arm) (hc : ∀ (j : Draft0.BayesianModel.Arm), 0 < c j) :
+  Junpei.ExclusionPerm.EBI k c m i ≤ Junpei.Exclusion.exclusion c m i
+info: Junpei/ExclusionAudit.lean:10:0: Junpei.FiniteModelExclusion.lemma12_any_finite_arm.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [Nontrivial A] (k : ℕ) (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A)
+  (hc : ∀ (a : A), 0 < c a) :
+  Junpei.FinitePosterior.loss k c m - Junpei.FinitePosterior.actionLoss k c m i ≤
+    Junpei.FiniteModelExclusion.exclusion i c m
+info: Junpei/ExclusionAudit.lean:11:0: Junpei.ExclusionLoss.lemma13_loss (k : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means)
+  (hc : ∀ (i : Draft0.BayesianModel.Arm), 0 < c i) :
+  |Draft0.PosteriorRegret.loss k c m - Junpei.ExclusionLoss.twoLoss k c m| ≤ Junpei.Exclusion.exclusion c m 2
+info: Junpei/ExclusionAudit.lean:12:0: Junpei.ExclusionLoss.lemma13_actionLoss (k : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means)
+  (i : Draft0.BayesianModel.Arm) (hi : i ≠ 2) (hc : ∀ (j : Draft0.BayesianModel.Arm), 0 < c j) :
+  |Draft0.PosteriorRegret.actionLoss k c m i - Junpei.ExclusionLoss.twoActionLoss k c m i| ≤
+    Junpei.Exclusion.exclusion c m 2
+info: Junpei/ExclusionAudit.lean:13:0: Junpei.ExclusionAsymptotics.paperG0_littleO180_equation11 (CU : ℝ) (hcondition : 180 < (CU - 6) ^ 2 / 4) :
+  (fun T => Junpei.ExclusionTail.paperG0 T CU) =o[Filter.atTop] Draft0.Rates.invPower 180
+info: Junpei/ExclusionAudit.lean:14:0: Junpei.FinitePosterior.theorem1_global_bayes_optimality.{u_1} {A : Type u_1} [Fintype A] [DecidableEq A] [Nonempty A]
+  {k : ℕ} (s : Junpei.FiniteGaussian.Strategy k) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hs : Junpei.FiniteGaussian.Admissible s c m) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.FinitePosterior.expectedRegret (Junpei.FiniteGaussian.optimal k c m) c m ≤
+    Junpei.FinitePosterior.expectedRegret s c m
+info: Junpei/ExclusionAudit.lean:15:0: Junpei.FinitePosterior.theorem1_randomized_bayes_optimality.{u_1, u_2} {A : Type u_1} [Fintype A] [DecidableEq A]
+  [Nonempty A] {S : Type u_2} [MeasurableSpace S] (seedLaw : MeasureTheory.Measure S)
+  [MeasureTheory.IsProbabilityMeasure seedLaw] {k : ℕ} (s : S → Junpei.FiniteGaussian.Strategy k)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A)
+  (hs : ∀ᵐ (r : S) ∂seedLaw, Junpei.FiniteGaussian.Admissible (s r) c m) (hc : ∀ (a : A), 0 < c a)
+  (hi : MeasureTheory.Integrable (fun r => Junpei.FinitePosterior.expectedRegret (s r) c m) seedLaw) :
+  Junpei.FinitePosterior.expectedRegret (Junpei.FiniteGaussian.optimal k c m) c m ≤
+    ∫ (r : S), Junpei.FinitePosterior.expectedRegret (s r) c m ∂seedLaw
+info: Junpei/ExclusionAudit.lean:16:0: Junpei.FiniteModelMeasurable.chooseFirst_measurable.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] (k : ℕ) (c : Junpei.FiniteGaussian.Precisions A) :
+  Measurable (Junpei.FiniteModelMeasurable.chooseFirst k c)
+info: Junpei/ExclusionAudit.lean:17:0: Junpei.FiniteModelMeasurable.optimalFirst_bayes_optimality.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  {k : ℕ} (s : Junpei.FiniteGaussian.Strategy k) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hs : Junpei.FiniteGaussian.Admissible s c m) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.FinitePosterior.expectedRegret (Junpei.FiniteModelMeasurable.optimalFirst k c m) c m ≤
+    Junpei.FinitePosterior.expectedRegret s c m
+info: Junpei/ExclusionAudit.lean:18:0: Junpei.Information.expected_bellman_improvement_nonnegative.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] (k : ℕ) (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A)
+  (hc : 0 < c i) : 0 ≤ Junpei.FinitePosterior.loss k c m - Junpei.FinitePosterior.actionLoss k c m i
+info: Junpei/ExclusionAudit.lean:20:0: 'Junpei.ExclusionBounds.lemma11_from_equation11' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:21:0: 'Junpei.ExclusionPerm.lemma12_k3' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:22:0: 'Junpei.FiniteModelExclusion.lemma12_any_finite_arm' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:23:0: 'Junpei.ExclusionLoss.lemma13_loss' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:24:0: 'Junpei.ExclusionLoss.lemma13_actionLoss' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:25:0: 'Junpei.ExclusionAsymptotics.paperG0_littleO180_equation11' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:26:0: 'Junpei.FinitePosterior.expectation_tower' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:27:0: 'Junpei.FinitePosterior.theorem1_global_bayes_optimality' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:28:0: 'Junpei.FinitePosterior.theorem1_randomized_bayes_optimality' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:29:0: 'Junpei.FiniteModelMeasurable.chooseFirst_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:30:0: 'Junpei.FiniteModelMeasurable.optimalFirst_bayes_optimality' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/ExclusionAudit.lean:31:0: 'Junpei.Information.expected_bellman_improvement_nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3396/3444] Built Junpei.Empirical (14s)
+✔ [3397/3444] Built Junpei.Coupling19Saturated (15s)
+✔ [3398/3444] Built Junpei.FixedGaussianTransfer (13s)
+✔ [3399/3444] Built Junpei.FixedGaussianStackLaws (13s)
+✔ [3400/3444] Built Junpei.PolicyEmbedding (14s)
+✔ [3401/3444] Built Junpei.MockTie (15s)
+✔ [3402/3444] Built Junpei.Main (13s)
+✔ [3403/3444] Built Junpei.CommonSampleLaw (13s)
+✔ [3404/3444] Built Junpei.FixedGaussianWindows (13s)
+✔ [3405/3444] Built Junpei.FixedGaussianStackExecution (13s)
+✔ [3406/3444] Built Junpei.JointGaussianMeasurable (14s)
+ℹ [3407/3444] Built Junpei.MockAudit (31s)
+info: Junpei/MockAudit.lean:3:0: Junpei.MockStream.copy_mean_law.{u_1} {A : Type u_1} [Fintype A] [DecidableEq A] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A) :
+  MeasureTheory.Measure.map (Junpei.MockStream.copyMean H m i) (Junpei.MockStream.law H c i) =
+    ProbabilityTheory.gaussianReal (m i) (c i)⁻¹
+info: Junpei/MockAudit.lean:4:0: Junpei.MockStream.copy_mean_independent_of_theta.{u_1} {A : Type u_1} [Fintype A] [DecidableEq A] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A) :
+  ProbabilityTheory.IndepFun (Junpei.MockStream.copyMean H m i) (Junpei.MockStream.theta H m i)
+    (Junpei.MockStream.law H c i)
+info: Junpei/MockAudit.lean:5:0: Junpei.MockStream.rewards_given_mean_law (H : ℕ) (u : ℝ) :
+  MeasureTheory.Measure.map (fun e t => u + e t) (Junpei.MockStream.noiseLaw H) =
+    MeasureTheory.Measure.pi fun x => ProbabilityTheory.gaussianReal u 1
+info: Junpei/MockAudit.lean:6:0: Junpei.MockStream.swap_preserving.{u_1} {A : Type u_1} [Fintype A] [DecidableEq A] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (i : A) :
+  MeasureTheory.MeasurePreserving (Junpei.MockStream.swap H i) (Junpei.MockStream.law H c i)
+    (Junpei.MockStream.law H c i)
+info: Junpei/MockAudit.lean:7:0: Junpei.MockSample.loss_decomposition.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] (i : A)
+  [Nonempty { a // a ≠ i }] (u : Junpei.FiniteGaussian.Means A) (j : A) (hji : j ≠ i) :
+  Junpei.FiniteGaussian.maxAll u - u j =
+    Junpei.FiniteModelExclusion.otherMaximum i u - u j + max (u i - Junpei.FiniteModelExclusion.otherMaximum i u) 0
+info: Junpei/MockAudit.lean:8:0: Junpei.MockSample.risk_coupling.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] [MeasurableSpace A]
+  [MeasurableSingletonClass A] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A)
+  (i : A) (J : Junpei.MockStream.RawStream A H → A) (hJ : Measurable J)
+  (hne : ∀ (s : Junpei.MockStream.RawStream A H), J s ≠ i) :
+  Junpei.MockSample.risk H c m i (Junpei.MockStream.mockStream H m i) J =
+    Junpei.MockSample.risk H c m i (Junpei.MockStream.realStream H m i) J
+info: Junpei/MockAudit.lean:9:0: Junpei.MockSample.full_risk_coupling.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] [MeasurableSpace A]
+  [MeasurableSingletonClass A] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A)
+  (i : A) (J : Junpei.MockStream.RawStream A H → A) (hJ : Measurable J) :
+  ∫ (w : Junpei.MockStream.World A H i),
+      Junpei.FiniteGaussian.maxAll (Junpei.MockStream.theta H m i (Junpei.MockStream.swap H i w)) -
+        Junpei.MockStream.theta H m i (Junpei.MockStream.swap H i w)
+          (J (Junpei.MockStream.mockStream H m i w)) ∂Junpei.MockStream.law H c i =
+    Junpei.MockSample.risk H c m i (Junpei.MockStream.realStream H m i) J
+info: Junpei/MockAudit.lean:10:0: Junpei.MockPolicy.replay_discards_real.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] [MeasurableSpace A]
+  [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] {H : ℕ} (next : ℝ → Junpei.FiniteGaussian.Strategy H)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (imaginary : Fin (H + 1) → ℝ) :
+  Junpei.MockPolicy.replay i (Junpei.FiniteGaussian.Strategy.sample i next) c m imaginary =
+    Junpei.FiniteGaussian.Strategy.sample i fun x =>
+      Junpei.MockPolicy.replay i (next (imaginary ⟨0, ⋯⟩)) (Junpei.FiniteGaussian.advance c i)
+        (Junpei.FiniteGaussian.shift m i ((imaginary ⟨0, ⋯⟩ - m i) / (↑(c i) + 1))) fun t => imaginary t.succ
+info: Junpei/MockAudit.lean:11:0: Junpei.MockPolicy.replay_supplies_real.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] [MeasurableSpace A]
+  [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] {H : ℕ} (a : A) (ha : a ≠ i)
+  (next : ℝ → Junpei.FiniteGaussian.Strategy H) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (imaginary : Fin (H + 1) → ℝ) :
+  Junpei.MockPolicy.replay i (Junpei.FiniteGaussian.Strategy.sample a next) c m imaginary =
+    Junpei.FiniteGaussian.Strategy.sample a fun y =>
+      Junpei.MockPolicy.replay i (next y) (Junpei.FiniteGaussian.advance c a)
+        (Junpei.FiniteGaussian.shift m a ((y - m a) / (↑(c a) + 1))) fun t => imaginary t.succ
+info: Junpei/MockAudit.lean:12:0: Junpei.MockPolicy.terminalChoice_posterior_best.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (m : Junpei.FiniteGaussian.Means A)
+  (a : A) (ha : m a = Junpei.FiniteGaussian.maxAll m) :
+  m (Junpei.MockPolicy.terminalChoice i m a) = Junpei.FiniteModelExclusion.otherMaximum i m
+info: Junpei/MockAudit.lean:13:0: Junpei.MockPolicy.mockPolicy_budget.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] [MeasurableSpace A]
+  [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (auxiliary : Fin (H + 1) → ℝ) (real : Junpei.EmbeddingRaw.RawStream A H) :
+  (Junpei.EmbeddingRaw.trace (Junpei.MockPolicy.mockPolicy i H c m auxiliary) real).length = H
+info: Junpei/MockAudit.lean:14:0: Junpei.MockMeasurable.mockPolicy_regular.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (auxiliary : Fin (H + 1) → ℝ) :
+  Junpei.EmbeddingExecution.Regular (Junpei.MockPolicy.mockPolicy i H c m auxiliary)
+info: Junpei/MockAudit.lean:15:0: Junpei.MockMeasurable.mockPolicy_block_run_measurable.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) :
+  Measurable fun p =>
+    Junpei.EmbeddingRaw.run (Junpei.MockPolicy.mockPolicy i H c m (Junpei.MockMeasurable.auxiliaryOfBlock i H m p.1))
+      p.2
+info: Junpei/MockAudit.lean:16:0: Junpei.MockLaw.realWorld_preserving.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A) :
+  MeasureTheory.MeasurePreserving (fun w => (Junpei.MockStream.theta H m i w, Junpei.MockLaw.realNoise H i w))
+    (Junpei.MockStream.law H c i) (Junpei.EmbeddingExecution.worldLaw H c m)
+info: Junpei/MockAudit.lean:17:0: Junpei.MockLaw.seed_and_real_preserving.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (i : A) :
+  MeasureTheory.MeasurePreserving
+    (fun w =>
+      (w.1.2, Junpei.MockStream.theta (H + 1) m i w, Junpei.EmbeddingRaw.tail (Junpei.MockLaw.realNoise (H + 1) i w)))
+    (Junpei.MockStream.law (H + 1) c i)
+    ((Junpei.MockStream.blockLaw (H + 1) (c i)⁻¹).prod (Junpei.EmbeddingExecution.worldLaw H c m))
+info: Junpei/MockAudit.lean:18:0: Junpei.MockRisk.mockLoss_eq_modified_real_risk.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) :
+  Junpei.MockRisk.mockLoss i H c m =
+    Junpei.MockSample.risk (H + 1) c m i (Junpei.MockStream.realStream (H + 1) m i)
+      (Junpei.EmbeddingRaw.run (Junpei.MockPolicy.terminalModified i (Junpei.MockPolicy.forcedPolicy i H c m) c m))
+info: Junpei/MockAudit.lean:19:0: Junpei.MockRisk.mockLoss_eq_randomized_rawRisk.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) :
+  Junpei.MockRisk.mockLoss i H c m =
+    ∫ (b : Junpei.MockStream.Block (H + 1)),
+      Junpei.EmbeddingExecution.rawRisk
+        (Junpei.MockPolicy.mockPolicy i H c m (Junpei.MockMeasurable.auxiliaryOfBlock i H m b)) c
+        m ∂Junpei.MockStream.blockLaw (H + 1) (c i)⁻¹
+info: Junpei/MockAudit.lean:20:0: Junpei.MockRisk.forced_rawRisk_eq_actionLoss.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.EmbeddingExecution.rawRisk (Junpei.MockPolicy.forcedPolicy i H c m) c m =
+    Junpei.FinitePosterior.actionLoss H c m i
+info: Junpei/MockAudit.lean:21:0: Junpei.MockRisk.mock_loss_chain.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] [MeasurableSpace A]
+  [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.FinitePosterior.loss H c m ≤ Junpei.MockRisk.mockLoss i H c m ∧
+    Junpei.MockRisk.mockLoss i H c m ≤
+      Junpei.FinitePosterior.actionLoss H c m i + Junpei.FiniteModelExclusion.exclusion i c m
+info: Junpei/MockAudit.lean:22:0: Junpei.MockRisk.lemma12_by_mock_samples.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty { a // a ≠ i }] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.FinitePosterior.loss H c m - Junpei.FinitePosterior.actionLoss H c m i ≤
+    Junpei.FiniteModelExclusion.exclusion i c m
+info: Junpei/MockAudit.lean:24:0: 'Junpei.MockStream.copy_mean_independent_of_theta' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:25:0: 'Junpei.MockSample.risk_coupling' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:26:0: 'Junpei.MockPolicy.mockPolicy_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:27:0: 'Junpei.MockMeasurable.mockPolicy_regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:28:0: 'Junpei.MockLaw.seed_and_real_preserving' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:29:0: 'Junpei.MockRisk.mockLoss_eq_modified_real_risk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:30:0: 'Junpei.MockRisk.mockLoss_eq_randomized_rawRisk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:31:0: 'Junpei.MockRisk.mock_loss_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/MockAudit.lean:32:0: 'Junpei.MockRisk.lemma12_by_mock_samples' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3408/3444] Built Junpei.MainExactRate (12s)
+✔ [3409/3444] Built Junpei.CommonSampleJoint (13s)
+ℹ [3410/3444] Built Junpei.EmbeddingAudit (21s)
+info: Junpei/EmbeddingAudit.lean:3:0: Junpei.PolicyEmbedding.lemma13_loss_by_policy_embeddings.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (i : A) [Nonempty (Junpei.EmbeddingDirect.Retained i)] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) :
+  |Junpei.FinitePosterior.loss H c m -
+        Junpei.FinitePosterior.loss H (Junpei.EmbeddingDirect.restrictPrecisions i c)
+          (Junpei.EmbeddingDirect.restrictMeans i m)| ≤
+    Junpei.FiniteModelExclusion.exclusion i c m
+info: Junpei/EmbeddingAudit.lean:4:0: Junpei.PolicyEmbedding.lemma13_actionLoss_by_policy_embeddings.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] (i : A)
+  [Nonempty (Junpei.EmbeddingDirect.Retained i)] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (a : Junpei.EmbeddingDirect.Retained i) (hc : ∀ (b : A), 0 < c b) :
+  |Junpei.FinitePosterior.actionLoss H c m ↑a -
+        Junpei.FinitePosterior.actionLoss H (Junpei.EmbeddingDirect.restrictPrecisions i c)
+          (Junpei.EmbeddingDirect.restrictMeans i m) a| ≤
+    Junpei.FiniteModelExclusion.exclusion i c m
+info: Junpei/EmbeddingAudit.lean:5:0: Junpei.EmbeddingExecution.rawOfInnovation_risk.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] {H : ℕ} (s : Junpei.FiniteGaussian.Strategy H)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a)
+  (hs : Junpei.EmbeddingExecution.Regular (Junpei.EmbeddingRaw.rawOfInnovation s c m)) :
+  Junpei.EmbeddingExecution.rawRisk (Junpei.EmbeddingRaw.rawOfInnovation s c m) c m =
+    Junpei.FinitePosterior.expectedRegret s c m
+info: Junpei/EmbeddingAudit.lean:6:0: Junpei.EmbeddingExecution.rawRisk_ge_loss.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] {H : ℕ} (s : Junpei.FiniteGaussian.Strategy H)
+  (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a)
+  (hs : Junpei.EmbeddingExecution.Regular s) :
+  Junpei.FinitePosterior.loss H c m ≤ Junpei.EmbeddingExecution.rawRisk s c m
+info: Junpei/EmbeddingAudit.lean:7:0: Junpei.EmbeddingRandomized.randomized_rawRisk_ge_loss.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] {S : Type u_2} [MeasurableSpace S] {H : ℕ}
+  (seedLaw : MeasureTheory.Measure S) [MeasureTheory.IsProbabilityMeasure seedLaw]
+  (s : S → Junpei.FiniteGaussian.Strategy H) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a)
+  (hregular : ∀ (r : S), Junpei.EmbeddingExecution.Regular (s r))
+  (hs : Measurable fun p => Junpei.EmbeddingRaw.run (s p.1) p.2) :
+  Junpei.FinitePosterior.loss H c m ≤ ∫ (r : S), Junpei.EmbeddingExecution.rawRisk (s r) c m ∂seedLaw
+info: Junpei/EmbeddingAudit.lean:8:0: Junpei.EmbeddingRaw.simulate_budget.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] (i : A)
+  [Nonempty { a // a ≠ i }] (dummy : Junpei.EmbeddingDirect.Retained i) {H : ℕ} (s : Junpei.FiniteGaussian.Strategy H)
+  (c : Junpei.FiniteGaussian.Precisions (Junpei.EmbeddingDirect.Retained i))
+  (m : Junpei.FiniteGaussian.Means (Junpei.EmbeddingDirect.Retained i)) (imaginary : Fin H → ℝ)
+  (real : Junpei.EmbeddingRaw.RawStream (Junpei.EmbeddingDirect.Retained i) H) :
+  (Junpei.EmbeddingRaw.trace (Junpei.EmbeddingRaw.simulate i dummy s c m imaginary) real).length = H
+info: Junpei/EmbeddingAudit.lean:9:0: 'Junpei.PolicyEmbedding.lemma13_loss_by_policy_embeddings' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/EmbeddingAudit.lean:10:0: 'Junpei.PolicyEmbedding.lemma13_actionLoss_by_policy_embeddings' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+info: Junpei/EmbeddingAudit.lean:11:0: 'Junpei.EmbeddingExecution.rawOfInnovation_risk' depends on axioms: [propext, Classical.choice, Quot.sound]
+info: Junpei/EmbeddingAudit.lean:12:0: 'Junpei.EmbeddingCoupling.simulatedRisk_le_fullRisk' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [3411/3444] Built Junpei.FixedGaussianStackPath (12s)
+✔ [3412/3444] Built Junpei.FlatPriorInitialization (12s)
+✔ [3413/3444] Built Junpei.RegretRatio (11s)
+✔ [3414/3444] Built Junpei.CommonSampleIntegral (11s)
+✔ [3415/3444] Built Junpei.FlatPriorProduct (10s)
+✔ [3416/3444] Built Junpei.SequentialRisk (11s)
+✔ [3417/3444] Built Junpei.Coupling19Stream (10s)
+✔ [3418/3444] Built Junpei.AdaptivePosteriorSufficiency (9.9s)
+✔ [3419/3444] Built Junpei.InitialOptimalDisintegration (9.9s)
+✔ [3420/3444] Built Junpei.InitialOptimalPaths (9.3s)
+✔ [3421/3444] Built Junpei.FixedGaussianInitialReduction (10s)
+✔ [3422/3444] Built Junpei.InitialOptimalHistory (10s)
+✔ [3423/3444] Built Junpei.InitialOptimalTrace (11s)
+✔ [3424/3444] Built Junpei.FixedGaussianInitialized (10s)
+✔ [3425/3444] Built Junpei.PosteriorStateHistory (11s)
+✔ [3426/3444] Built Junpei.RealPrecisionPolicy (11s)
+✔ [3427/3444] Built Junpei.UniformSamplingModel (11s)
+✔ [3428/3444] Built Junpei.GeneralOptimalityHistory (10s)
+✔ [3429/3444] Built Junpei.UniformSamplingProbability (14s)
+✔ [3430/3444] Built Junpei.FixedGaussianMainLaw (16s)
+✔ [3431/3444] Built Junpei.GeneralOptimality (12s)
+✔ [3432/3444] Built Junpei.FixedGaussianMain (11s)
+✔ [3433/3444] Built Junpei.UniformSamplingRate (14s)
+✔ [3434/3444] Built Junpei.GeneralOptimalityProper (12s)
+✔ [3435/3444] Built Junpei.InitialHistoryMain (11s)
+✔ [3436/3444] Built Junpei.FixedGaussianFlatInitialization (11s)
+✔ [3437/3444] Built Junpei.UniformSamplingConclusion (11s)
+✔ [3438/3444] Built Junpei.GeneralOptimalityFinite (10s)
+✔ [3439/3444] Built Junpei.RealPrecisionMain (10s)
+✔ [3440/3444] Built Junpei.UniformSamplingRounding (12s)
+✔ [3441/3444] Built Junpei.UniformSampling (9.1s)
+✔ [3442/3444] Built Junpei.UniformSamplingObservation (8.7s)
+✔ [3443/3444] Built JunpeiVersionLean (8.7s)
+Build completed successfully (3444 jobs).

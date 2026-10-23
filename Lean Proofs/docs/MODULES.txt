@@ -1,0 +1,946 @@
+LEAN SOURCE MODULE INDEX
+========================
+
+156 modules; 1517 public theorem/lemma declarations.
+Paths are relative to the project root. Imports are direct Lean imports.
+Descriptions reproduce module documentation headers where present.
+A missing header is reported explicitly; it is not inferred from a filename.
+This is navigation only. See PROOF_MAP.txt for manuscript coverage and
+root REPORT.txt, verification_results.json, and logs/ for recorded Lean
+evidence; run verify.py to recheck proofs.
+
+Draft0.BadEvent
+  Source: Draft0/BadEvent.lean
+  Public theorem/lemma declarations: 39
+  Header: Frequentist sample arrays for means (0,0,1), and probabilities of the bad empirical-mean event. The raw observations are independent unit-variance Gaussian coordinates, rather than assumed posterior innovations.
+  Imports: Draft0.Drift, Draft0.SmallBall, Draft0.PredictiveBound, Mathlib.Probability.HasLaw, Mathlib.Probability.Moments.SubGaussian, Mathlib.MeasureTheory.Constructions.Pi, Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+
+Draft0.BadEvent50
+  Source: Draft0/BadEvent50.lean
+  Public theorem/lemma declarations: 11
+  Header: The complete frequentist bad event with CU=50. This stronger underestimation event accommodates the corrected even-budget drift exponent. All raw sample streams and their Gaussian product laws are reused from Draft0.BadEvent.
+  Imports: Draft0.BadEvent
+
+Draft0.BayesianModel
+  Source: Draft0/BayesianModel.lean
+  Public theorem/lemma declarations: 15
+  Header: The three-arm Gaussian posterior decision process. Counts and means are the paper's sufficient statistics. Values are expected terminal posterior means; the posterior expectation of the best latent mean is an action-independent additive constant in expected regret.
+  Imports: Draft0.Gaussian, Mathlib.Topology.MetricSpace.Lipschitz
+
+Draft0.BellmanAlgebra
+  Source: Draft0/BellmanAlgebra.lean
+  Public theorem/lemma declarations: 6
+  Header: Algebraic Bellman steps with every probabilistic comparison premise explicit. These proofs establish no mock-sample coupling or full-policy optimality.
+  Imports: Mathlib.Data.Real.Basic, Mathlib.Tactic.Linarith
+
+Draft0.CorrectedLemma17
+  Source: Draft0/CorrectedLemma17.lean
+  Public theorem/lemma declarations: 2
+  Header: The repaired nonterminal Lemma 17 for the explicitly defined balanced Gaussian-innovation forecast. The deterministic W event is the full printed event, including its anchored Y and Z restrictions. The forecast is an actual probability measure, not a symbolic probability or numerical model. Connecting this law to the paper's conditional filtration remains a separate model-identification obligation.
+  Imports: Draft0.Drift, Draft0.PredictiveLaw, Draft0.PredictiveBound
+
+Draft0.Counts
+  Source: Draft0/Counts.lean
+  Public theorem/lemma declarations: 38
+  Header: # Corrected count and final-round statements These declarations formalize corrected Appendix B arithmetic, the count and variance arithmetic of Lemma 15, and the actual balanced sampling schedule in Equation (22). They do not assume or claim the Bellman optimality statement of Lemma 16 or the nonterminal Gaussian lower bound of Lemma 17.
+  Imports: Mathlib.Data.Real.Basic, Mathlib.MeasureTheory.Measure.MeasureSpace, Mathlib.MeasureTheory.Measure.Typeclasses.Probability, Mathlib.Tactic.FieldSimp, Mathlib.Tactic.Linarith, Mathlib.Tactic.NormNum, Mathlib.Tactic.Positivity
+
+Draft0.Drift
+  Source: Draft0/Drift.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Counts, Mathlib.Analysis.SpecialFunctions.Log.Basic, Mathlib.Analysis.Complex.ExponentialBounds, Mathlib.Data.Real.Sqrt, Mathlib.Algebra.BigOperators.Intervals
+
+Draft0.DynamicGain
+  Source: Draft0/DynamicGain.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.ThreeArmComparison, Draft0.TerminalBounds, Draft0.PredictiveBound, Draft0.CorrectedLemma17, Draft0.TwoArmGain
+
+Draft0.DynamicPolicy
+  Source: Draft0/DynamicPolicy.lean
+  Public theorem/lemma declarations: 18
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.DynamicGain, Draft0.GaussianTail, Draft0.TerminalDrift
+
+Draft0.EvenCounts
+  Source: Draft0/EvenCounts.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.TwoArmGain, Draft0.Drift
+
+Draft0.EvenDrift
+  Source: Draft0/EvenDrift.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.EvenCounts, Draft0.TerminalDrift
+
+Draft0.EvenDynamicGain
+  Source: Draft0/EvenDynamicGain.lean
+  Public theorem/lemma declarations: 8
+  Header: Actual quantitative Gaussian gains for the corrected even-budget drift. The analytic arguments use the existing Gaussian losses and forecasts, with drift coefficients 300 for nonterminal states and 350 for terminal states.
+  Imports: Draft0.DynamicGain
+
+Draft0.EvenDynamicPolicy
+  Source: Draft0/EvenDynamicPolicy.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.DynamicPolicy, Draft0.EvenDrift, Draft0.EvenDynamicGain
+
+Draft0.Execution
+  Source: Draft0/Execution.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.FrequentistModel
+
+Draft0.FrequentistModel
+  Source: Draft0/FrequentistModel.lean
+  Public theorem/lemma declarations: 14
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.BadEvent, Draft0.PolicyPaths
+
+Draft0.Gaussian
+  Source: Draft0/Gaussian.lean
+  Public theorem/lemma declarations: 35
+  Header: Corrections of Gaussian formulas in old_version.pdf. The statements quantify over every real gap/mean and every admissible positive variance/count. Probability expressions use actual mathlib Gaussian measures. No statement here is assumed as a paper-specific axiom.
+  Imports: Mathlib.Probability.Distributions.Gaussian.Real, Mathlib.MeasureTheory.Group.IntegralConvolution, Mathlib.Tactic
+
+Draft0.GaussianTail
+  Source: Draft0/GaussianTail.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Gaussian, Draft0.Rates, Draft0.Drift
+
+Draft0.MainBridge
+  Source: Draft0/MainBridge.lean
+  Public theorem/lemma declarations: 8
+  Header: Corrected deterministic induction and terminal recommendation step in Theorem 2. The action admissibility premises are explicit. Establishing them for the actual Bayes optimal policy still requires stochastic Bellman comparison lemmas. In particular the terminal premise is separate, never inferred from t < T.
+  Imports: Mathlib.Analysis.Complex.ExponentialBounds, Mathlib.Data.Real.Sqrt, Mathlib.Tactic.FinCases, Mathlib.Tactic.Linarith, Mathlib.Tactic.NormNum, Mathlib.Tactic.Positivity, Draft0.Rates
+
+Draft0.MainTheorem
+  Source: Draft0/MainTheorem.lean
+  Public theorem/lemma declarations: 14
+  Header: End-to-end regret bounds for the explicitly defined posterior Bayes optimal Gaussian algorithm on true means (0,0,1). The event probabilities, Bellman comparisons, all action choices and terminal recommendation are proved.
+  Imports: Draft0.DynamicPolicy, Draft0.EvenDynamicPolicy, Draft0.PathInduction, Draft0.FrequentistModel, Draft0.BadEvent50, Draft0.Optimality, Draft0.PosteriorLaw
+
+Draft0.Optimality
+  Source: Draft0/Optimality.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.PosteriorRegret
+
+Draft0.PathInduction
+  Source: Draft0/PathInduction.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.PolicyPaths, Draft0.Drift
+
+Draft0.PolicyPaths
+  Source: Draft0/PolicyPaths.lean
+  Public theorem/lemma declarations: 15
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.BayesianModel, Draft0.PosteriorRegret, Draft0.MainBridge, Mathlib.MeasureTheory.Constructions.Pi
+
+Draft0.PosteriorLaw
+  Source: Draft0/PosteriorLaw.lean
+  Public theorem/lemma declarations: 18
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Optimality
+
+Draft0.PosteriorRegret
+  Source: Draft0/PosteriorRegret.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.BayesianModel
+
+Draft0.PredictiveBound
+  Source: Draft0/PredictiveBound.lean
+  Public theorem/lemma declarations: 7
+  Header: A quantitative replacement for the nonterminal Gaussian probability estimate in Lemma 17. All probabilities use the actual Gaussian measure. The bound on the predictive mean is an explicit hypothesis; it is not a custom axiom. The zero-variance terminal state is deliberately outside this theorem.
+  Imports: Draft0.Rates, Mathlib.Probability.Distributions.Gaussian.Real, Mathlib.Tactic
+
+Draft0.PredictiveLaw
+  Source: Draft0/PredictiveLaw.lean
+  Public theorem/lemma declarations: 5
+  Header: The forecast law for the corrected deterministic balanced schedule, defined by convolving the centered Gaussian posterior innovations of Section 5.1. Its variance is exactly the difference of initial and final posterior variances. A separate model-identification argument is needed to identify this measure recursion with the paper's conditional random history.
+  Imports: Draft0.Counts, Draft0.Gaussian
+
+Draft0.Rates
+  Source: Draft0/Rates.lean
+  Public theorem/lemma declarations: 38
+  Header: Corrected integer-budget asymptotic algebra for Appendix E.3 and the regret step of Theorem 2. The hypotheses giving bounds on the actual EBI functions, event probabilities, and simple regret are explicitly conditional. This file does not claim those stochastic hypotheses have been established.
+  Imports: Mathlib.Analysis.Asymptotics.SpecificAsymptotics, Mathlib.MeasureTheory.Integral.Bochner.Set, Mathlib.Tactic
+
+Draft0.Regression
+  Source: Draft0/Regression.lean
+  Public theorem/lemma declarations: 9
+  Header: Previously failing parameter choices, checked against the corrected statements. Every declaration is a Lean proof. These cases supplement the general theorems.
+  Imports: Draft0.Gaussian, Draft0.Counts, Draft0.MainBridge
+
+Draft0.SmallBall
+  Source: Draft0/SmallBall.lean
+  Public theorem/lemma declarations: 7
+  Header: Actual Gaussian small-ball bound replacing the flawed variance estimate in Appendix B. The final probability retains the paper's printed f₂ constant.
+  Imports: Draft0.Gaussian, Mathlib.Tactic
+
+Draft0.TerminalBounds
+  Source: Draft0/TerminalBounds.lean
+  Public theorem/lemma declarations: 14
+  Header: # Quantitative corrected terminal loss bounds The bounds use the actual Gaussian measures and loss definitions proved in Draft0.Gaussian. In particular the lower bound for Lemma 14 is valid at gap zero, where the product printed in the paper vanishes.
+  Imports: Draft0.Gaussian, Draft0.Rates, Draft0.Counts
+
+Draft0.TerminalDrift
+  Source: Draft0/TerminalDrift.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Drift, Draft0.TerminalBounds
+
+Draft0.ThreeArmComparison
+  Source: Draft0/ThreeArmComparison.lean
+  Public theorem/lemma declarations: 25
+  Header: Perfect-information slack for adding a third arm to the two-arm Bellman problem. The slack is the genuine posterior expectation of the positive part of the third arm's advantage over the first. It is preserved in expectation by either arm's Gaussian posterior innovation.
+  Imports: Draft0.Gaussian, Draft0.BayesianModel, Draft0.TwoArmBellman
+
+Draft0.TwoArmBellman
+  Source: Draft0/TwoArmBellman.lean
+  Public theorem/lemma declarations: 39
+  Header: Finite-horizon, two-arm posterior-mean Bellman model. Each action has the Gaussian innovation law already proved in Draft0.Gaussian. The terminal reward is the larger posterior mean. The recursive maximization is defined explicitly.
+  Imports: Draft0.Gaussian, Draft0.Counts, Mathlib.Tactic
+
+Draft0.TwoArmGain
+  Source: Draft0/TwoArmGain.lean
+  Public theorem/lemma declarations: 26
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.TwoArmBellman, Draft0.PredictiveLaw
+
+Junpei.AdaptivePosteriorSufficiency
+  Source: Junpei/AdaptivePosteriorSufficiency.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FlatPriorProduct
+
+Junpei.BayesOptimal
+  Source: Junpei/BayesOptimal.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FinitePosterior
+
+Junpei.ChoiceAsymptotic
+  Source: Junpei/ChoiceAsymptotic.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicyChoice
+
+Junpei.CommonSample
+  Source: Junpei/CommonSample.lean
+  Public theorem/lemma declarations: 18
+  Header: Explicit common observation streams and deterministic observation schedules. Every coordinate is a Gaussian posterior-mean innovation indexed by arm and current integer precision. The corresponding observation is obtained by the normal conjugate update. Permuting an allocation preserves the common samples pointwise, and preserves its actual posterior-predictive terminal regret.
+  Imports: Junpei.TwoArmOptimal, Junpei.Information, Junpei.ForecastRules
+
+Junpei.CommonSampleIntegral
+  Source: Junpei/CommonSampleIntegral.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.CommonSampleJoint
+
+Junpei.CommonSampleJoint
+  Source: Junpei/CommonSampleJoint.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.CommonSampleLaw
+
+Junpei.CommonSampleLaw
+  Source: Junpei/CommonSampleLaw.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Coupling19Saturated, Mathlib.Probability.HasLaw
+
+Junpei.CountComparison
+  Source: Junpei/CountComparison.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.CorrectedLemma17, Draft0.BadEvent
+
+Junpei.CountModelBridge
+  Source: Junpei/CountModelBridge.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.PosteriorRegret, Junpei.FinitePosterior
+
+Junpei.Coupling19
+  Source: Junpei/Coupling19.lean
+  Public theorem/lemma declarations: 21
+  Header: Explicit arm-dependent optimal allocations, permutation of their common samples, and the conditional last-observation identities used in Lemma 19.
+  Imports: Junpei.CommonSample, Junpei.Coupling19Counts
+
+Junpei.Coupling19Counts
+  Source: Junpei/Coupling19Counts.lean
+  Public theorem/lemma declarations: 12
+  Header: A single globally fixed left-tie rule cannot supply the skip orientation for both forced-arm comparisons. The counterexample persists at arbitrarily large odd horizons. The paper's explicit orientation choice is formalized using one fixed count-only rule within each comparison, chosen for that arm.
+  Imports: Junpei.Dynamic, Junpei.ForecastRules
+
+Junpei.Coupling19Rates
+  Source: Junpei/Coupling19Rates.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Coupling19
+
+Junpei.Coupling19Saturated
+  Source: Junpei/Coupling19Saturated.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Coupling19Rates
+
+Junpei.Coupling19Stream
+  Source: Junpei/Coupling19Stream.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.CommonSampleIntegral
+
+Junpei.Dynamic
+  Source: Junpei/Dynamic.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.CountComparison, Draft0.DynamicGain
+
+Junpei.EmbeddingAudit
+  Source: Junpei/EmbeddingAudit.lean
+  Public theorem/lemma declarations: 0
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicyEmbedding
+
+Junpei.EmbeddingCoupling
+  Source: Junpei/EmbeddingCoupling.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingRandomized, Junpei.MockLaw, Junpei.MockSample
+
+Junpei.EmbeddingDirect
+  Source: Junpei/EmbeddingDirect.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FiniteModelExclusion
+
+Junpei.EmbeddingExecution
+  Source: Junpei/EmbeddingExecution.lean
+  Public theorem/lemma declarations: 18
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingRaw, Junpei.MockStream, Junpei.FiniteModelMeasurable, Junpei.ObservationBridge
+
+Junpei.EmbeddingMeasurable
+  Source: Junpei/EmbeddingMeasurable.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingExecution
+
+Junpei.EmbeddingRandomized
+  Source: Junpei/EmbeddingRandomized.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingExecution
+
+Junpei.EmbeddingRaw
+  Source: Junpei/EmbeddingRaw.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingDirect, Junpei.FiniteModelMeasurable
+
+Junpei.Empirical
+  Source: Junpei/Empirical.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ProbabilityModel, Junpei.PathInduction, Draft0.FrequentistModel
+
+Junpei.Exclusion
+  Source: Junpei/Exclusion.lean
+  Public theorem/lemma declarations: 20
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.PosteriorLaw, Draft0.ThreeArmComparison, Draft0.GaussianTail, Junpei.CountComparison
+
+Junpei.ExclusionAsymptotics
+  Source: Junpei/ExclusionAsymptotics.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ExclusionBounds, Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
+
+Junpei.ExclusionAudit
+  Source: Junpei/ExclusionAudit.lean
+  Public theorem/lemma declarations: 0
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ExclusionAsymptotics, Junpei.ExclusionPerm, Junpei.ExclusionLoss, Junpei.FiniteModelExclusion, Junpei.FiniteModelMeasurable, Junpei.Information
+
+Junpei.ExclusionBounds
+  Source: Junpei/ExclusionBounds.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Exclusion, Junpei.ExclusionTail, Draft0.DynamicPolicy
+
+Junpei.ExclusionLoss
+  Source: Junpei/ExclusionLoss.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Exclusion
+
+Junpei.ExclusionPerm
+  Source: Junpei/ExclusionPerm.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Exclusion
+
+Junpei.ExclusionTail
+  Source: Junpei/ExclusionTail.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.GaussianTail, Junpei.CountComparison, Mathlib.Analysis.Real.Pi.Bounds
+
+Junpei.ExclusionVarianceComparison
+  Source: Junpei/ExclusionVarianceComparison.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ExclusionBounds
+
+Junpei.FiniteGaussian
+  Source: Junpei/FiniteGaussian.lean
+  Public theorem/lemma declarations: 20
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Gaussian, Mathlib.Topology.MetricSpace.Lipschitz
+
+Junpei.FiniteModelExclusion
+  Source: Junpei/FiniteModelExclusion.lean
+  Public theorem/lemma declarations: 19
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FinitePosterior, Draft0.ThreeArmComparison
+
+Junpei.FiniteModelMeasurable
+  Source: Junpei/FiniteModelMeasurable.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FinitePosterior
+
+Junpei.FinitePosterior
+  Source: Junpei/FinitePosterior.lean
+  Public theorem/lemma declarations: 36
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FiniteGaussian, Mathlib.MeasureTheory.Constructions.Pi, Mathlib.Probability.Independence.Basic
+
+Junpei.FixedGaussianAbsoluteContinuous
+  Source: Junpei/FixedGaussianAbsoluteContinuous.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingExecution
+
+Junpei.FixedGaussianFlatInitialization
+  Source: Junpei/FixedGaussianFlatInitialization.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianMain, Junpei.FlatPriorProduct
+
+Junpei.FixedGaussianInitialized
+  Source: Junpei/FixedGaussianInitialized.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianInitialReduction, Junpei.FixedGaussianStackExecution
+
+Junpei.FixedGaussianInitialReduction
+  Source: Junpei/FixedGaussianInitialReduction.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianTransfer, Junpei.InitialOptimalPaths
+
+Junpei.FixedGaussianLaws
+  Source: Junpei/FixedGaussianLaws.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianAbsoluteContinuous
+
+Junpei.FixedGaussianMain
+  Source: Junpei/FixedGaussianMain.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianMainLaw, Junpei.MainExactRate, Junpei.RegretRatio
+
+Junpei.FixedGaussianMainLaw
+  Source: Junpei/FixedGaussianMainLaw.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianInitialized, Junpei.FixedGaussianWindows, Junpei.FixedGaussianStackPath
+
+Junpei.FixedGaussianStackExecution
+  Source: Junpei/FixedGaussianStackExecution.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianStackLaws, Junpei.PolicyContinuation
+
+Junpei.FixedGaussianStackLaws
+  Source: Junpei/FixedGaussianStackLaws.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianLaws, Junpei.MockMeasure
+
+Junpei.FixedGaussianStackPath
+  Source: Junpei/FixedGaussianStackPath.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianStackExecution, Junpei.Empirical, Junpei.Main
+
+Junpei.FixedGaussianTransfer
+  Source: Junpei/FixedGaussianTransfer.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianLaws
+
+Junpei.FixedGaussianWindows
+  Source: Junpei/FixedGaussianWindows.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FixedGaussianStackLaws, Junpei.PolicySeeds
+
+Junpei.FlatPriorInitialization
+  Source: Junpei/FlatPriorInitialization.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.JointGaussianMeasurable
+
+Junpei.FlatPriorProduct
+  Source: Junpei/FlatPriorProduct.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FlatPriorInitialization, Mathlib.MeasureTheory.Integral.Pi
+
+Junpei.Footnote14Characterization
+  Source: Junpei/Footnote14Characterization.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Footnote14Scale, Junpei.UniformSamplingTail
+
+Junpei.Footnote14Scale
+  Source: Junpei/Footnote14Scale.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ProseCorollariesFootnote14
+
+Junpei.Forecast
+  Source: Junpei/Forecast.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.CountComparison
+
+Junpei.ForecastRules
+  Source: Junpei/ForecastRules.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Forecast
+
+Junpei.ForecastTerminal
+  Source: Junpei/ForecastTerminal.lean
+  Public theorem/lemma declarations: 1
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Forecast
+
+Junpei.GaussianComparison
+  Source: Junpei/GaussianComparison.lean
+  Public theorem/lemma declarations: 15
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.TwoArmBellman
+
+Junpei.GeneralOptimality
+  Source: Junpei/GeneralOptimality.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.GeneralOptimalityHistory
+
+Junpei.GeneralOptimalityFinite
+  Source: Junpei/GeneralOptimalityFinite.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.GeneralOptimalityProper
+
+Junpei.GeneralOptimalityHistory
+  Source: Junpei/GeneralOptimalityHistory.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.RealPrecisionPolicy
+
+Junpei.GeneralOptimalityProper
+  Source: Junpei/GeneralOptimalityProper.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.GeneralOptimality
+
+Junpei.Information
+  Source: Junpei/Information.lean
+  Public theorem/lemma declarations: 9
+  Header: Information cannot increase optimal posterior expected regret. The proof uses the actual finite-arm Gaussian Bellman recursion.
+  Imports: Junpei.FinitePosterior
+
+Junpei.InitialHistoryMain
+  Source: Junpei/InitialHistoryMain.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PosteriorStateHistory, Junpei.FixedGaussianMain
+
+Junpei.InitialOptimalDisintegration
+  Source: Junpei/InitialOptimalDisintegration.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.SequentialRisk
+
+Junpei.InitialOptimalHistory
+  Source: Junpei/InitialOptimalHistory.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.InitialOptimalPaths
+
+Junpei.InitialOptimalPaths
+  Source: Junpei/InitialOptimalPaths.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.InitialOptimalDisintegration
+
+Junpei.InitialOptimalTrace
+  Source: Junpei/InitialOptimalTrace.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.InitialOptimalPaths
+
+Junpei.JointGaussianMeasurable
+  Source: Junpei/JointGaussianMeasurable.lean
+  Public theorem/lemma declarations: 18
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockTie
+
+Junpei.LemmaRates
+  Source: Junpei/LemmaRates.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicyChoice, Junpei.ExclusionAsymptotics
+
+Junpei.Main
+  Source: Junpei/Main.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Empirical, Junpei.PolicyAEExecution, Junpei.ProbabilityPolynomial, Junpei.ProbabilityExact, Junpei.RegretExponent
+
+Junpei.MainExactRate
+  Source: Junpei/MainExactRate.lean
+  Public theorem/lemma declarations: 2
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Main, Junpei.ProbabilityExactRate
+
+Junpei.Marginal
+  Source: Junpei/Marginal.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.GaussianComparison, Draft0.TwoArmGain, Draft0.TerminalBounds
+
+Junpei.MarginalAudit
+  Source: Junpei/MarginalAudit.lean
+  Public theorem/lemma declarations: 0
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MarginalStrict, Junpei.MarginalTerminal, Junpei.TailRatio
+
+Junpei.MarginalCounts
+  Source: Junpei/MarginalCounts.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MarginalRates
+
+Junpei.MarginalRates
+  Source: Junpei/MarginalRates.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Marginal, Draft0.PredictiveBound
+
+Junpei.MarginalStrict
+  Source: Junpei/MarginalStrict.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MarginalCounts
+
+Junpei.MarginalTerminal
+  Source: Junpei/MarginalTerminal.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Marginal, Draft0.Drift, Draft0.PredictiveBound
+
+Junpei.MockAudit
+  Source: Junpei/MockAudit.lean
+  Public theorem/lemma declarations: 0
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockRisk
+
+Junpei.MockLaw
+  Source: Junpei/MockLaw.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockMeasure, Junpei.EmbeddingExecution
+
+Junpei.MockMeasurable
+  Source: Junpei/MockMeasurable.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockPolicy, Junpei.EmbeddingExecution
+
+Junpei.MockMeasure
+  Source: Junpei/MockMeasure.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockStream
+
+Junpei.MockPolicy
+  Source: Junpei/MockPolicy.lean
+  Public theorem/lemma declarations: 18
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockSample, Junpei.EmbeddingRaw
+
+Junpei.MockRisk
+  Source: Junpei/MockRisk.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockMeasurable, Junpei.MockLaw, Junpei.EmbeddingRandomized
+
+Junpei.MockSample
+  Source: Junpei/MockSample.lean
+  Public theorem/lemma declarations: 20
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockStream, Junpei.FiniteModelMeasurable
+
+Junpei.MockStream
+  Source: Junpei/MockStream.lean
+  Public theorem/lemma declarations: 18
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FiniteModelExclusion
+
+Junpei.MockTie
+  Source: Junpei/MockTie.lean
+  Public theorem/lemma declarations: 36
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MockRisk
+
+Junpei.ObservationBridge
+  Source: Junpei/ObservationBridge.lean
+  Public theorem/lemma declarations: 16
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FinitePosterior, Mathlib.MeasureTheory.Measure.CharacteristicFunction
+
+Junpei.PathInduction
+  Source: Junpei/PathInduction.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Policy, Junpei.ChoiceAsymptotic, Draft0.PathInduction
+
+Junpei.Policy
+  Source: Junpei/Policy.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.PolicyPaths
+
+Junpei.PolicyAE
+  Source: Junpei/PolicyAE.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Policy
+
+Junpei.PolicyAEAudit
+  Source: Junpei/PolicyAEAudit.lean
+  Public theorem/lemma declarations: 0
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicyAEExecution
+
+Junpei.PolicyAEExecution
+  Source: Junpei/PolicyAEExecution.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicySeeds
+
+Junpei.PolicyChoice
+  Source: Junpei/PolicyChoice.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Dynamic, Junpei.ExclusionBounds, Junpei.ExclusionPerm, Junpei.MarginalTerminal, Junpei.ForecastTerminal
+
+Junpei.PolicyContinuation
+  Source: Junpei/PolicyContinuation.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Policy, Junpei.EmbeddingExecution
+
+Junpei.PolicyContinuationOptimal
+  Source: Junpei/PolicyContinuationOptimal.lean
+  Public theorem/lemma declarations: 1
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicyContinuation, Junpei.CountModelBridge, Junpei.BayesOptimal
+
+Junpei.PolicyEmbedding
+  Source: Junpei/PolicyEmbedding.lean
+  Public theorem/lemma declarations: 8
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.EmbeddingCoupling, Junpei.EmbeddingMeasurable
+
+Junpei.PolicySeeds
+  Source: Junpei/PolicySeeds.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.PolicyAE
+
+Junpei.PosteriorStateHistory
+  Source: Junpei/PosteriorStateHistory.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.InitialOptimalHistory
+
+Junpei.Probability
+  Source: Junpei/Probability.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.BadEvent
+
+Junpei.ProbabilityExact
+  Source: Junpei/ProbabilityExact.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ProbabilityPolynomial, Junpei.TailRatio
+
+Junpei.ProbabilityExactRate
+  Source: Junpei/ProbabilityExactRate.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ProbabilityExact
+
+Junpei.ProbabilityModel
+  Source: Junpei/ProbabilityModel.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Probability, Junpei.CountComparison
+
+Junpei.ProbabilityPolynomial
+  Source: Junpei/ProbabilityPolynomial.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ProbabilityModel
+
+Junpei.ProseCorollariesErrorRate
+  Source: Junpei/ProseCorollariesErrorRate.lean
+  Public theorem/lemma declarations: 12
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FiniteModelExclusion, Junpei.RegretExponent
+
+Junpei.ProseCorollariesExclusion
+  Source: Junpei/ProseCorollariesExclusion.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.FiniteModelExclusion, Junpei.EmbeddingRandomized
+
+Junpei.ProseCorollariesFootnote14
+  Source: Junpei/ProseCorollariesFootnote14.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.ProbabilityPolynomial
+
+Junpei.ProseCorollariesRemark3
+  Source: Junpei/ProseCorollariesRemark3.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.Dynamic, Junpei.TwoArmOptimal
+
+Junpei.RateComparison
+  Source: Junpei/RateComparison.lean
+  Public theorem/lemma declarations: 14
+  Header: Limited comparison checks for junpei_version.pdf. These prove the revised rate algebra conditional on its stated component bounds. They do not formalize or certify the revised probabilistic or policy lemmas.
+  Imports: Draft0.MainTheorem
+
+Junpei.RealPrecisionMain
+  Source: Junpei/RealPrecisionMain.lean
+  Public theorem/lemma declarations: 11
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.RealPrecisionPolicy, Junpei.InitialHistoryMain
+
+Junpei.RealPrecisionPolicy
+  Source: Junpei/RealPrecisionPolicy.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.JointGaussianMeasurable, Junpei.InitialOptimalHistory
+
+Junpei.RegretExponent
+  Source: Junpei/RegretExponent.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Rates, Mathlib.Topology.Instances.EReal.Lemmas, Mathlib.Topology.Order.LiminfLimsup, Mathlib.Analysis.SpecificLimits.Basic, Mathlib.Analysis.SpecialFunctions.Log.Basic
+
+Junpei.RegretRatio
+  Source: Junpei/RegretRatio.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.MainExactRate
+
+Junpei.SequentialRisk
+  Source: Junpei/SequentialRisk.lean
+  Public theorem/lemma declarations: 21
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.CountModelBridge, Junpei.PolicyContinuation, Junpei.PolicyContinuationOptimal, Junpei.PolicySeeds, Junpei.EmbeddingRandomized, Junpei.BayesOptimal, Junpei.MainExactRate, Junpei.RegretRatio
+
+Junpei.TailRatio
+  Source: Junpei/TailRatio.lean
+  Public theorem/lemma declarations: 16
+  Header: [No module documentation header in this source.]
+  Imports: Draft0.Gaussian, Mathlib.MeasureTheory.Integral.IntegralEqImproper
+
+Junpei.TwoArmAudit
+  Source: Junpei/TwoArmAudit.lean
+  Public theorem/lemma declarations: 0
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.TwoArmOptimal, Junpei.Information
+
+Junpei.TwoArmOptimal
+  Source: Junpei/TwoArmOptimal.lean
+  Public theorem/lemma declarations: 15
+  Header: Exact scope of revised Lemma 17 (PDF page 33): positive INTEGER precisions. The Bellman recursion integrates the actual normal posterior innovations; its maximum ranges over both possible actions at every history.
+  Imports: Junpei.GaussianComparison, Junpei.FinitePosterior, Draft0.PredictiveLaw
+
+Junpei.UniformSampling
+  Source: Junpei/UniformSampling.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.UniformSamplingRounding
+
+Junpei.UniformSamplingConclusion
+  Source: Junpei/UniformSamplingConclusion.lean
+  Public theorem/lemma declarations: 6
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.UniformSamplingRate
+
+Junpei.UniformSamplingModel
+  Source: Junpei/UniformSamplingModel.lean
+  Public theorem/lemma declarations: 10
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.InitialOptimalHistory, Junpei.TailRatio, Junpei.ProseCorollariesErrorRate
+
+Junpei.UniformSamplingObservation
+  Source: Junpei/UniformSamplingObservation.lean
+  Public theorem/lemma declarations: 9
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.UniformSampling
+
+Junpei.UniformSamplingProbability
+  Source: Junpei/UniformSamplingProbability.lean
+  Public theorem/lemma declarations: 4
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.UniformSamplingModel
+
+Junpei.UniformSamplingRate
+  Source: Junpei/UniformSamplingRate.lean
+  Public theorem/lemma declarations: 3
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.UniformSamplingProbability, Junpei.UniformSamplingTail
+
+Junpei.UniformSamplingRounding
+  Source: Junpei/UniformSamplingRounding.lean
+  Public theorem/lemma declarations: 5
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.UniformSamplingConclusion
+
+Junpei.UniformSamplingTail
+  Source: Junpei/UniformSamplingTail.lean
+  Public theorem/lemma declarations: 7
+  Header: [No module documentation header in this source.]
+  Imports: Junpei.TailRatio, Junpei.RegretExponent

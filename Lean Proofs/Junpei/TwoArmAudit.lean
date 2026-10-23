@@ -1,0 +1,18 @@
+import Junpei.TwoArmOptimal
+import Junpei.Information
+
+#check Junpei.TwoArmOptimal.lemma17_every_posterior
+#check Junpei.TwoArmOptimal.lemma17_balanced_policy
+#check Junpei.TwoArmOptimal.lemma17_minimal_terminal_variance
+#check Junpei.TwoArmOptimal.lemma17_variance_identity
+#check Junpei.TwoArmOptimal.lemma17_gaussian_forecast
+#check Junpei.Information.expected_bellman_improvement_nonnegative
+
+#print axioms Junpei.TwoArmOptimal.value_eq_twoArm
+#print axioms Junpei.TwoArmOptimal.lemma17_every_posterior
+#print axioms Junpei.TwoArmOptimal.lemma17_balanced_policy
+#print axioms Junpei.TwoArmOptimal.lemma17_minimal_terminal_variance
+#print axioms Junpei.TwoArmOptimal.lemma17_variance_identity
+#print axioms Junpei.TwoArmOptimal.lemma17_gaussian_forecast
+#print axioms Junpei.Information.value_le_action
+#print axioms Junpei.Information.expected_bellman_improvement_nonnegative

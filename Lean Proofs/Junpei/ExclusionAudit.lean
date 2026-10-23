@@ -1,0 +1,31 @@
+import Junpei.ExclusionAsymptotics
+import Junpei.ExclusionPerm
+import Junpei.ExclusionLoss
+import Junpei.FiniteModelExclusion
+import Junpei.FiniteModelMeasurable
+import Junpei.Information
+
+#check Junpei.ExclusionBounds.lemma11_from_equation11
+#check Junpei.ExclusionPerm.lemma12_k3
+#check Junpei.FiniteModelExclusion.lemma12_any_finite_arm
+#check Junpei.ExclusionLoss.lemma13_loss
+#check Junpei.ExclusionLoss.lemma13_actionLoss
+#check Junpei.ExclusionAsymptotics.paperG0_littleO180_equation11
+#check Junpei.FinitePosterior.theorem1_global_bayes_optimality
+#check Junpei.FinitePosterior.theorem1_randomized_bayes_optimality
+#check Junpei.FiniteModelMeasurable.chooseFirst_measurable
+#check Junpei.FiniteModelMeasurable.optimalFirst_bayes_optimality
+#check Junpei.Information.expected_bellman_improvement_nonnegative
+
+#print axioms Junpei.ExclusionBounds.lemma11_from_equation11
+#print axioms Junpei.ExclusionPerm.lemma12_k3
+#print axioms Junpei.FiniteModelExclusion.lemma12_any_finite_arm
+#print axioms Junpei.ExclusionLoss.lemma13_loss
+#print axioms Junpei.ExclusionLoss.lemma13_actionLoss
+#print axioms Junpei.ExclusionAsymptotics.paperG0_littleO180_equation11
+#print axioms Junpei.FinitePosterior.expectation_tower
+#print axioms Junpei.FinitePosterior.theorem1_global_bayes_optimality
+#print axioms Junpei.FinitePosterior.theorem1_randomized_bayes_optimality
+#print axioms Junpei.FiniteModelMeasurable.chooseFirst_measurable
+#print axioms Junpei.FiniteModelMeasurable.optimalFirst_bayes_optimality
+#print axioms Junpei.Information.expected_bellman_improvement_nonnegative

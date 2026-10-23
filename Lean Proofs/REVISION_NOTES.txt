@@ -1,0 +1,118 @@
+JUNPEI LEAN SUBMISSION — REVISION 3
+
+NEW CORRECTED GAUSSIAN-TAIL EQUIVALENCE
+
+Revision 3 extends revision 2 with Junpei/Footnote14Characterization.lean,
+containing 12 public theorems. The complete inventory is now 156 proof modules
+and 1,517 public theorem/lemma declarations. All 155 revision 2 proof modules,
+including its Theorem 1 extension and the Footnote 14 counterexample, are
+preserved byte for byte. The supplied manuscript is unchanged.
+
+Exact requested endpoint:
+  Junpei.Footnote14Characterization.corrected_footnote14_iff
+
+For any d : Nat -> Real with forall T, 0 <= d T, this states the equivalence:
+  there exist real c > 0, real p > 0, and natural T0 such that for all T >= T0,
+  c*T^(-p) <= (gaussianReal 0 (((T : NNReal)^3)^(-1))).real (Ici (d T));
+  if and only if d =O[atTop] (fun T => T^(-3/2)*sqrt(log T)).
+
+The quantifier order makes c, p, and T0 independent of T, while allowing them
+to depend on d. No monotonicity, continuity, convergence, or other assumptions
+on d are present. The tail is the actual Gaussian probability, with variance
+T^(-3); the right side uses Lean's asymptotic notation.
+
+Proof route:
+  tail_standardize uses the existing standardDeviation and its squared-scale
+  identity to identify the Gaussian tail with the standard-normal tail.
+  eventuallyPolynomialTail_of_isBigO proves sufficiency using the existing
+  Gaussian polynomial lower bound and monotonicity of the tail event.
+  standardized_threshold_sq_bound and isBigO_of_eventuallyPolynomialTail
+  prove necessity using existing Gaussian logarithmic tail estimates.
+  realExponentPolynomialTail_iff_eventually proves both conversions between
+  the intermediate natural exponent and the exact positive real exponent and
+  explicit starting horizon used in the final statement.
+
+The proof uses these already formalized tail estimates; the optional new
+density-interval estimate suggested in the request is not needed as a lemma.
+All parts of the requested equivalence are proved in the final endpoint.
+
+Focused inspection:
+  lake env lean checks/Footnote14CharacterizationAudit.lean
+
+REVISION 2 BACKGROUND: THEOREM 1 CORRECTION
+
+The first release overstated the scope of its Theorem 1 coverage. It proved
+that a constructed policy is optimal for general finite arm sets, but its
+implication from arbitrary policy optimality to the stated sampling and
+recommendation rules was restricted to three arms and integer counts.
+Repackaging those same proofs did not establish the missing general result.
+
+Revision 2 added four modules and 35 public theorem declarations. Its complete
+inventory was 155 proof modules and 1,505 public theorem/lemma declarations.
+The original 151 proof modules are unchanged; their proofs remain dependencies.
+
+NEW PROOF CHAIN
+
+  Junpei/GeneralOptimalityHistory.lean (6 theorems)
+    Compile posterior-state rules into concrete Borel history policies and
+    prove exact equality of raw execution and actual posterior risk.
+
+  Junpei/GeneralOptimality.lean (10 theorems)
+    Derive Bellman risk equality, EBI-maximizing draws, and maximal-mean
+    recommendations from actual-risk minimization at a single state. Package
+    the conclusions for every remaining horizon of a fixed finite budget.
+
+  Junpei/GeneralOptimalityProper.lean (8 theorems)
+    Use rules defined only on proper Gaussian states. Prove that extending
+    those rules to unused improper states preserves their direct execution
+    and actual risk; transfer the characterization to the original domain.
+
+  Junpei/GeneralOptimalityFinite.lean (11 theorems)
+    Use exactly N sampling rules, indexed by Fin N, and one terminal rule.
+    Prove that constant padding outside the budget preserves execution and
+    risk. Establish the characterization and a concrete optimal-policy witness
+    in this finite class. No rules beyond the fixed budget are hypotheses.
+
+PRINCIPAL THEOREM 1 ENDPOINT
+
+  Junpei.GeneralOptimality.FiniteHorizon.theorem1
+
+The policy is any Borel randomized posterior-state policy in the finite class.
+Its premise is actual posterior-risk minimization against all concrete Borel
+history continuation policies at each proper state and remaining horizon.
+The arm set is an arbitrary finite nonempty ordered type, including Fin K for
+every K >= 1. All posterior precisions are arbitrary strictly positive reals.
+For the paper, N = T - K and sampling index j = T - t.
+
+The theorem derives all three conclusions: actual risk equals Bellman loss;
+the selected arm maximizes EBI almost surely in the fresh Gaussian randomizer;
+and the terminal recommendation maximizes posterior mean almost surely.
+The conclusions are not assumptions in the actual-risk optimality predicate.
+The companion exists_sequentiallyOptimal theorem supplies a concrete witness.
+
+VERIFICATION AND NAVIGATION
+
+Run python -X utf8 verify.py --fresh from the project root. Mathematical
+verification is performed by Lean. Python only orchestrates the compiler,
+inventories declarations, and records file identities and compiler outputs.
+The full run now includes 12 supplementary audits. For Theorem 1 inspection:
+
+  lake env lean checks/GeneralOptimalityAudit.lean
+
+REPORT.txt and verification_results.json record the current run. The aggregate
+BundleAudit.lean includes all 1,517 public theorem/lemma declarations.
+docs/PROOF_MAP.html and docs/PROOF_MAP.txt identify the new principal endpoint
+and the supporting definitions, transport identities, and existence proof.
+evidence/source_equivalence.json records the source differences from revision 2.
+The previous revision's records are preserved in evidence/revision2_run/.
+
+UNCHANGED SCOPE
+
+Theorem 2 and its initial-risk-to-frequentist-regret chain are unchanged and
+included in the full verification run. The manuscript PDF is unchanged.
+The existing Footnote 14 counterexample is retained. The corrected equivalence
+is supplied as a separate Lean result; it does not edit the manuscript.
+Conjecture 9 remains open. The contextual exclusions in ALL_ARGUMENTS_STATUS.txt
+remain exclusions; complete_literal_manuscript_formalization remains false.
+The Theorem 1 correction and new Gaussian-tail equivalence do not change the
+status of unrelated contextual assertions in the manuscript.

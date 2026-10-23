@@ -1,0 +1,150 @@
+Junpei.FixedGaussian.finite_pi_absolutelyContinuous.{u_1, u_2} {I : Type u_1} {B : Type u_2} [Fintype I]
+  [MeasurableSpace B] (μ ν : I → MeasureTheory.Measure B) [∀ (i : I), MeasureTheory.SigmaFinite (μ i)]
+  [∀ (i : I), MeasureTheory.SigmaFinite (ν i)] (h : ∀ (i : I), (μ i).AbsolutelyContinuous (ν i)) :
+  (MeasureTheory.Measure.pi μ).AbsolutelyContinuous (MeasureTheory.Measure.pi ν)
+Junpei.FixedGaussian.fixed_predictive_equivalent.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m μ : Junpei.FiniteGaussian.Means A) :
+  (Junpei.FixedGaussian.fixedLaw H μ).AbsolutelyContinuous (Junpei.FixedGaussian.predictiveLaw H c m) ∧
+    (Junpei.FixedGaussian.predictiveLaw H c m).AbsolutelyContinuous (Junpei.FixedGaussian.fixedLaw H μ)
+Junpei.FixedGaussian.seeded_fixed_predictive_equivalent.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] {S : Type u_2} [MeasurableSpace S] (σ : MeasureTheory.Measure S) (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m μ : Junpei.FiniteGaussian.Means A) :
+  (σ.prod (Junpei.FixedGaussian.fixedLaw H μ)).AbsolutelyContinuous
+      (σ.prod (Junpei.FixedGaussian.predictiveLaw H c m)) ∧
+    (σ.prod (Junpei.FixedGaussian.predictiveLaw H c m)).AbsolutelyContinuous
+      (σ.prod (Junpei.FixedGaussian.fixedLaw H μ))
+Junpei.FixedGaussian.adaptive_map_equivalent.{u_1, u_2, u_3} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  {S : Type u_2} {B : Type u_3} [MeasurableSpace S] [MeasurableSpace B] (σ : MeasureTheory.Measure S) (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m μ : Junpei.FiniteGaussian.Means A)
+  (f : S × Junpei.EmbeddingRaw.RawStream A H → B) (hf : Measurable f) :
+  (MeasureTheory.Measure.map f (σ.prod (Junpei.FixedGaussian.fixedLaw H μ))).AbsolutelyContinuous
+      (MeasureTheory.Measure.map f (σ.prod (Junpei.FixedGaussian.predictiveLaw H c m))) ∧
+    (MeasureTheory.Measure.map f (σ.prod (Junpei.FixedGaussian.predictiveLaw H c m))).AbsolutelyContinuous
+      (MeasureTheory.Measure.map f (σ.prod (Junpei.FixedGaussian.fixedLaw H μ)))
+Junpei.FixedGaussian.ae_execution_transfer.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  {S : Type u_2} [MeasurableSpace S] (σ : MeasureTheory.Measure S) [MeasureTheory.SFinite σ] (H : ℕ)
+  (c : Junpei.FiniteGaussian.Precisions A) (m μ : Junpei.FiniteGaussian.Means A)
+  (P : S × Junpei.EmbeddingRaw.RawStream A H → Prop) (hP : MeasurableSet {p | P p})
+  (h :
+    ∀ᵐ (p :
+      S ×
+        Junpei.FiniteGaussian.Means A ×
+          Junpei.EmbeddingRaw.RawStream A H) ∂σ.prod (Junpei.EmbeddingExecution.worldLaw H c m),
+      P (p.1, Junpei.EmbeddingExecution.observations p.2)) :
+  ∀ᵐ (p : S × Junpei.EmbeddingRaw.RawStream A H) ∂σ.prod (Junpei.FixedGaussian.fixedLaw H μ), P p
+Junpei.FixedGaussian.recommendation_law_eq.{u_1, u_2, u_3} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  {S : Type u_2} {B : Type u_3} [MeasurableSpace S] [MeasurableSpace B] [Countable B] [MeasurableSingletonClass B]
+  (σ : MeasureTheory.Measure S) [MeasureTheory.SFinite σ] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m μ : Junpei.FiniteGaussian.Means A) (f g : S × Junpei.EmbeddingRaw.RawStream A H → B) (hf : Measurable f)
+  (hg : Measurable g)
+  (h :
+    ∀ᵐ (p :
+      S ×
+        Junpei.FiniteGaussian.Means A ×
+          Junpei.EmbeddingRaw.RawStream A H) ∂σ.prod (Junpei.EmbeddingExecution.worldLaw H c m),
+      f (p.1, Junpei.EmbeddingExecution.observations p.2) = g (p.1, Junpei.EmbeddingExecution.observations p.2)) :
+  MeasureTheory.Measure.map f (σ.prod (Junpei.FixedGaussian.fixedLaw H μ)) =
+    MeasureTheory.Measure.map g (σ.prod (Junpei.FixedGaussian.fixedLaw H μ))
+Junpei.FixedGaussian.minimizing_rawTree_repair_fixed_ae (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m μ : Draft0.BayesianModel.Means) (horizon : t + H = T + 1) (ht : 4 ≤ t)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (H + 1) ×
+      Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+        H) ∂(Junpei.Policy.seedLaw (H + 1)).prod (Junpei.FixedGaussian.fixedLaw H μ),
+    Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c m p.1) p.2 =
+      Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) t H c m p.1) p.2
+Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae (π : Junpei.Policy.StatePolicy) (T : ℕ) (hT : 3 ≤ T)
+  (hπ : Junpei.InitialOptimal.InitialRiskOptimal π T) (m μ : Draft0.BayesianModel.Means) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (T - 3 + 1) ×
+      Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+        (T - 3)) ∂(Junpei.Policy.seedLaw (T - 3 + 1)).prod (Junpei.FixedGaussian.fixedLaw (T - 3) μ),
+    Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π 4 (T - 3) (fun x => 1) m p.1) p.2 =
+      Junpei.EmbeddingRaw.run
+        (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) 4 (T - 3) (fun x => 1) m p.1) p.2
+Junpei.FixedGaussian.initialRiskOptimal_fixed_payoff_repair_eq (π : Junpei.Policy.StatePolicy) (T : ℕ) (hT : 3 ≤ T)
+  (hπ : Junpei.InitialOptimal.InitialRiskOptimal π T) (m μ : Draft0.BayesianModel.Means)
+  (L : Draft0.BayesianModel.Arm → ℝ) :
+  ∫ (p : Junpei.Policy.SeedArray (T - 3 + 1) × Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm (T - 3)),
+      L
+        (Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π 4 (T - 3) (fun x => 1) m p.1)
+          p.2) ∂(Junpei.Policy.seedLaw (T - 3 + 1)).prod (Junpei.FixedGaussian.fixedLaw (T - 3) μ) =
+    ∫ (p : Junpei.Policy.SeedArray (T - 3 + 1) × Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm (T - 3)),
+      L
+        (Junpei.EmbeddingRaw.run
+          (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) 4 (T - 3) (fun x => 1) m p.1)
+          p.2) ∂(Junpei.Policy.seedLaw (T - 3 + 1)).prod (Junpei.FixedGaussian.fixedLaw (T - 3) μ)
+'Junpei.FixedGaussian.finite_pi_absolutelyContinuous' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.fixed_predictive_equivalent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.seeded_fixed_predictive_equivalent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.adaptive_map_equivalent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.ae_execution_transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.recommendation_law_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.minimizing_rawTree_repair_fixed_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.initialRiskOptimal_fixed_payoff_repair_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+Junpei.FixedGaussian.selected_stack_split_preserving.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  (H : ℕ) (μ : Junpei.FiniteGaussian.Means A) (a : A) :
+  MeasureTheory.MeasurePreserving (fun r => (r a ⟨0, ⋯⟩, Junpei.FixedGaussian.stackTail a r))
+    (Junpei.FixedGaussian.fixedLaw (H + 1) μ)
+    ((ProbabilityTheory.gaussianReal (μ a) 1).prod (Junpei.FixedGaussian.fixedLaw H μ))
+Junpei.FixedGaussian.rawTree_stack_law_eq (π : Junpei.Policy.StatePolicy) (t H : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m μ : Draft0.BayesianModel.Means) (u : Junpei.PolicyContinuation.Seeds H) :
+  MeasureTheory.Measure.map (Junpei.FixedGaussian.stackRun (Junpei.PolicyContinuation.rawTree π t H c m u))
+      (Junpei.FixedGaussian.fixedLaw H μ) =
+    MeasureTheory.Measure.map (Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c m u))
+      (Junpei.FixedGaussian.fixedLaw H μ)
+Junpei.FixedGaussian.initializedInput_preserving (T : ℕ) (Δ : ℝ) (hT : 3 ≤ T) :
+  MeasureTheory.MeasurePreserving (Junpei.FixedGaussian.StackPath.initializedInput T Δ hT) (Junpei.Main.jointLaw T)
+    (Junpei.FixedGaussian.initializedLaw (T - 3) (Junpei.Empirical.trueMean Δ))
+Junpei.FixedGaussian.actualRecommendation_law (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) (hT : 3 ≤ T) :
+  MeasureTheory.Measure.map (Junpei.Main.actualRecommendation π T Δ) (Junpei.Main.jointLaw T) =
+    MeasureTheory.Measure.map (Junpei.FixedGaussian.initializedStackRun π (T - 3))
+      (Junpei.FixedGaussian.initializedLaw (T - 3) (Junpei.Empirical.trueMean Δ))
+Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) (hT : 3 ≤ T)
+  (hπ : Junpei.InitialOptimal.InitialRiskOptimal π T) :
+  Junpei.Main.regret π T Δ = Junpei.Main.regret (Junpei.Policy.repair π T) T Δ
+Junpei.FixedGaussian.theorem2_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy),
+                Junpei.InitialOptimal.InitialRiskOptimal π T → c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret π T Δ
+Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c T0,
+    0 < c ∧
+      ∀ (T : ℕ),
+        T0 ≤ T →
+          Odd T →
+            ∀ (π : Junpei.Policy.StatePolicy),
+              Junpei.InitialOptimal.InitialRiskOptimal π T →
+                c * ↑T ^ (-((33 + Δ) ^ 2 / 2 + 4)) ≤ Junpei.Main.regret π T Δ
+Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ)
+  (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.InitialOptimal.InitialRiskOptimal (family T) T) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (family T) T Δ) Filter.atTop = 0
+Junpei.FixedGaussian.remark2_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.InitialOptimal.InitialRiskOptimal (family T) T) (rFreq : ℕ → ℝ)
+  (hF : ∀ (T : ℕ), 0 ≤ rFreq T) (hpositive : 0 < Filter.liminf (Junpei.RegretExponent.rate rFreq) Filter.atTop) :
+  Filter.limsup (Junpei.RegretRatio.ratio (fun T => Junpei.Main.regret (family T) T Δ) rFreq) Filter.atTop = ⊤
+Junpei.FixedGaussian.exists_initialRiskOptimal (T : ℕ) (hT : 3 ≤ T) : ∃ π, Junpei.InitialOptimal.InitialRiskOptimal π T
+'Junpei.FixedGaussian.selected_stack_split_preserving' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.rawTree_stack_law_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.initializedInput_preserving' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.actualRecommendation_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.theorem2_initialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.FixedGaussian.remark2_initialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.exists_initialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]

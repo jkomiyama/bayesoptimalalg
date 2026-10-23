@@ -1,0 +1,1049 @@
+JUNPEI MANUSCRIPT TO LEAN: PROOF MAP
+
+This is the reading guide for the submitted formal proof sources. Paths below
+are relative to the submission directory, not to this docs/ directory.
+Page numbers refer to the supplied 38-page junpei_version.pdf, whose SHA256 is:
+e8bd134e3463a4606354a6ac7c86ff1f95b96f77d5a8dbf0658fbc9b64ed5263
+
+This map includes all 18 numbered proved results, Definitions 1-5, every
+numbered equation (1)-(25), Remarks 1-3, the principal unnumbered proof
+arguments, additional constructions, and explicit scope exceptions.
+It also records the separately requested corrected Gaussian-tail condition;
+that added statement is not text in the unchanged PDF.
+The machine-readable equivalent is docs/proof_map.tsv. It contains one row
+per manuscript item or requested correction; declaration names, source
+locations, and kinds are aligned in the same order. A source location has
+the form path:line. There are 76 mapped items (75 manuscript items and one
+requested correction) and 292 declaration references in this map.
+
+IMPORTANT STATUS
+The numbered theorem/lemma formalizations are accepted by Lean. The entire
+manuscript is not certified correct: Lean proves a counterexample to
+Footnote 14. Conjecture 9 and the Appendix F proposal remain open/unproved.
+Some contextual literature assertions and general-prior extensions are
+outside the formalization. Equation (12) is one such contextual definition.
+Equation (18) is mapped to the formal hinge-integral proof route, without
+claiming a standalone theorem reproducing its displayed equality verbatim.
+A definition, a theorem hypothesis, and a proved assertion have different
+roles. The status labels below distinguish those roles.
+The corrected Footnote 14 condition is a separate PROVED CORRECTION item.
+Its verification does not alter the PDF or the REFUTED status of the
+original footnote. It does not establish the proposed enlarged-event bound.
+
+Use the submission README for setup and verification commands. REPORT.txt
+and verification_results.json record compiler evidence; logs/ contains the
+actual output. A successful build accepts the counterexample proof as well
+as the positive theorems. It does not make the false footnote true.
+This map is documentation of the translation, not another mathematical
+proof checker. Its references were checked against the actual Lean source
+declarations and recorded theorem inventory. Proof acceptance comes from
+Lean.
+
+WHERE TO START
+1. Junpei/RealPrecisionMain.lean:
+   Junpei.RealPrecisionMain.theorem2 is the broad main endpoint for Borel
+   policies on real-precision Gaussian states. Its assumption only requires
+   initial posterior risk minimization against concrete full-history Borel
+   continuation policies. The same file gives the printed exponent, zero
+   exponential-rate liminf, Remark 2, and an existence witness.
+2. Junpei/InitialHistoryMain.lean:
+   The equivalent integer-count policy endpoint, which directly uses the
+   original Junpei.Main.regret. The policy is posterior-state based; its
+   competitors are concrete Borel history policies.
+3. Junpei/InitialOptimalPaths.lean and Junpei/InitialOptimalTrace.lean:
+   Derive almost-sure agreement with a sequentially optimal repair from
+   actual initial risk minimization.
+4. Junpei/FixedGaussianMainLaw.lean and related FixedGaussian modules:
+   Transport this equality to every fixed Gaussian parameter and identify
+   the original frequentist reward-stack regret.
+5. Junpei/Main.lean:
+   The event probability, path argument, and regret lower bound under the
+   derived local almost-sure optimality predicate.
+6. Junpei/GeneralOptimalityFinite.lean:
+   Junpei.GeneralOptimality.FiniteHorizon.theorem1 handles any finite
+   collection of Borel rules on proper Gaussian states, with arbitrary
+   finite K and positive real precisions. Actual risk minimization implies
+   the risk identity and local rules. GeneralOptimalityProper,
+   GeneralOptimality, and GeneralOptimalityHistory prove the domain
+   extension, generic necessity argument, and concrete history compilation.
+   All extensions preserve direct execution and risk. FinitePosterior,
+   EmbeddingExecution, and RealPrecisionPolicy supply the foundations.
+7. Junpei/Footnote14Characterization.lean:
+   corrected_footnote14_iff is the separately requested correction, with
+   positive real c and p, an explicit starting horizon, the actual Gaussian
+   tail probability, and Lean IsBigO at T^(-3/2)*sqrt(log T). Supporting
+   endpoints expose standardization, both directions, and exponent
+   conversion. The PDF still contains the original refuted footnote.
+8. ClaimsAudit.lean, EndToEndAudit.lean, AdditionalProofAudit.lean, and
+   checks/ProseArgumentAudit.lean:
+   Lean #check/#print axioms entry points for reviewer inspection.
+
+HOW TO INSPECT A CLAIM
+Open its listed source file at the listed line and read the entire theorem
+signature, including all hypotheses. The proof follows ':= by'. Fully
+qualified names are unique across modules, even when file and namespace
+names differ. In a temporary Lean file in the project, after the build:
+  import JunpeiVersionLean
+  #check Junpei.RealPrecisionMain.theorem2
+  #print axioms Junpei.RealPrecisionMain.theorem2
+Then run it with 'lake env lean <your-file>.lean'. The supplied audit files
+already provide reproducible versions of these inspections.
+
+A theorem is normally proved using smaller lemmas imported from other files.
+The entries below list principal endpoints and useful intermediate results;
+they do not repeat every transitive dependency. Keep both Junpei/ and
+Draft0/: Draft0 contains required foundations, and its older lemma numbers
+are not the current PDF numbering. Use this map rather than those historical
+names to locate the manuscript claim. JunpeiVersionLean.lean imports the
+complete proof collection.
+
+NOTATION BRIDGE
+* Paper arms 1,2,3 correspond to Fin 3 indices 0,1,2 in the policy model.
+  The count-path event model retains one-based indexing and proves the bridge.
+* Paper odd horizon T=2T'+1 is written T=2q+1.
+* Generic Bellman arguments use remaining draws, rather than absolute round.
+  EBI(k) compares k remaining draws after a skipped/forced current action;
+  inspect each signature rather than substituting paper t for Lean k.
+* Theorem 1 uses FiniteHorizon.Policy A N: N Borel draw rules and one
+  terminal rule, defined only on strictly positive real precisions.
+  Padding unused indices and extending the precision domain preserve
+  execution and risk. Reachable initialized counts are positive integers.
+* Set N = T - K after initialization. The draw index j = T - t in Fin N
+  counts draws remaining after the current action, so calendar order is
+  N-1,...,0. Sequential optimality concerns remaining budgets H <= N only;
+  N = 0 contains just the terminal recommendation.
+* invPower n T denotes (T^n)^(-1). Explicit positive coefficients and uniform
+  thresholds implement the paper's Omega bounds.
+* The predictive posterior law and the fixed-parameter frequentist reward law
+  are distinct measures. Their identities/transfers are proved explicitly.
+* Zero regret gives rate +infinity in EReal. The main polynomial bound is on
+  odd horizons; the zero limit inferior and ratio consequence concern the
+  complete horizon sequence.
+
+SCOPE THAT MUST ACCOMPANY THE BUNDLE
+The main algorithm is a posterior-state policy as in Definition 3. No theorem
+asserts that every arbitrary history minimizer can be replaced by a state
+policy while preserving every history correlation. Proper product-Gaussian
+posteriors are the prior class covered by the Bellman optimality proofs.
+Auxiliary mock/coupling randomness is realized as independent Gaussian
+blocks; no general block-to-one-scalar randomizer compression is supplied.
+The labelled adaptive likelihood normalization is not by itself a theorem
+about every arbitrary adaptive-history regular conditional distribution.
+The actual Gaussian observation/risk bridges are separate named theorems.
+Historical claims, cited literature results, and numerical examples are not
+silently promoted into formal targets. See ALL_ARGUMENTS_STATUS.txt and
+COVERAGE.txt for the inherited full scope record.
+
+PAPER-ITEM INDEX
+
+NUMBERED THEOREMS, LEMMAS, AND CONJECTURE
+=========================================
+
+Theorem 1 | PDF pp. 10-11 | PROVED
+Bayes optimal actions, recommendations, and posterior risk
+FiniteHorizon.theorem1 is the principal endpoint for any finite collection of N Borel sampling rules and one terminal rule, defined only on the paper's proper Gaussian states, for arbitrary finite K and positive real precisions. Its premise is actual posterior-risk minimization against concrete Borel full-history policies at each state and remaining budget H <= N. It derives the Bellman risk identity, almost-sure EBI-maximizing sampling, and maximal-mean recommendation. Padding the finite rule collection and extending outside positive precisions preserve direct execution and risk. The supporting generic theorems also derive these conclusions from single-state minimization. No Bellman-action premise, rule beyond the finite budget, or optimality at a larger horizon is assumed.
+  Junpei.GeneralOptimality.FiniteHorizon.theorem1
+    Junpei/GeneralOptimalityFinite.lean:117 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.rawTree_extend
+    Junpei/GeneralOptimalityFinite.lean:67 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.actualRisk_extend
+    Junpei/GeneralOptimalityFinite.lean:84 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.exists_sequentiallyOptimal
+    Junpei/GeneralOptimalityFinite.lean:174 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.theorem1
+    Junpei/GeneralOptimalityProper.lean:138 [theorem]
+  Junpei.GeneralOptimality.theorem1
+    Junpei/GeneralOptimality.lean:132 [theorem]
+  Junpei.GeneralOptimality.minimizing_actualRisk_eq_loss
+    Junpei/GeneralOptimality.lean:38 [theorem]
+  Junpei.GeneralOptimality.minimizesHistoryRisk_iff_actualRisk_eq_loss
+    Junpei/GeneralOptimality.lean:45 [theorem]
+  Junpei.GeneralOptimality.minimizing_draw_EBI_ae
+    Junpei/GeneralOptimality.lean:97 [theorem]
+  Junpei.GeneralOptimality.minimizing_recommend_ae
+    Junpei/GeneralOptimality.lean:107 [theorem]
+  Junpei.GeneralOptimality.toRaw_compile
+    Junpei/GeneralOptimalityHistory.lean:90 [theorem]
+  Junpei.GeneralOptimality.actualRisk_compile
+    Junpei/GeneralOptimalityHistory.lean:119 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.rawTree_extend
+    Junpei/GeneralOptimalityProper.lean:90 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.actualRisk_extend
+    Junpei/GeneralOptimalityProper.lean:105 [theorem]
+  Junpei.BayesOptimal.optimal_action_iff_EBI_max
+    Junpei/BayesOptimal.lean:41 [theorem]
+  Junpei.BayesOptimal.terminal_recommendation_iff
+    Junpei/BayesOptimal.lean:56 [theorem]
+
+Theorem 2 | PDF pp. 11; proof 14-15 | PROVED
+Polynomial frequentist regret and zero exponential-rate liminf
+Three arms with means (0,0,Delta), every Delta>0; one policy-independent threshold and coefficient; polynomial bound at sufficiently large odd horizons. The liminf statement is over all horizons. RealPrecisionMain uses only initialization risk minimization against concrete Borel history competitors.
+  Junpei.RealPrecisionMain.theorem2
+    Junpei/RealPrecisionMain.lean:127 [theorem]
+  Junpei.RealPrecisionMain.theorem2_paper_exponent
+    Junpei/RealPrecisionMain.lean:138 [theorem]
+  Junpei.RealPrecisionMain.theorem2_exponential_rate
+    Junpei/RealPrecisionMain.lean:149 [theorem]
+  Junpei.InitialHistoryMain.theorem2
+    Junpei/InitialHistoryMain.lean:20 [theorem]
+  Junpei.Main.theorem2
+    Junpei/Main.lean:98 [theorem]
+  Junpei.Main.theorem2_exponential_rate
+    Junpei/Main.lean:123 [theorem]
+
+Lemma 3 | PDF pp. 13 | PROVED
+Probability of severe underestimation of arm 3
+Exact printed f1; arbitrary Delta>0 and CU>0, eventually every natural horizon. The finite bound records its explicit threshold hypotheses.
+  Junpei.Probability.lemma3
+    Junpei/ProbabilityExact.lean:18 [theorem]
+  Junpei.Probability.lemma3_eventually
+    Junpei/ProbabilityExact.lean:72 [theorem]
+  Junpei.TailRatio.shifted_left_tail
+    Junpei/TailRatio.lean:28 [theorem]
+
+Lemma 4 | PDF pp. 13; proof 24 | PROVED
+Small-ball probability for each zero-mean arm
+Odd T=2q+1, q>0; actual sample mean variance 1/q; exact printed f2.
+  Junpei.Probability.lemma4
+    Junpei/Probability.lean:158 [theorem]
+  Draft0.SmallBall.f2
+    Draft0/SmallBall.lean:16 [def]
+
+Lemma 5 | PDF pp. 13; proof 24 | PROVED
+Drift-event failure bound
+T>=5, q<=T; revised coefficient 3 in event Z; actual Gaussian arrays, finite union bound, and zero-variance endpoint.
+  Junpei.Probability.driftFailure3_probability_le
+    Junpei/Probability.lean:51 [theorem]
+  Junpei.Probability.goodDriftSet3_compl_probability_le
+    Junpei/Probability.lean:112 [theorem]
+  Junpei.Probability.lemma5
+    Junpei/Probability.lean:151 [theorem]
+
+Lemma 6 | PDF pp. 14; proof 24-27 | PROVED
+Arm 3 EBI upper bound
+Consistent revised W states and cutoff 180<(CU-6)^2/4. Explicit paperG0 envelope and little-o(T^-180), uniform in round, state, and policy.
+  Junpei.PolicyChoice.lemma6_upper
+    Junpei/PolicyChoice.lean:25 [theorem]
+  Junpei.PolicyChoice.lemma6_absolute_upper
+    Junpei/LemmaRates.lean:13 [theorem]
+  Junpei.ExclusionAsymptotics.paperG0_littleO180_equation11
+    Junpei/ExclusionAsymptotics.lean:14 [theorem]
+
+Lemma 7 | PDF pp. 14; proof 37 | PROVED
+EBI lower bounds and exclusion of saturated actions
+Sufficiently large odd T, 4<=t<T, consistent W states. Both nonbest arms have uniform positive polynomial EBI; a saturated action cannot maximize EBI.
+  Junpei.PolicyChoice.lemmas7_8_uniform
+    Junpei/LemmaRates.lean:28 [theorem]
+  Junpei.PolicyChoice.lemma7_individual_lower
+    Junpei/PolicyChoice.lean:52 [theorem]
+  Junpei.PolicyChoice.lemma7_saturated_left
+    Junpei/PolicyChoice.lean:68 [theorem]
+  Junpei.PolicyChoice.lemma7_saturated_right
+    Junpei/PolicyChoice.lean:82 [theorem]
+
+Lemma 8 | PDF pp. 14; proof 37 | PROVED
+Last-round exclusion of arm 3
+Separate final-round proof including tied means. Terminal count multiset {q,q-1}, mean-gap bound, and both remaining-arm improvements of order T^-22.
+  Junpei.PolicyChoice.lemmas7_8_uniform
+    Junpei/LemmaRates.lean:28 [theorem]
+  Junpei.PolicyChoice.terminal_pair
+    Junpei/PolicyChoice.lean:96 [theorem]
+  Junpei.PolicyChoice.lemma8_individual_lower
+    Junpei/PolicyChoice.lean:102 [theorem]
+  Junpei.Forecast.terminal_gap_bound
+    Junpei/ForecastTerminal.lean:11 [theorem]
+
+Conjecture 9 | PDF pp. 20 | OPEN
+Almost-every-instance exponential convergence
+Explicit manuscript conjecture. No proved theorem or custom axiom encodes it.
+  No claimed formal endpoint.
+
+Lemma 10 | PDF pp. 23 | PROVED
+Mills inequalities
+Standard normal density and actual tail for every x>0; exact printed upper and lower factors.
+  Junpei.TailRatio.mills_lower
+    Junpei/TailRatio.lean:146 [theorem]
+  Junpei.TailRatio.mills_upper
+    Junpei/TailRatio.lean:121 [theorem]
+  Junpei.TailRatio.tail_remainder_identity
+    Junpei/TailRatio.lean:108 [theorem]
+
+Lemma 11 | PDF pp. 24-25 | PROVED
+Exclusion-loss Gaussian bound
+Minimum-based exclusion loss; proper consistent W states. Also includes the displayed independent-Gaussian comparison on p.25.
+  Junpei.ExclusionBounds.lemma11
+    Junpei/ExclusionBounds.lean:26 [theorem]
+  Junpei.ExclusionBounds.lemma11_from_equation11
+    Junpei/ExclusionBounds.lean:52 [theorem]
+  Junpei.ExclusionVarianceComparison.lemma11_independent_comparison
+    Junpei/ExclusionVarianceComparison.lean:46 [theorem]
+
+Lemma 12 | PDF pp. 25-27 | PROVED
+EBI bounded by exclusion loss via mock sampling
+Any finite arm set with at least two arms, any finite horizon, positive real precisions. Literal minimum-index retained recommendation, independent mock stream, budget and actual-risk sandwich are constructed.
+  Junpei.FiniteModelExclusion.lemma12_any_finite_arm
+    Junpei/FiniteModelExclusion.lean:296 [theorem]
+  Junpei.ExclusionPerm.lemma12_k3
+    Junpei/ExclusionPerm.lean:77 [theorem]
+  Junpei.MockRisk.lemma12_by_mock_samples
+    Junpei/MockRisk.lean:162 [theorem]
+  Junpei.MockTie.literal_mock_loss_chain
+    Junpei/MockTie.lean:468 [theorem]
+
+Lemma 13 | PDF pp. 27-28 | PROVED
+Full/reduced posterior loss comparison
+Any finite arm set with a nonempty retained set. Both policy embeddings and forced retained-arm comparison are proved with actual Gaussian risks; integer three-arm endpoints are also retained.
+  Junpei.PolicyEmbedding.lemma13_loss_by_policy_embeddings
+    Junpei/PolicyEmbedding.lean:35 [theorem]
+  Junpei.PolicyEmbedding.lemma13_actionLoss_by_policy_embeddings
+    Junpei/PolicyEmbedding.lean:129 [theorem]
+  Junpei.ExclusionLoss.lemma13_loss
+    Junpei/ExclusionLoss.lean:112 [theorem]
+  Junpei.ExclusionLoss.lemma13_actionLoss
+    Junpei/ExclusionLoss.lean:122 [theorem]
+
+Lemma 14 | PDF pp. 28-29 | PROVED
+Normalized two-arm terminal-regret integral
+Arbitrary real means, nonnegative variances, positive total variance; exact Gaussian normalization factor.
+  Junpei.Marginal.lemma14_normalized
+    Junpei/Marginal.lean:16 [theorem]
+  Draft0.Gaussian.twoArmPosteriorLoss_eq
+    Draft0/Gaussian.lean:501 [theorem]
+  Draft0.Gaussian.twoArmPosteriorLoss_normalized
+    Draft0/Gaussian.lean:513 [theorem]
+
+Lemma 15 | PDF pp. 29-31 | PROVED
+One-step improvement and g1 bounds
+Exact revised probability product; g1 is zero at gap zero, while actual improvement is positive. Count-uniform exponents 4 and 6, plus terminal exponent 22 including zero gap.
+  Junpei.Marginal.lemma15_g1_lower
+    Junpei/Marginal.lean:60 [theorem]
+  Junpei.Marginal.lemma15_g1_uniform4
+    Junpei/MarginalCounts.lean:52 [theorem]
+  Junpei.Marginal.lemma15_g1_uniform6
+    Junpei/MarginalCounts.lean:66 [theorem]
+  Junpei.Marginal.lemma15_terminal_uniform22
+    Junpei/MarginalTerminal.lean:121 [theorem]
+  Draft0.Gaussian.oneStepImprovement_positive
+    Draft0/Gaussian.lean:289 [theorem]
+
+Lemma 16 | PDF pp. 31-33 | PROVED
+Strict advantage of smaller-count terminal action and g2 bounds
+Distinct positive integer counts, arbitrary real gap; strict comparison includes zero gap. Small-gap uniform exponents 6 and 8.
+  Junpei.Marginal.lemma16_g2_lower
+    Junpei/Marginal.lean:108 [theorem]
+  Junpei.Marginal.lemma16_g2_count_strict
+    Junpei/MarginalStrict.lean:80 [theorem]
+  Junpei.Marginal.lemma16_g2_uniform6
+    Junpei/MarginalCounts.lean:111 [theorem]
+  Junpei.Marginal.lemma16_g2_uniform8
+    Junpei/MarginalCounts.lean:130 [theorem]
+
+Lemma 17 | PDF pp. 33-34 | PROVED
+Two-arm smaller-count policy is Bayes optimal
+All positive integer precisions and real means, any finite remaining horizon. Covers both tied-count choices and adaptive competitors; deterministic terminal-variance comparison and Gaussian forecast are supporting results.
+  Junpei.TwoArmOptimal.lemma17_every_posterior
+    Junpei/TwoArmOptimal.lean:154 [theorem]
+  Junpei.TwoArmOptimal.lemma17_balanced_policy
+    Junpei/TwoArmOptimal.lean:172 [theorem]
+  Junpei.TwoArmOptimal.lemma17_minimal_terminal_variance
+    Junpei/TwoArmOptimal.lean:181 [theorem]
+  Junpei.TwoArmOptimal.lemma17_variance_identity
+    Junpei/TwoArmOptimal.lean:189 [theorem]
+  Junpei.TwoArmOptimal.lemma17_gaussian_forecast
+    Junpei/TwoArmOptimal.lean:194 [theorem]
+
+Lemma 18 | PDF pp. 34-35 | PROVED
+Posterior forecast reaches the small-gap interval
+Any deterministic count-only smaller-count tie rule. Requires t<T so at least one forecast draw occurs. Uniform lower bound with exponent 170 under revised W; predictive law remains distinct from frequentist law.
+  Junpei.Forecast.lemma18
+    Junpei/ForecastRules.lean:134 [theorem]
+  Junpei.Forecast.ruleForecast_gaussian
+    Junpei/ForecastRules.lean:97 [theorem]
+  Junpei.Forecast.ruleAccumulatedVariance_coe
+    Junpei/ForecastRules.lean:105 [theorem]
+  Junpei.Forecast.general_forecast_probability170
+    Junpei/Forecast.lean:174 [theorem]
+
+Lemma 19 | PDF pp. 35-37 | PROVED
+Reduced two-arm EBI gains by shared-sample coupling
+Uniform exponents 176 and 178. For the forced-left comparison use rightTie; for forced-right use leftTie. Each comparison uses one fixed rule on both sides, as permitted by the paper.
+  Junpei.Coupling19.lemma19_individual_gains_via_coupling
+    Junpei/Coupling19Rates.lean:113 [theorem]
+  Junpei.Coupling19.lemma19_saturated_left_gap_via_coupling
+    Junpei/Coupling19Saturated.lean:102 [theorem]
+  Junpei.Coupling19.lemma19_saturated_right_gap_via_coupling
+    Junpei/Coupling19Saturated.lean:127 [theorem]
+  Junpei.Dynamic.lemma19_individual_gains
+    Junpei/Dynamic.lean:241 [theorem]
+
+DEFINITIONS
+===========
+
+Definition 1 | PDF pp. 4 | DEFINITION AND CONSEQUENCES
+Frequentist exponential rate
+Formal analysis uses extended-real normalized negative log, assigning +infinity to zero regret. The positive-liminf-to-exponential-envelope implication used in Remark 2 is proved; no literal syntax for every o(T) expression is asserted.
+  Junpei.RegretExponent.rate
+    Junpei/RegretExponent.lean:15 [def]
+  Junpei.RegretRatio.exponential_envelope_of_positive_rate
+    Junpei/RegretRatio.lean:71 [theorem]
+
+Definition 2 | PDF pp. 6 | DEFINITION AND CONSTRUCTIONS
+Algorithms and posterior-state policies
+FiniteHorizon.Policy A N contains exactly N Borel sampling rules, indexed by Fin N, and one Borel terminal rule on strictly positive real-precision Gaussian states. Its direct execution uses only the current state, fresh scalar randomizer, and selected reward. Padding unused indices and extending the proper-state domain preserve the raw strategy and actual risk. Concrete Borel history policies include past arms, rewards, and seeds; GeneralOptimality.compile explicitly represents the state policy as such a history algorithm.
+  Junpei.GeneralOptimality.FiniteHorizon.Policy
+    Junpei/GeneralOptimalityFinite.lean:26 [structure]
+  Junpei.GeneralOptimality.FiniteHorizon.extend
+    Junpei/GeneralOptimalityFinite.lean:36 [def]
+  Junpei.GeneralOptimality.FiniteHorizon.rawTree
+    Junpei/GeneralOptimalityFinite.lean:58 [def]
+  Junpei.GeneralOptimality.FiniteHorizon.rawTree_extend
+    Junpei/GeneralOptimalityFinite.lean:67 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.actualRisk_extend
+    Junpei/GeneralOptimalityFinite.lean:84 [theorem]
+  Junpei.HistoryPolicy.Policy
+    Junpei/InitialOptimalHistory.lean:25 [structure]
+  Junpei.HistoryPolicy.toRaw
+    Junpei/InitialOptimalHistory.lean:49 [def]
+  Junpei.HistoryPolicy.toRaw_budget
+    Junpei/InitialOptimalHistory.lean:111 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.State
+    Junpei/GeneralOptimalityProper.lean:23 [def]
+  Junpei.GeneralOptimality.ProperDomain.Policy
+    Junpei/GeneralOptimalityProper.lean:30 [structure]
+  Junpei.GeneralOptimality.ProperDomain.extend
+    Junpei/GeneralOptimalityProper.lean:44 [def]
+  Junpei.GeneralOptimality.ProperDomain.rawTree_extend
+    Junpei/GeneralOptimalityProper.lean:90 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.actualRisk_extend
+    Junpei/GeneralOptimalityProper.lean:105 [theorem]
+  Junpei.GeneralOptimality.compile
+    Junpei/GeneralOptimalityHistory.lean:69 [def]
+  Junpei.GeneralOptimality.toRaw_compile
+    Junpei/GeneralOptimalityHistory.lean:90 [theorem]
+  Junpei.GeneralOptimality.actualRisk_compile
+    Junpei/GeneralOptimalityHistory.lean:119 [theorem]
+
+Definition 3 | PDF pp. 6-7 | DEFINITION AND CONSTRUCTIONS
+Flat-prior generalized Bayes optimal algorithm
+Flat likelihood is normalized after initialization; no risk is integrated against an improper probability prior. FiniteHorizon.SequentiallyOptimal states actual-risk optimality of the finite rule collection at every proper Gaussian state and remaining budget H <= N, against concrete Borel history competitors. This exact finite policy class has an explicit Borel canonical witness, including N = 0. Proper-domain and generic representations supply the supporting proof chain. Initialization-only endpoints remain sufficient for the main theorem.
+  Junpei.GeneralOptimality.FiniteHorizon.SequentiallyOptimal
+    Junpei/GeneralOptimalityFinite.lean:102 [def]
+  Junpei.GeneralOptimality.FiniteHorizon.MinimizesHistoryRisk
+    Junpei/GeneralOptimalityFinite.lean:90 [def]
+  Junpei.GeneralOptimality.FiniteHorizon.exists_sequentiallyOptimal
+    Junpei/GeneralOptimalityFinite.lean:174 [theorem]
+  Junpei.FlatPriorProduct.normalized_product_measure
+    Junpei/FlatPriorProduct.lean:94 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.MinimizesHistoryRisk
+    Junpei/GeneralOptimalityProper.lean:111 [def]
+  Junpei.GeneralOptimality.ProperDomain.SequentiallyOptimalUpTo
+    Junpei/GeneralOptimalityProper.lean:122 [def]
+  Junpei.GeneralOptimality.SequentiallyOptimalUpTo
+    Junpei/GeneralOptimality.lean:125 [def]
+  Junpei.GeneralOptimality.exists_sequentiallyOptimalUpTo
+    Junpei/GeneralOptimality.lean:155 [theorem]
+  Junpei.RealPrecisionMain.InitialHistoryRiskOptimal
+    Junpei/RealPrecisionMain.lean:78 [def]
+  Junpei.RealPrecisionMain.sequentiallyOptimal_implies_initial
+    Junpei/RealPrecisionMain.lean:95 [theorem]
+
+Definition 4 | PDF pp. 10 | DEFINITION AND CONSEQUENCES
+Expected Bellman improvement
+EBI is skipped-round loss minus forced-action loss. Its nonnegativity and maximizing-action equivalence are proved.
+  Junpei.BayesOptimal.EBI
+    Junpei/BayesOptimal.lean:11 [def]
+  Junpei.BayesOptimal.EBI_eq
+    Junpei/BayesOptimal.lean:14 [theorem]
+  Junpei.Information.expected_bellman_improvement_nonnegative
+    Junpei/Information.lean:140 [theorem]
+  Junpei.BayesOptimal.argmax_EBI_iff_argmin_actionLoss
+    Junpei/BayesOptimal.lean:20 [theorem]
+
+Definition 5 | PDF pp. 25-26 | DEFINITION AND CONSTRUCTIONS
+Mock-sample loss
+Independent posterior-copy latent parameter and conditional mock rewards; real sampling budget preserved. Literal minimum-index retained recommendation and its risk agree with the earlier selector's loss.
+  Junpei.MockTie.literalMockPolicy
+    Junpei/MockTie.lean:297 [def]
+  Junpei.MockTie.literalMockLoss
+    Junpei/MockTie.lean:435 [def]
+  Junpei.MockTie.literalMockPolicy_budget
+    Junpei/MockTie.lean:303 [theorem]
+  Junpei.MockTie.literalMockPolicy_recommends_minimum
+    Junpei/MockTie.lean:365 [theorem]
+  Junpei.MockTie.literalMockLoss_eq_original
+    Junpei/MockTie.lean:456 [theorem]
+  Junpei.MockTie.literal_mock_loss_chain
+    Junpei/MockTie.lean:468 [theorem]
+
+NUMBERED EQUATIONS (1)-(25)
+===========================
+
+Equation (1) | PDF pp. 4 | DEFINITION AND IDENTITIES
+Frequentist simple regret
+Main.regret implements the actual reward-stack expectation at means (0,0,Delta); regret_eq identifies it with Delta times the wrong-recommendation probability. A generic finite-instance regret integral also supports error-rate equivalence.
+  Junpei.Main.regret
+    Junpei/Main.lean:40 [def]
+  Junpei.Main.regret_eq
+    Junpei/Main.lean:43 [theorem]
+  Junpei.ProseCorollaries.frequentistRegret
+    Junpei/ProseCorollariesErrorRate.lean:66 [def]
+  Junpei.UniformSampling.observedRegret
+    Junpei/UniformSamplingObservation.lean:79 [def]
+
+Equation (2) | PDF pp. 7 | DEFINITION AND EXISTENCE
+Sequential posterior risk minimization
+FiniteHorizon.SequentiallyOptimal is fixed-budget sequential posterior risk minimization for the literal finite collection of rules, arbitrary finite K, and strictly positive real precisions. Only remaining horizons H <= N are quantified. FiniteHorizon.theorem1 derives the risk identity and local action rules from this premise. The explicit canonical policy belongs to this finite class and attains the Bellman loss. Exact padding and proper-domain extensions transport actual risk without adding policy or optimality hypotheses.
+  Junpei.GeneralOptimality.FiniteHorizon.SequentiallyOptimal
+    Junpei/GeneralOptimalityFinite.lean:102 [def]
+  Junpei.GeneralOptimality.FiniteHorizon.MinimizesHistoryRisk
+    Junpei/GeneralOptimalityFinite.lean:90 [def]
+  Junpei.GeneralOptimality.FiniteHorizon.minimizing_extend_iff
+    Junpei/GeneralOptimalityFinite.lean:95 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.canonical_actualRisk
+    Junpei/GeneralOptimalityFinite.lean:159 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.canonical_sequentiallyOptimal
+    Junpei/GeneralOptimalityFinite.lean:165 [theorem]
+  Junpei.GeneralOptimality.FiniteHorizon.theorem1
+    Junpei/GeneralOptimalityFinite.lean:117 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.SequentiallyOptimalUpTo
+    Junpei/GeneralOptimalityProper.lean:122 [def]
+  Junpei.GeneralOptimality.ProperDomain.MinimizesHistoryRisk
+    Junpei/GeneralOptimalityProper.lean:111 [def]
+  Junpei.GeneralOptimality.ProperDomain.minimizing_extend_iff
+    Junpei/GeneralOptimalityProper.lean:115 [theorem]
+  Junpei.GeneralOptimality.MinimizesHistoryRisk
+    Junpei/GeneralOptimality.lean:25 [def]
+  Junpei.GeneralOptimality.minimizesHistoryRisk_iff_actualRisk_eq_loss
+    Junpei/GeneralOptimality.lean:45 [theorem]
+  Junpei.GeneralOptimality.exists_sequentiallyOptimalUpTo
+    Junpei/GeneralOptimality.lean:155 [theorem]
+  Junpei.GeneralOptimality.ProperDomain.theorem1
+    Junpei/GeneralOptimalityProper.lean:138 [theorem]
+
+Equation (3) | PDF pp. 7 | DEFINITION AND REDUCTION
+Risk minimization at initialization
+Concrete full-history competition at counts one; actual-risk minimization is not replaced by a Bellman-equality assumption. Equivalence of representations and transfer into the main theorem are proved.
+  Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal
+    Junpei/PosteriorStateHistory.lean:142 [def]
+  Junpei.PosteriorStateHistory.initialHistoryRiskOptimal_iff
+    Junpei/PosteriorStateHistory.lean:145 [theorem]
+  Junpei.RealPrecisionMain.InitialHistoryRiskOptimal
+    Junpei/RealPrecisionMain.lean:78 [def]
+  Junpei.RealPrecisionMain.initialHistoryRiskOptimal_iff_restriction
+    Junpei/RealPrecisionMain.lean:84 [theorem]
+  Junpei.InitialHistoryMain.regret_repair_eq
+    Junpei/InitialHistoryMain.lean:14 [theorem]
+
+Equation (4) | PDF pp. 9 | PROVED LAW
+Posterior-predictive Gaussian reward law
+Scalar predictive Gaussian law together with the full latent-parameter/observation joint-law bridge. Positive real precisions are allowed.
+  Draft0.Gaussian.section51_predictive_law
+    Draft0/Gaussian.lean:57 [theorem]
+  Junpei.ObservationBridge.scalar_observation_joint_law
+    Junpei/ObservationBridge.lean:101 [theorem]
+  Junpei.ObservationBridge.observation_joint_law
+    Junpei/ObservationBridge.lean:189 [theorem]
+
+Equation (5) | PDF pp. 9 | DEFINITION AND SELECTOR PROOFS
+Minimum-index posterior-mean maximizer
+Exact minimum maximizing arm for finite linearly ordered arm types; attainment, least index, and Borel measurability are proved.
+  Junpei.MockTie.minimumMaximizer
+    Junpei/MockTie.lean:26 [def]
+  Junpei.MockTie.minimumMaximizer_attains
+    Junpei/MockTie.lean:28 [theorem]
+  Junpei.MockTie.minimumMaximizer_le
+    Junpei/MockTie.lean:31 [theorem]
+  Junpei.MockTie.minimumMaximizer_measurable
+    Junpei/MockTie.lean:57 [theorem]
+
+Equation (6) | PDF pp. 9 | DEFINITION AND IDENTITIES
+Terminal posterior expected regret
+Terminal regret is an actual posterior integral; terminalRegret_eq gives expected maximum minus selected mean. Optimal terminal loss is connected to this integral.
+  Junpei.FinitePosterior.terminalRegret
+    Junpei/FinitePosterior.lean:342 [def]
+  Junpei.FinitePosterior.terminalRegret_eq
+    Junpei/FinitePosterior.lean:346 [theorem]
+  Junpei.BayesOptimal.terminal_recommendation_iff
+    Junpei/BayesOptimal.lean:56 [theorem]
+  Junpei.BayesOptimal.optimal_posterior_loss
+    Junpei/BayesOptimal.lean:66 [theorem]
+
+Equation (7) | PDF pp. 9 | PROVED RECURSION
+Action loss as expected next-state loss
+actionLoss_eq identifies the Gaussian innovation recursion with the posterior-loss integral; rawRisk_succ_data proves the corresponding actual observation recursion.
+  Junpei.FinitePosterior.actionLoss
+    Junpei/FinitePosterior.lean:355 [def]
+  Junpei.FinitePosterior.actionLoss_eq
+    Junpei/FinitePosterior.lean:358 [theorem]
+  Junpei.EmbeddingExecution.rawRisk_succ_data
+    Junpei/EmbeddingExecution.lean:218 [theorem]
+  Junpei.ObservationBridge.observation_integral
+    Junpei/ObservationBridge.lean:236 [theorem]
+
+Equation (8) | PDF pp. 9 | DEFINITION AND MINIMUM PROOFS
+Bellman loss is the minimum action loss
+FiniteGaussian.value is a reward-value recursion; FinitePosterior.loss subtracts it from posterior expected maximum. The exact minimum and attaining selector are proved.
+  Junpei.FinitePosterior.loss
+    Junpei/FinitePosterior.lean:353 [def]
+  Junpei.BayesOptimal.actionLoss_minimal
+    Junpei/BayesOptimal.lean:31 [theorem]
+  Junpei.BayesOptimal.chosen_actionLoss_eq
+    Junpei/BayesOptimal.lean:37 [theorem]
+  Junpei.JointGaussianMeasurable.minimumOptimal_actionLoss
+    Junpei/JointGaussianMeasurable.lean:160 [theorem]
+
+Equation (9) | PDF pp. 10 | DEFINITION AND IDENTITY
+EBI equals skipped-round loss minus action loss
+Remaining-horizon indexing differs from paper round indexing; EBI_eq is the loss-form identity.
+  Junpei.BayesOptimal.EBI
+    Junpei/BayesOptimal.lean:11 [def]
+  Junpei.BayesOptimal.EBI_eq
+    Junpei/BayesOptimal.lean:14 [theorem]
+
+Equation (10) | PDF pp. 11 | PROVED
+Main polynomial regret lower bound
+Actual frequentist law, arbitrary Delta>0, all sufficiently large odd T, policy-independent constants. Paper exponent endpoint uses (33+Delta)^2/2+4.
+  Junpei.RealPrecisionMain.theorem2
+    Junpei/RealPrecisionMain.lean:127 [theorem]
+  Junpei.RealPrecisionMain.theorem2_paper_exponent
+    Junpei/RealPrecisionMain.lean:138 [theorem]
+  Junpei.InitialHistoryMain.theorem2
+    Junpei/InitialHistoryMain.lean:20 [theorem]
+  Junpei.Main.theorem2_paper_exponent
+    Junpei/MainExactRate.lean:14 [theorem]
+
+Equation (11) | PDF pp. 12 | HYPOTHESIS AND CONSEQUENCES
+Cutoff condition 180<(CU-6)^2/4
+A parameter choice in the manuscript, not a standalone universal assertion. Its consequences for little-o(T^-180), CU>=10, and the main CU=33 specialization are proved.
+  Junpei.ExclusionAsymptotics.paperG0_littleO180_equation11
+    Junpei/ExclusionAsymptotics.lean:14 [theorem]
+  Junpei.ExclusionBounds.cutoff_condition_implies_ten
+    Junpei/ExclusionBounds.lean:22 [theorem]
+  Junpei.Main.theorem2_paper_exponent
+    Junpei/MainExactRate.lean:14 [theorem]
+
+Equation (12) | PDF pp. 19 | CONTEXTUAL DEFINITION; UNFORMALIZED
+OCBA oracle static-allocation objective
+Displayed in the literature review. No standalone formal definition or optimal-allocation theorem for this OCBA objective is claimed in this bundle; cited large-deviation results are outside scope.
+  No claimed formal endpoint.
+
+Equation (13) | PDF pp. 27 | PROVED
+Absolute full-versus-reduced value-loss difference
+Both full-to-reduced and reduced-to-full policy embeddings, imaginary stream, discarded dummy rewards, integrability, measurability, and the final exclusion bound are proved.
+  Junpei.PolicyEmbedding.lemma13_loss_by_policy_embeddings
+    Junpei/PolicyEmbedding.lean:35 [theorem]
+  Junpei.ExclusionLoss.lemma13_loss
+    Junpei/ExclusionLoss.lean:112 [theorem]
+
+Equation (14) | PDF pp. 27 | PROVED
+Absolute forced-action loss difference
+Same constructed policy embeddings with the first action fixed to a retained arm.
+  Junpei.PolicyEmbedding.lemma13_actionLoss_by_policy_embeddings
+    Junpei/PolicyEmbedding.lean:129 [theorem]
+  Junpei.ExclusionLoss.lemma13_actionLoss
+    Junpei/ExclusionLoss.lean:122 [theorem]
+
+Equation (15) | PDF pp. 28 | PROVED LAW
+Centered latent two-arm difference is Gaussian
+Difference of independent posterior Gaussian coordinates. The normalized terminal loss formula uses this law.
+  Draft0.Gaussian.posterior_difference_law
+    Draft0/Gaussian.lean:357 [theorem]
+  Junpei.CommonSample.centered_pair_difference_law
+    Junpei/CommonSampleLaw.lean:14 [theorem]
+  Junpei.Marginal.lemma14_normalized
+    Junpei/Marginal.lean:16 [theorem]
+
+Equation (16) | PDF pp. 29 | PROVED LAW
+Posterior-mean difference innovation is Gaussian
+Scalar conjugate-update law supplies variance 1/[n(n+1)]. Reflection handles either arm; multi-step distribution and regret bridges use this update.
+  Draft0.Gaussian.section51_increment_law
+    Draft0/Gaussian.lean:64 [theorem]
+  Draft0.Gaussian.section51_increment_law_nat
+    Draft0/Gaussian.lean:86 [theorem]
+  Junpei.CommonSample.observation_conjugate_update
+    Junpei/CommonSample.lean:224 [theorem]
+
+Equation (17) | PDF pp. 30 | PROVED BOUND
+One-step improvement probability-product bound
+Exact printed g1 lower bound; pointwise event argument and actual Gaussian integral identities are formalized. The absolute gap handles both signs.
+  Junpei.Marginal.lemma15_g1_lower
+    Junpei/Marginal.lean:60 [theorem]
+  JunpeiComparison.Gaussian.lemma15_repaired_event_bound
+    Junpei/GaussianComparison.lean:92 [theorem]
+  Draft0.Gaussian.oneStepImprovement_eq_hinge
+    Draft0/Gaussian.lean:240 [theorem]
+
+Equation (18) | PDF pp. 32 | FORMAL PROOF VIA HINGE REPRESENTATION
+Difference of two action losses and conditional Gaussian integration
+The Lean proof uses an integrated hinge-loss identity and conditional nonnegativity to prove the printed g2 bound. The printed triple-integral equality is not separately exported verbatim as a named theorem; these are its proof-route counterparts.
+  Junpei.Marginal.hinge_increment_integral_shift
+    Junpei/Marginal.lean:92 [theorem]
+  Junpei.Marginal.absolute_shift_hinge_integrable
+    Junpei/Marginal.lean:81 [theorem]
+  Junpei.Marginal.lemma16_g2_lower
+    Junpei/Marginal.lean:108 [theorem]
+  Junpei.Marginal.lemma16_g2_count_lower
+    Junpei/MarginalCounts.lean:93 [theorem]
+
+Equation (19) | PDF pp. 33 | PROVED BOUND VIA INTERVAL LEMMA
+Small-gap interval probability is Omega(T^-2)
+gaussian_small_interval_lower gives the finite uniform interval estimate; g2_uniform6_variance instantiates it inside the printed product bound. No separate asymptotic equality to a polynomial is claimed.
+  Junpei.Marginal.gaussian_small_interval_lower
+    Junpei/MarginalRates.lean:92 [theorem]
+  Junpei.Marginal.g2_uniform6_variance
+    Junpei/MarginalRates.lean:151 [theorem]
+  Junpei.Marginal.lemma16_g2_uniform6
+    Junpei/MarginalCounts.lean:111 [theorem]
+
+Equation (20) | PDF pp. 33 | PROVED LAW AND COUNT IDENTITY
+Deterministic allocation forecast variance and order independence
+Shared-stream terminal-gap law and telescoping allocation variance cover arbitrary deterministic schedules. Risk depends only on terminal counts; the balanced-policy specialization is also named.
+  Junpei.CommonSample.terminal_gap_law
+    Junpei/CommonSampleJoint.lean:126 [theorem]
+  Junpei.CommonSample.allocationVariance_decomposition
+    Junpei/CommonSample.lean:74 [theorem]
+  Junpei.CommonSample.risk_depends_only_terminal_counts
+    Junpei/CommonSample.lean:150 [theorem]
+  Junpei.TwoArmOptimal.lemma17_gaussian_forecast
+    Junpei/TwoArmOptimal.lean:194 [theorem]
+
+Equation (21) | PDF pp. 34 | PROVED LAW AND VARIANCE IDENTITY
+Smaller-count forecast Gaussian law
+Any fixed count-only smaller-count tie rule. Exact accumulated variance is initial minus final reciprocal counts.
+  Junpei.Forecast.ruleForecast_gaussian
+    Junpei/ForecastRules.lean:97 [theorem]
+  Junpei.Forecast.ruleAccumulatedVariance_coe
+    Junpei/ForecastRules.lean:105 [theorem]
+
+Equation (22) | PDF pp. 35 | PROVED BOUND
+Anchor reciprocal-variance sum is at most twice forecast variance
+Both final count orientations {q,q-1}; positive remaining forecast variance required.
+  Junpei.Forecast.finalVariance_residual_lower
+    Junpei/Forecast.lean:33 [theorem]
+  Junpei.Forecast.finalVariance_anchor
+    Junpei/Forecast.lean:59 [theorem]
+
+Equation (23) | PDF pp. 35 | PROVED BOUND
+Squared current mean gap is at most 160 log(T) times forecast variance
+Derived from revised W with drift coefficient 3 and count constraints. Both general-rule and earlier fixed-orientation endpoints exist.
+  Junpei.Forecast.general_drift160
+    Junpei/Forecast.lean:86 [theorem]
+  JunpeiComparison.new_equation23_drift160
+    Junpei/CountComparison.lean:37 [theorem]
+
+Equation (24) | PDF pp. 35 | PROVED BOUND
+Each reduced two-arm EBI is at least c1*T^-176
+Actual common-sample coupling and an alternative Gaussian Bellman proof are both included.
+  Junpei.Coupling19.lemma19_individual_gains_via_coupling
+    Junpei/Coupling19Rates.lean:113 [theorem]
+  Junpei.Dynamic.lemma19_individual_gains
+    Junpei/Dynamic.lean:241 [theorem]
+
+Equation (25) | PDF pp. 35 | PROVED BOUND
+Strict advantage over a saturated action is at least c2*T^-178
+Both saturated orientations, with the count-only tie convention chosen for the forced-arm comparison.
+  Junpei.Coupling19.lemma19_saturated_left_gap_via_coupling
+    Junpei/Coupling19Saturated.lean:102 [theorem]
+  Junpei.Coupling19.lemma19_saturated_right_gap_via_coupling
+    Junpei/Coupling19Saturated.lean:127 [theorem]
+  Junpei.Dynamic.lemma19_saturated_left_gap
+    Junpei/Dynamic.lean:262 [theorem]
+  Junpei.Dynamic.lemma19_saturated_right_gap
+    Junpei/Dynamic.lean:279 [theorem]
+
+REMARKS AND RELEVANT FOOTNOTES
+==============================
+
+Remark 1 | PDF pp. 5 | CONTEXTUAL EXTENSIONS; UNFORMALIZED
+Gaussian extensions of cited frequentist and Bayesian guarantees
+SR, change-of-measure lower bounds, and general-prior Bayesian O(1/T) statements are not independently reproved. Full external algorithms and regularity hypotheses are not specified in the manuscript.
+  No claimed formal endpoint.
+
+Remark 2 | PDF pp. 12 | PROVED
+Regret ratio has infinite extended-real limit superior
+Any nonnegative comparison-regret sequence with positive lower exponential rate; denominator zero means ratio +infinity. Initialization-only actual-risk and real-precision endpoints included.
+  Junpei.RegretRatio.remark2
+    Junpei/RegretRatio.lean:100 [theorem]
+  Junpei.InitialHistoryMain.remark2
+    Junpei/InitialHistoryMain.lean:48 [theorem]
+  Junpei.RealPrecisionMain.remark2
+    Junpei/RealPrecisionMain.lean:158 [theorem]
+
+Remark 3 | PDF pp. 18 | PROVED
+Two-arm action-loss ties, strict saturated comparisons, balanced counts
+Literal equal-action-loss and both strict saturated-arm cases, plus balanced terminal count statement.
+  Junpei.ProseCorollaries.remark3_equal_action_losses
+    Junpei/ProseCorollariesRemark3.lean:19 [theorem]
+  Junpei.ProseCorollaries.remark3_saturated_left_strict
+    Junpei/ProseCorollariesRemark3.lean:70 [theorem]
+  Junpei.ProseCorollaries.remark3_saturated_right_strict
+    Junpei/ProseCorollariesRemark3.lean:102 [theorem]
+  Junpei.ProseCorollaries.remark3_balanced_terminal_counts
+    Junpei/ProseCorollariesRemark3.lean:50 [theorem]
+
+Footnote 6 | PDF pp. 12 | PARAMETER SPECIALIZATION
+CU>=33 suffices for the main cutoff
+The actual main proof specializes CU=33 and obtains the explicit exponent. The footnote's parameter choice is used within that proof rather than exported as a separate footnote theorem.
+  Junpei.Main.theorem2_paper_exponent
+    Junpei/MainExactRate.lean:14 [theorem]
+  Junpei.ExclusionBounds.paperG0_littleO180
+    Junpei/ExclusionBounds.lean:90 [theorem]
+
+Footnote 13 | PDF pp. 30 | SIGN SYMMETRY IN FORMAL STATEMENTS
+Negative mean-gap case in Lemma 15
+Formal bounds are stated using abs(gap), so both signs are included without an additional sign assumption.
+  Junpei.Marginal.lemma15_g1_lower
+    Junpei/Marginal.lean:60 [theorem]
+  Junpei.Marginal.lemma15_g1_uniform6
+    Junpei/MarginalCounts.lean:66 [theorem]
+
+Footnote 14 | PDF pp. 38 | REFUTED
+Claimed necessary O(T^-3/2) scale for polynomial Gaussian tails
+Lean proves a positive polynomial tail lower bound for gap=sqrt(log T)/sqrt(T^3), while the gap is not O(T^-3/2). This refutes necessity in the polynomial-lower-bound interpretation; it does not assert exact tail asymptotics or refute the adjacent bounded-exponent sufficient calculation.
+  Junpei.ProseCorollaries.Footnote14.counterexample_to_necessary_scale
+    Junpei/ProseCorollariesFootnote14.lean:79 [theorem]
+  Junpei.Footnote14Scale.logarithmicGap_not_bigO_paper_scale
+    Junpei/Footnote14Scale.lean:21 [theorem]
+  Junpei.Footnote14Scale.polynomial_tail_does_not_require_paper_scale
+    Junpei/Footnote14Scale.lean:32 [theorem]
+
+Corrected Footnote 14 condition | Added correction; original discussion: PDF p. 38 | PROVED CORRECTION
+Polynomial Gaussian-tail lower bounds exactly characterize the logarithmic gap scale
+This is the separately requested corrected statement, not text in the unchanged PDF. For every deterministic d : Nat -> Real with d(T) >= 0, the existence of real c > 0 and p > 0 and a natural T0 such that P[Z_T >= d(T)] >= c*T^(-p) for every T >= T0 is equivalent to Lean IsBigO at infinity of d(T) against T^(-3/2)*sqrt(log T). Z_T has the actual normalized Gaussian law with mean zero and variance T^(-3). The proof includes exact Gaussian standardization, both implication directions, and conversion from an eventual natural-exponent bound to the explicit positive-real-exponent formulation. No monotonicity or further regularity of d is assumed; sufficiently large horizons handle the finite zero/log edge cases. The original Footnote 14 necessity claim remains separately refuted.
+  Junpei.Footnote14Characterization.corrected_footnote14_iff
+    Junpei/Footnote14Characterization.lean:255 [theorem]
+  Junpei.Footnote14Characterization.tail_standardize
+    Junpei/Footnote14Characterization.lean:22 [theorem]
+  Junpei.Footnote14Characterization.eventuallyPolynomialTail_of_isBigO
+    Junpei/Footnote14Characterization.lean:61 [theorem]
+  Junpei.Footnote14Characterization.isBigO_of_eventuallyPolynomialTail
+    Junpei/Footnote14Characterization.lean:107 [theorem]
+  Junpei.Footnote14Characterization.realExponentPolynomialTail_iff_eventually
+    Junpei/Footnote14Characterization.lean:224 [theorem]
+  Junpei.Footnote14Characterization.eventuallyPolynomialTail_iff_isBigO
+    Junpei/Footnote14Characterization.lean:134 [theorem]
+
+UNNUMBERED ARGUMENTS AND ADDITIONAL CONSTRUCTIONS
+=================================================
+
+Flat posterior normalization | PDF pp. 6-8 | PROVED
+Flat likelihood, sufficient statistics, and initialized posterior
+Normalization is against Lebesgue measure; the resulting product Gaussian is a probability law. Explicit labelled adaptive likelihood normalization is proved, not an independent arbitrary-history regular-conditional-distribution theorem.
+  Junpei.FlatPriorInitialization.sum_squares_decomposition
+    Junpei/FlatPriorInitialization.lean:28 [theorem]
+  Junpei.FlatPriorInitialization.normalized_flat_measure
+    Junpei/FlatPriorInitialization.lean:85 [theorem]
+  Junpei.FlatPriorProduct.normalized_product_measure
+    Junpei/FlatPriorProduct.lean:94 [theorem]
+  Junpei.FlatPriorProduct.normalized_product_sufficient
+    Junpei/FlatPriorProduct.lean:102 [theorem]
+  Junpei.AdaptivePosteriorSufficiency.normalized_history_posterior
+    Junpei/AdaptivePosteriorSufficiency.lean:86 [theorem]
+  Junpei.AdaptivePosteriorSufficiency.parameter_independent_factor_cancels
+    Junpei/AdaptivePosteriorSufficiency.lean:98 [theorem]
+
+Flat posterior actual risk | PDF pp. 6-9 | PROVED
+Normalized flat posterior agrees with actual continuation law
+Links normalized flat likelihood to the proper Gaussian posterior, observation joint law, latent/noise world, and original continuation-risk integral.
+  Junpei.FixedGaussian.FlatInitialization.normalizedFlatLaw_eq_posterior
+    Junpei/FixedGaussianFlatInitialization.lean:30 [theorem]
+  Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law
+    Junpei/FixedGaussianFlatInitialization.lean:44 [theorem]
+  Junpei.FixedGaussian.FlatInitialization.flatWorldLaw_eq_worldLaw
+    Junpei/FixedGaussianFlatInitialization.lean:60 [theorem]
+  Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq
+    Junpei/FixedGaussianFlatInitialization.lean:128 [theorem]
+
+Borel Bellman functions | PDF pp. 9-10 | PROVED
+Finite losses and measurable optimal selectors
+Jointly in means and positive real precisions; exact minimum-index action. Concrete actual regret is integrable for regular Borel policy trees.
+  Junpei.JointGaussianMeasurable.value_joint_measurable
+    Junpei/JointGaussianMeasurable.lean:67 [theorem]
+  Junpei.JointGaussianMeasurable.potential_joint_measurable
+    Junpei/JointGaussianMeasurable.lean:107 [theorem]
+  Junpei.JointGaussianMeasurable.loss_joint_measurable
+    Junpei/JointGaussianMeasurable.lean:129 [theorem]
+  Junpei.JointGaussianMeasurable.actionLoss_joint_measurable
+    Junpei/JointGaussianMeasurable.lean:133 [theorem]
+  Junpei.JointGaussianMeasurable.minimumOptimal_joint_measurable
+    Junpei/JointGaussianMeasurable.lean:147 [theorem]
+  Junpei.RealPrecisionPolicy.exists_globally_borel_sequentiallyOptimal
+    Junpei/RealPrecisionPolicy.lean:197 [theorem]
+
+History competitors | PDF pp. 3-7 | PROVED CONSTRUCTIONS
+Borel full-history algorithms and posterior-state execution
+Past arms, rewards, and randomizers represented explicitly. Compiler preserves recommendation, sampled-arm trace, real budget, measurability, and actual risk.
+  Junpei.HistoryPolicy.toRaw_run_eq
+    Junpei/InitialOptimalHistory.lean:133 [theorem]
+  Junpei.HistoryPolicy.toRaw_trace_eq
+    Junpei/InitialOptimalHistory.lean:141 [theorem]
+  Junpei.HistoryPolicy.toRaw_run_measurable
+    Junpei/InitialOptimalHistory.lean:60 [theorem]
+  Junpei.HistoryPolicy.toRaw_budget
+    Junpei/InitialOptimalHistory.lean:111 [theorem]
+  Junpei.HistoryPolicy.familyRisk_eq_actualRisk
+    Junpei/InitialOptimalHistory.lean:185 [theorem]
+  Junpei.PosteriorStateHistory.actualRisk_compile
+    Junpei/PosteriorStateHistory.lean:107 [theorem]
+  Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff
+    Junpei/PosteriorStateHistory.lean:126 [theorem]
+
+Initial optimality repair | PDF pp. 7 | PROVED
+Initial-only risk minimization implies almost-sure optimal repair
+From actual initial-risk optimality, not from an assumed sequential/local Bellman premise; recommendation and sampled-arm trace agreement are proved.
+  Junpei.InitialOptimal.InitialRiskOptimal
+    Junpei/InitialOptimalPaths.lean:156 [def]
+  Junpei.InitialOptimal.minimizing_rawTree_repair_ae
+    Junpei/InitialOptimalPaths.lean:141 [theorem]
+  Junpei.InitialOptimal.minimizing_trace_repair_ae
+    Junpei/InitialOptimalTrace.lean:228 [theorem]
+  Junpei.InitialOptimal.initialRiskOptimal_repair_ae
+    Junpei/InitialOptimalPaths.lean:164 [theorem]
+
+Absolute-continuity transfer | PDF pp. 7 | PROVED
+Predictive null sets are null at every fixed Gaussian parameter
+Mutual absolute continuity for finite predictive and fixed-parameter Gaussian arrays, including independent policy seeds and measurable maps; transfers optimal-repair equality.
+  Junpei.FixedGaussian.fixed_predictive_equivalent
+    Junpei/FixedGaussianLaws.lean:90 [theorem]
+  Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae
+    Junpei/FixedGaussianInitialReduction.lean:33 [theorem]
+  Junpei.FixedGaussian.initialRiskOptimal_fixed_payoff_repair_eq
+    Junpei/FixedGaussianInitialReduction.lean:41 [theorem]
+
+Actual stack execution | PDF pp. 3-4; 7; 14-15 | PROVED
+Calendar arrays, per-arm reward stacks, initialization, and Main.regret
+The execution-law bridge links the posterior raw-tree argument to the original frequentist per-arm-stack regret definition. It is not an assumed risk-preservation identity.
+  Junpei.FixedGaussian.rawTree_stack_law_eq
+    Junpei/FixedGaussianStackExecution.lean:150 [theorem]
+  Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq
+    Junpei/FixedGaussianMainLaw.lean:93 [theorem]
+  Junpei.InitialHistoryMain.regret_repair_eq
+    Junpei/InitialHistoryMain.lean:14 [theorem]
+  Junpei.RealPrecisionMain.regret_repair_eq
+    Junpei/RealPrecisionMain.lean:117 [theorem]
+
+Real-precision restriction | PDF pp. 6-10 | PROVED
+Full real-precision state policy restricted to reachable integer states
+Exact raw-tree and risk identities. Main endpoints require initialization-only optimality at the given horizon; no larger-horizon optimality assumption.
+  Junpei.RealPrecisionMain.rawTree_restriction
+    Junpei/RealPrecisionMain.lean:41 [theorem]
+  Junpei.RealPrecisionMain.continuationRisk_restriction
+    Junpei/RealPrecisionMain.lean:63 [theorem]
+  Junpei.RealPrecisionMain.initialHistoryRiskOptimal_iff_restriction
+    Junpei/RealPrecisionMain.lean:84 [theorem]
+  Junpei.RealPrecisionMain.exists_initialHistoryRiskOptimal
+    Junpei/RealPrecisionMain.lean:168 [theorem]
+
+EBI nonnegativity | PDF pp. 10 | PROVED
+Ignoring a sample is feasible and cannot improve optimum
+Arbitrary finite arm set and positive real precisions; no EBI sign hypothesis.
+  Junpei.Information.expected_bellman_improvement_nonnegative
+    Junpei/Information.lean:140 [theorem]
+
+Probability and path bridge | PDF pp. 13-15 | PROVED
+Actual bad-event probability and policy-independent path induction
+Revised coefficient-3 event, actual independent arrays, measurability, probability factorization, and bad-event implication. Main proof turns these into wrong recommendation and regret.
+  Junpei.Probability.rawBadEvent_implies_newW
+    Junpei/ProbabilityModel.lean:65 [theorem]
+  Junpei.Main.jointBadEvent_probability
+    Junpei/Main.lean:66 [theorem]
+  Junpei.Main.eventually_pointwise_event_lower
+    Junpei/Main.lean:72 [theorem]
+  Junpei.Main.theorem2
+    Junpei/Main.lean:98 [theorem]
+
+Exclusion regret contribution | PDF pp. 16 | PROVED
+Best-arm-event posterior regret is bounded by exclusion loss
+Arbitrary measurable terminal decision with independent auxiliary noise; min-based exclusion expectation.
+  Junpei.ProseCorollaries.posterior_best_arm_risk_le_exclusion
+    Junpei/ProseCorollariesExclusion.lean:64 [theorem]
+
+Error/regret rate equivalence | PDF pp. 18 | PROVED
+Error probability and simple regret have equal exponential rates
+Finite unique-best positive-gap instances; min/max-gap sandwich, equality of lower and upper extended-real rates, including zero-error horizons.
+  Junpei.ProseCorollaries.error_regret_sandwich
+    Junpei/ProseCorollariesErrorRate.lean:71 [theorem]
+  Junpei.ProseCorollaries.error_regret_same_exponential_rate
+    Junpei/ProseCorollariesErrorRate.lean:189 [theorem]
+  Junpei.ProseCorollaries.error_regret_same_upper_exponential_rate
+    Junpei/ProseCorollariesErrorRate.lean:208 [theorem]
+
+Uniform sampling | PDF pp. 5 | PROVED
+Uniform-sampling frequentist exponent minGap^2/(4K)
+Explicit exact-budget floor/remainder allocation, all sufficiently large horizons; full regret-rate limit and error exponent. Observed recommendation uses rewards, without a latent-parameter argument.
+  Junpei.UniformSampling.uniform_frequentist_rate_limit
+    Junpei/UniformSampling.lean:25 [theorem]
+  Junpei.UniformSampling.uniform_error_log_limit
+    Junpei/UniformSampling.lean:41 [theorem]
+  Junpei.UniformSampling.observedRecommendation
+    Junpei/UniformSamplingObservation.lean:27 [def]
+  Junpei.UniformSampling.observed_uniform_frequentist_rate_limit
+    Junpei/UniformSamplingObservation.lean:96 [theorem]
+
+Mock-policy construction | PDF pp. 25-27 | PROVED
+Independent posterior copy and literal minimum-index mock policy
+Shared independent Gaussian blocks, actual risk, measurable execution, budget preservation, and exact terminal rule. No separate compression of arbitrary auxiliary blocks into one scalar seed is claimed.
+  Junpei.MockTie.literalMockPolicy_run_measurable
+    Junpei/MockTie.lean:320 [theorem]
+  Junpei.MockTie.literalMockPolicy_regular
+    Junpei/MockTie.lean:431 [theorem]
+  Junpei.MockTie.literalMockPolicy_terminal_spec
+    Junpei/MockTie.lean:374 [theorem]
+  Junpei.MockTie.literalMockLoss_eq_original
+    Junpei/MockTie.lean:456 [theorem]
+  Junpei.MockTie.literal_mock_loss_chain
+    Junpei/MockTie.lean:468 [theorem]
+
+Two policy embeddings | PDF pp. 27-28 | PROVED
+Both directions of full/reduced policy comparison
+Reverse simulation uses an independent imaginary stream and discards real dummy observations. The final endpoints discharge simulator measurability, feasibility, risk identities, and coupling bounds.
+  Junpei.EmbeddingDirect.lemma13_first_embedding
+    Junpei/EmbeddingDirect.lean:151 [theorem]
+  Junpei.EmbeddingDirect.lemma13_first_embedding_forced
+    Junpei/EmbeddingDirect.lean:162 [theorem]
+  Junpei.EmbeddingCoupling.lemma13_second_embedding
+    Junpei/EmbeddingCoupling.lean:158 [theorem]
+  Junpei.EmbeddingCoupling.lemma13_second_embedding_forced
+    Junpei/EmbeddingCoupling.lean:169 [theorem]
+  Junpei.PolicyEmbedding.lemma13_loss_by_policy_embeddings
+    Junpei/PolicyEmbedding.lean:35 [theorem]
+
+Common-sample coupling | PDF pp. 33; 35-37 | PROVED
+Allocation order invariance and coupled risk gains
+Per-arm Gaussian innovation streams realize conjugate observation laws. Product-stream risk equals recursive posterior risk; coupled differences give the Lemma 19 bounds.
+  Junpei.CommonSample.terminalMeans_permutation
+    Junpei/CommonSample.lean:186 [theorem]
+  Junpei.CommonSample.stream_integral_eq_recursive_risk
+    Junpei/CommonSampleIntegral.lean:38 [theorem]
+  Junpei.CommonSample.stream_integral_permutation
+    Junpei/CommonSampleIntegral.lean:76 [theorem]
+  Junpei.Coupling19.left_common_product_gain
+    Junpei/Coupling19Stream.lean:16 [theorem]
+  Junpei.Coupling19.right_common_product_gain
+    Junpei/Coupling19Stream.lean:51 [theorem]
+
+LIMITS, CONTEXT, AND OPEN SUGGESTIONS
+=====================================
+
+Lemma 19 stronger tie interpretation | PDF pp. 36 | REFUTED STRONGER INTERPRETATION
+One globally fixed left-tie rule cannot serve both forced-arm comparisons
+Negative certificate is within the lemma's count/state domain, but the stronger interpretation is not the paper's allowed orientation choice. This is not a refutation of Lemma 19.
+  Junpei.Coupling19.fixed_tie_same_forced_arm_assertion_false
+    Junpei/Coupling19Counts.lean:33 [theorem]
+  Junpei.Coupling19.counterexample_within_lemma19_domain
+    Junpei/Coupling19Counts.lean:55 [theorem]
+
+General proper-prior Bellman assertion | PDF pp. 7 | UNFORMALIZED
+Non-Gaussian proper priors with finite first moment
+Current general finite-arm optimality theorems concern proper product-Gaussian posteriors. No separate theorem for every non-Gaussian finite-first-moment prior is supplied.
+  No claimed formal endpoint.
+
+KG/EI definitions and literature | PDF pp. 11; 18-20 | OUTSIDE FORMAL TARGETS
+One-step heuristics and literature comparisons
+No independent verification of all cited algorithms, literature rates, historical claims, or numerical illustrations is claimed.
+  No claimed formal endpoint.
+
+Appendix F proposal | PDF pp. 38 | EXPLICITLY UNPROVED
+Enlarged-event improvement
+The manuscript's proposed enlarged-event argument remains unproved. The footnote counterexample is not a proof of this proposal; the main theorem keeps the original event.
+  No claimed formal endpoint.

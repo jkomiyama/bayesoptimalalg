@@ -1,0 +1,78 @@
+import Junpei.JointGaussianMeasurable
+import Junpei.AdaptivePosteriorSufficiency
+import Junpei.ExclusionVarianceComparison
+import Junpei.InitialOptimalTrace
+import Junpei.InitialOptimalHistory
+import Junpei.FixedGaussianInitialReduction
+import Junpei.FixedGaussianStackPath
+import Junpei.ProseCorollariesRemark3
+import Junpei.ProseCorollariesExclusion
+import Junpei.ProseCorollariesErrorRate
+import Junpei.Footnote14Scale
+import Junpei.InitialHistoryMain
+import Junpei.FixedGaussianFlatInitialization
+import Junpei.UniformSampling
+import Junpei.UniformSamplingObservation
+import Junpei.RealPrecisionPolicy
+
+-- Each entry is a real proof target, including the negative PDF certificate.
+#print Junpei.InitialOptimal.InitialRiskOptimal
+#check Junpei.InitialOptimal.minimizing_rawTree_repair_ae
+#check Junpei.InitialOptimal.minimizing_trace_repair_ae
+#check Junpei.InitialOptimal.exists_initialRiskOptimal
+#check Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae
+#check Junpei.HistoryPolicy.toRaw_family_feasible
+#check Junpei.HistoryPolicy.familyRisk_eq_actualRisk
+#check Junpei.HistoryPolicy.minimizing_actualRisk_le_history
+#check Junpei.FixedGaussian.rawTree_stack_law_eq
+#check Junpei.FlatPriorInitialization.normalized_flat_measure
+#check Junpei.FlatPriorProduct.normalized_product_measure
+#check Junpei.AdaptivePosteriorSufficiency.normalized_history_posterior
+#check Junpei.JointGaussianMeasurable.loss_joint_measurable
+#check Junpei.JointGaussianMeasurable.actionLoss_joint_measurable
+#check Junpei.JointGaussianMeasurable.minimumOptimal_joint_measurable
+#check Junpei.JointGaussianMeasurable.minimumOptimal_actionLoss
+#check Junpei.JointGaussianMeasurable.minimumOptimal_le_minimizer
+#check Junpei.ExclusionVarianceComparison.lemma11_independent_comparison
+#check Junpei.ProseCorollaries.remark3_equal_action_losses
+#check Junpei.ProseCorollaries.remark3_saturated_left_strict
+#check Junpei.ProseCorollaries.remark3_saturated_right_strict
+#check Junpei.ProseCorollaries.remark3_balanced_terminal_counts
+#check Junpei.ProseCorollaries.posterior_best_arm_risk_le_exclusion
+#check Junpei.ProseCorollaries.error_regret_same_exponential_rate
+#check Junpei.ProseCorollaries.error_regret_same_upper_exponential_rate
+#check Junpei.ProseCorollaries.Footnote14.counterexample_to_necessary_scale
+#check Junpei.Footnote14Scale.logarithmicGap_not_bigO_paper_scale
+#check Junpei.Footnote14Scale.polynomial_tail_does_not_require_paper_scale
+#check Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff
+#check Junpei.InitialHistoryMain.theorem2
+#check Junpei.InitialHistoryMain.theorem2_exponential_rate
+#check Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law
+#check Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq
+#check Junpei.UniformSampling.uniform_frequentist_rate_limit
+#check Junpei.UniformSampling.uniform_frequentist_rate
+#check Junpei.UniformSampling.uniform_error_log_limit
+#check Junpei.UniformSampling.observed_uniform_frequentist_rate_limit
+#check Junpei.RealPrecisionPolicy.canonical_rawRisk
+#check Junpei.RealPrecisionPolicy.canonical_actualRisk
+#check Junpei.RealPrecisionPolicy.canonical_sequentiallyOptimal
+#check Junpei.RealPrecisionPolicy.exists_globally_borel_sequentiallyOptimal
+
+#print axioms Junpei.InitialOptimal.minimizing_rawTree_repair_ae
+#print axioms Junpei.InitialOptimal.minimizing_trace_repair_ae
+#print axioms Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae
+#print axioms Junpei.HistoryPolicy.toRaw_family_feasible
+#print axioms Junpei.FixedGaussian.rawTree_stack_law_eq
+#print axioms Junpei.AdaptivePosteriorSufficiency.normalized_history_posterior
+#print axioms Junpei.JointGaussianMeasurable.minimumOptimal_joint_measurable
+#print axioms Junpei.ExclusionVarianceComparison.lemma11_independent_comparison
+#print axioms Junpei.ProseCorollaries.error_regret_same_exponential_rate
+#print axioms Junpei.ProseCorollaries.Footnote14.counterexample_to_necessary_scale
+#print axioms Junpei.Footnote14Scale.polynomial_tail_does_not_require_paper_scale
+#print axioms Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff
+#print axioms Junpei.InitialHistoryMain.theorem2
+#print axioms Junpei.InitialHistoryMain.theorem2_exponential_rate
+#print axioms Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq
+#print axioms Junpei.UniformSampling.uniform_frequentist_rate_limit
+#print axioms Junpei.UniformSampling.observed_uniform_frequentist_rate_limit
+#print axioms Junpei.RealPrecisionPolicy.exists_globally_borel_sequentiallyOptimal

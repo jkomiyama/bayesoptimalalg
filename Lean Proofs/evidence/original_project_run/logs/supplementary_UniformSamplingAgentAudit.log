@@ -1,0 +1,79 @@
+Junpei.UniformSampling.empirical_gap_law.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (T : ℕ) (μ : Junpei.FiniteGaussian.Means A) (n : A → ℕ) (a b : A)
+  (hab : a ≠ b) (hn : ∀ (a : A), 0 < n a) (hnT : ∀ (a : A), n a ≤ T) :
+  ProbabilityTheory.HasLaw
+    (fun x => Junpei.UniformSampling.empirical μ n x a - Junpei.UniformSampling.empirical μ n x b)
+    (ProbabilityTheory.gaussianReal (μ a - μ b) (Junpei.UniformSampling.pairVariance n a b))
+    (Junpei.UniformSampling.law T)
+Junpei.UniformSampling.error_tail_sandwich.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (T : ℕ) (μ : Junpei.FiniteGaussian.Means A) (n : A → ℕ) (best : A)
+  (hn : ∀ (a : A), 0 < n a) (hnT : ∀ (a : A), n a ≤ T) :
+  (∀ (a : { a // a ≠ best }),
+      Junpei.TailRatio.normalTail (Junpei.UniformSampling.threshold μ n best ↑a) ≤
+        Junpei.UniformSampling.error T μ best n) ∧
+    Junpei.UniformSampling.error T μ best n ≤
+      ∑ a, Junpei.TailRatio.normalTail (Junpei.UniformSampling.threshold μ n best ↑a)
+Junpei.UniformSampling.tail_log_sq_tendsto :
+  Filter.Tendsto (fun x => -Real.log (Junpei.TailRatio.normalTail x) / x ^ 2) Filter.atTop (nhds (1 / 2))
+Junpei.UniformSampling.allocation_sum.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] (T : ℕ) :
+  ∑ a, Junpei.UniformSampling.allocation T a = T
+Junpei.UniformSampling.allocation_proportion.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] (a : A) :
+  Filter.Tendsto (fun T => ↑(Junpei.UniformSampling.allocation T a) / ↑T) Filter.atTop (nhds (1 / ↑(Fintype.card A)))
+Junpei.UniformSampling.uniform_frequentist_rate_limit.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.Tendsto
+    (Junpei.RegretExponent.rate fun T => Junpei.UniformSampling.regret T μ best (Junpei.UniformSampling.allocation T))
+    Filter.atTop (nhds ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A))))
+Junpei.UniformSampling.uniform_frequentist_rate.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.liminf
+      (Junpei.RegretExponent.rate fun T => Junpei.UniformSampling.regret T μ best (Junpei.UniformSampling.allocation T))
+      Filter.atTop =
+    ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A)))
+Junpei.UniformSampling.uniform_error_log_limit.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.Tendsto (fun T => -Real.log (Junpei.UniformSampling.error T μ best (Junpei.UniformSampling.allocation T)) / ↑T)
+    Filter.atTop (nhds (Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A))))
+'Junpei.UniformSampling.uniform_frequentist_rate_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.UniformSampling.uniform_frequentist_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.UniformSampling.uniform_error_log_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.UniformSampling.allocation_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+Junpei.UniformSampling.observedRecommendation.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] {T : ℕ} (n : A → ℕ)
+  (r : Junpei.UniformSampling.Arrays A T) : A
+Junpei.UniformSampling.observedEmpirical_eq_empirical.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (T : ℕ) (μ : Junpei.FiniteGaussian.Means A) (n : A → ℕ)
+  (hn : ∀ (a : A), 0 < n a) (hnT : ∀ (a : A), n a ≤ T) (x : Junpei.UniformSampling.Arrays A T) :
+  Junpei.UniformSampling.observedEmpirical n (Junpei.UniformSampling.observedRewards μ x) =
+    Junpei.UniformSampling.empirical μ n x
+Junpei.UniformSampling.observedRecommendation_eq.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (T : ℕ) (μ : Junpei.FiniteGaussian.Means A) (n : A → ℕ)
+  (hn : ∀ (a : A), 0 < n a) (hnT : ∀ (a : A), n a ≤ T) (x : Junpei.UniformSampling.Arrays A T) :
+  Junpei.UniformSampling.observedRecommendation n (Junpei.UniformSampling.observedRewards μ x) =
+    Junpei.UniformSampling.recommendation μ n x
+Junpei.UniformSampling.observedRegret_eq.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (T : ℕ) (μ : Junpei.FiniteGaussian.Means A) (best : A) (n : A → ℕ)
+  (hn : ∀ (a : A), 0 < n a) (hnT : ∀ (a : A), n a ≤ T) :
+  Junpei.UniformSampling.observedRegret T μ best n = Junpei.UniformSampling.regret T μ best n
+Junpei.UniformSampling.observed_uniform_frequentist_rate_limit.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.Tendsto
+    (Junpei.RegretExponent.rate fun T =>
+      Junpei.UniformSampling.observedRegret T μ best (Junpei.UniformSampling.allocation T))
+    Filter.atTop (nhds ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A))))
+Junpei.UniformSampling.observed_uniform_frequentist_rate.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.liminf
+      (Junpei.RegretExponent.rate fun T =>
+        Junpei.UniformSampling.observedRegret T μ best (Junpei.UniformSampling.allocation T))
+      Filter.atTop =
+    ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A)))
+'Junpei.UniformSampling.observedRegret_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.UniformSampling.observed_uniform_frequentist_rate_limit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.UniformSampling.observed_uniform_frequentist_rate' depends on axioms: [propext, Classical.choice, Quot.sound]

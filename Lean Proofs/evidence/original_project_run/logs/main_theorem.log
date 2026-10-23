@@ -1,0 +1,113 @@
+Junpei.Main.theorem2 (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy),
+                Junpei.Policy.AEOptimal π T → c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret π T Δ
+Junpei.Main.theorem2_paper_exponent (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c T0,
+    0 < c ∧
+      ∀ (T : ℕ),
+        T0 ≤ T →
+          Odd T →
+            ∀ (π : Junpei.Policy.StatePolicy),
+              Junpei.Policy.AEOptimal π T → c * ↑T ^ (-((33 + Δ) ^ 2 / 2 + 4)) ≤ Junpei.Main.regret π T Δ
+Junpei.Main.theorem2_real_exponent (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy), Junpei.Policy.AEOptimal π T → c * ↑T ^ (-C) ≤ Junpei.Main.regret π T Δ
+Junpei.Main.theorem2_exponential_rate (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.Policy.AEOptimal (family T) T) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (family T) T Δ) Filter.atTop = 0
+Junpei.RegretRatio.remark2 (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.Policy.AEOptimal (family T) T) (rFreq : ℕ → ℝ) (hF : ∀ (T : ℕ), 0 ≤ rFreq T)
+  (hpositive : 0 < Filter.liminf (Junpei.RegretExponent.rate rFreq) Filter.atTop) :
+  Filter.limsup (Junpei.RegretRatio.ratio (fun T => Junpei.Main.regret (family T) T Δ) rFreq) Filter.atTop = ⊤
+Junpei.Main.regret_eq (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) :
+  Junpei.Main.regret π T Δ = Δ * (Junpei.Main.jointLaw T).real (Junpei.Main.wrongEvent π T Δ)
+Junpei.Main.regret_bounds (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) (hΔ : 0 ≤ Δ) :
+  0 ≤ Junpei.Main.regret π T Δ ∧ Junpei.Main.regret π T Δ ≤ Δ
+Junpei.Main.regret_repair_eq (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) (hπ : Junpei.Policy.AEOptimal π T) :
+  Junpei.Main.regret π T Δ = Junpei.Main.regret (Junpei.Policy.repair π T) T Δ
+Junpei.PolicyChoice.eventually_optimal_choices (CU : ℝ) (hCU : 33 ≤ CU) :
+  ∃ T0,
+    ∀ (T : ℕ),
+      T0 ≤ T →
+        (∀ (q t : ℕ) (p : Draft0.Counts.MeanPath) (c : Draft0.Counts.Counts) (a : Draft0.BayesianModel.Arm),
+            T = 2 * q + 1 →
+              4 ≤ t →
+                t < T →
+                  Draft0.Counts.horizonConsistent t c →
+                    JunpeiComparison.newW T q CU p c →
+                      Draft0.BayesianModel.action (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                            (Draft0.DynamicPolicy.modelMeans p c) a =
+                          Draft0.BayesianModel.value (T - t + 1) (Draft0.DynamicPolicy.modelCounts c)
+                            (Draft0.DynamicPolicy.modelMeans p c) →
+                        Draft0.DynamicPolicy.admissible q c a) ∧
+          ∀ (q : ℕ) (p : Draft0.Counts.MeanPath) (c : Draft0.Counts.Counts) (a : Draft0.BayesianModel.Arm),
+            T = 2 * q + 1 →
+              Draft0.Counts.horizonConsistent T c →
+                JunpeiComparison.newW T q CU p c →
+                  Draft0.BayesianModel.action 0 (Draft0.DynamicPolicy.modelCounts c)
+                        (Draft0.DynamicPolicy.modelMeans p c) a =
+                      Draft0.BayesianModel.value 1 (Draft0.DynamicPolicy.modelCounts c)
+                        (Draft0.DynamicPolicy.modelMeans p c) →
+                    a ≠ 2
+Junpei.PolicyChoice.lemmas7_8_uniform (CU : ℝ) (hCU : 0 < CU) (hcut : 180 < (CU - 6) ^ 2 / 4) :
+  ∃ T0,
+    ∀ (T : ℕ),
+      T0 ≤ T →
+        (∀ (q t : ℕ) (p : Draft0.Counts.MeanPath) (c : Draft0.Counts.Counts),
+            T = 2 * q + 1 →
+              4 ≤ t →
+                t < T →
+                  Draft0.Counts.horizonConsistent t c →
+                    JunpeiComparison.newW T q CU p c →
+                      (Junpei.PolicyChoice.gainC / 2 * Draft0.Rates.invPower 178 T ≤
+                            Junpei.ExclusionPerm.EBI (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                              (Draft0.DynamicPolicy.modelMeans p c) 0 ∧
+                          Junpei.PolicyChoice.gainC / 2 * Draft0.Rates.invPower 178 T ≤
+                            Junpei.ExclusionPerm.EBI (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                              (Draft0.DynamicPolicy.modelMeans p c) 1) ∧
+                        (c.n1 = q →
+                            Junpei.PolicyChoice.comparisonC / 2 * Draft0.Rates.invPower 178 T ≤
+                              Draft0.BayesianModel.action (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                                  (Draft0.DynamicPolicy.modelMeans p c) 1 -
+                                Draft0.BayesianModel.action (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                                  (Draft0.DynamicPolicy.modelMeans p c) 0) ∧
+                          (c.n2 = q →
+                            Junpei.PolicyChoice.comparisonC / 2 * Draft0.Rates.invPower 178 T ≤
+                              Draft0.BayesianModel.action (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                                  (Draft0.DynamicPolicy.modelMeans p c) 0 -
+                                Draft0.BayesianModel.action (T - t) (Draft0.DynamicPolicy.modelCounts c)
+                                  (Draft0.DynamicPolicy.modelMeans p c) 1)) ∧
+          ∀ (q : ℕ) (p : Draft0.Counts.MeanPath) (c : Draft0.Counts.Counts),
+            T = 2 * q + 1 →
+              Draft0.Counts.horizonConsistent T c →
+                JunpeiComparison.newW T q CU p c →
+                  Junpei.Marginal.terminalConstant / 2 * Draft0.Rates.invPower 22 T ≤
+                      Junpei.ExclusionPerm.EBI 0 (Draft0.DynamicPolicy.modelCounts c)
+                        (Draft0.DynamicPolicy.modelMeans p c) 0 ∧
+                    Junpei.Marginal.terminalConstant / 2 * Draft0.Rates.invPower 22 T ≤
+                      Junpei.ExclusionPerm.EBI 0 (Draft0.DynamicPolicy.modelCounts c)
+                        (Draft0.DynamicPolicy.modelMeans p c) 1
+Junpei.PolicyChoice.lemma6_absolute_upper (T q t : ℕ) (CU : ℝ) (p : Draft0.Counts.MeanPath) (c : Draft0.Counts.Counts)
+  (hT : 5 ≤ T) (hCU : 0 < CU) (hcut : 180 < (CU - 6) ^ 2 / 4) (hc : Draft0.Counts.horizonConsistent t c)
+  (hW : JunpeiComparison.newW T q CU p c) :
+  |Junpei.ExclusionPerm.EBI (T - t) (Draft0.DynamicPolicy.modelCounts c) (Draft0.DynamicPolicy.modelMeans p c) 2| ≤
+    Junpei.ExclusionTail.paperG0 T CU
+'Junpei.Main.theorem2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.Main.theorem2_paper_exponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.Main.theorem2_real_exponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.Main.theorem2_exponential_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.RegretRatio.remark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.Main.regret_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.Main.regret_repair_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.PolicyChoice.lemmas7_8_uniform' depends on axioms: [propext, Classical.choice, Quot.sound]

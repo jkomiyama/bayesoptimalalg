@@ -1,0 +1,281 @@
+def Junpei.InitialOptimal.InitialRiskOptimal : Junpei.Policy.StatePolicy → ℕ → Prop :=
+fun π T => ∀ (m : Draft0.BayesianModel.Means), Junpei.SequentialRisk.MinimizesActualRisk π 4 (T - 3) (fun x => 1) m
+Junpei.InitialOptimal.minimizing_rawTree_repair_ae (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1) (ht : 4 ≤ t)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (H + 1) ×
+      Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+        Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+          H) ∂(Junpei.Policy.seedLaw (H + 1)).prod
+      (Junpei.EmbeddingExecution.worldLaw H (Junpei.CountModelBridge.natPrecisions c) m),
+    Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2) =
+      Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2)
+Junpei.InitialOptimal.minimizing_trace_repair_ae (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1) (ht : 4 ≤ t)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (H + 1) ×
+      Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+        Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+          H) ∂(Junpei.Policy.seedLaw (H + 1)).prod
+      (Junpei.EmbeddingExecution.worldLaw H (Junpei.CountModelBridge.natPrecisions c) m),
+    Junpei.EmbeddingRaw.trace (Junpei.PolicyContinuation.rawTree π t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2) =
+      Junpei.EmbeddingRaw.trace (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2)
+Junpei.InitialOptimal.exists_initialRiskOptimal (T : ℕ) (hT : 3 ≤ T) : ∃ π, Junpei.InitialOptimal.InitialRiskOptimal π T
+Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae (π : Junpei.Policy.StatePolicy) (T : ℕ) (hT : 3 ≤ T)
+  (hπ : Junpei.InitialOptimal.InitialRiskOptimal π T) (m μ : Draft0.BayesianModel.Means) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (T - 3 + 1) ×
+      Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+        (T - 3)) ∂(Junpei.Policy.seedLaw (T - 3 + 1)).prod (Junpei.FixedGaussian.fixedLaw (T - 3) μ),
+    Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π 4 (T - 3) (fun x => 1) m p.1) p.2 =
+      Junpei.EmbeddingRaw.run
+        (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) 4 (T - 3) (fun x => 1) m p.1) p.2
+Junpei.HistoryPolicy.toRaw_family_feasible (π : Junpei.HistoryPolicy.Policy Draft0.BayesianModel.Arm) (n H : ℕ)
+  (h : Junpei.HistoryPolicy.History Draft0.BayesianModel.Arm n) :
+  Junpei.SequentialRisk.Feasible fun u => Junpei.HistoryPolicy.toRaw π n H h u
+Junpei.HistoryPolicy.familyRisk_eq_actualRisk (π : Junpei.HistoryPolicy.Policy Draft0.BayesianModel.Arm) (n H : ℕ)
+  (h : Junpei.HistoryPolicy.History Draft0.BayesianModel.Arm n) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) :
+  Junpei.SequentialRisk.familyRisk (fun u => Junpei.HistoryPolicy.toRaw π n H h u) c m =
+    Junpei.HistoryPolicy.actualRisk π n H h (Junpei.CountModelBridge.natPrecisions c) m
+Junpei.HistoryPolicy.minimizing_actualRisk_le_history (π : Junpei.Policy.StatePolicy) (t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means)
+  (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) (ρ : Junpei.HistoryPolicy.Policy Draft0.BayesianModel.Arm)
+  (n : ℕ) (h : Junpei.HistoryPolicy.History Draft0.BayesianModel.Arm n) :
+  Junpei.SequentialRisk.continuationRisk π t H c m ≤
+    Junpei.HistoryPolicy.actualRisk ρ n H h (Junpei.CountModelBridge.natPrecisions c) m
+Junpei.FixedGaussian.rawTree_stack_law_eq (π : Junpei.Policy.StatePolicy) (t H : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m μ : Draft0.BayesianModel.Means) (u : Junpei.PolicyContinuation.Seeds H) :
+  MeasureTheory.Measure.map (Junpei.FixedGaussian.stackRun (Junpei.PolicyContinuation.rawTree π t H c m u))
+      (Junpei.FixedGaussian.fixedLaw H μ) =
+    MeasureTheory.Measure.map (Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c m u))
+      (Junpei.FixedGaussian.fixedLaw H μ)
+Junpei.FlatPriorInitialization.normalized_flat_measure {n : ℕ} (y : Fin n → ℝ) (hn : 0 < n) :
+  (MeasureTheory.volume.withDensity fun θ =>
+      ENNReal.ofReal
+        (Junpei.FlatPriorInitialization.flatLikelihood y θ /
+          ∫ (x : ℝ), Junpei.FlatPriorInitialization.flatLikelihood y x)) =
+    ProbabilityTheory.gaussianReal (Junpei.FlatPriorInitialization.empiricalMean y) (↑n)⁻¹
+Junpei.FlatPriorProduct.normalized_product_measure.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  (n : A → ℕ) (y : (a : A) → Fin (n a) → ℝ) (hn : ∀ (a : A), 0 < n a) :
+  (MeasureTheory.volume.withDensity fun θ =>
+      ENNReal.ofReal
+        (Junpei.FlatPriorProduct.productLikelihood n y θ /
+          ∫ (x : Junpei.FiniteGaussian.Means A), Junpei.FlatPriorProduct.productLikelihood n y x)) =
+    Junpei.FinitePosterior.posteriorLaw (fun a => ↑(n a)) fun a => Junpei.FlatPriorInitialization.empiricalMean (y a)
+Junpei.AdaptivePosteriorSufficiency.normalized_history_posterior.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] {N : ℕ} (arms : Fin N → A) (y : Fin N → ℝ) (hinit : ∀ (a : A), ∃ j, arms j = a) :
+  (MeasureTheory.volume.withDensity fun θ =>
+      ENNReal.ofReal
+        (Junpei.AdaptivePosteriorSufficiency.likelihood arms y θ /
+          ∫ (x : Junpei.FiniteGaussian.Means A), Junpei.AdaptivePosteriorSufficiency.likelihood arms y x)) =
+    Junpei.FinitePosterior.posteriorLaw (fun a => ↑(Junpei.AdaptivePosteriorSufficiency.sampleCount arms a)) fun a =>
+      Junpei.FlatPriorInitialization.empiricalMean (Junpei.AdaptivePosteriorSufficiency.sampleData arms y a)
+Junpei.JointGaussianMeasurable.loss_joint_measurable.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  (k : ℕ) : Measurable fun p => Junpei.FinitePosterior.loss k p.1 p.2
+Junpei.JointGaussianMeasurable.actionLoss_joint_measurable.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  (k : ℕ) (i : A) : Measurable fun p => Junpei.FinitePosterior.actionLoss k p.1 p.2 i
+Junpei.JointGaussianMeasurable.minimumOptimal_joint_measurable.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [LinearOrder A] [MeasurableSpace A] [MeasurableSingletonClass A] (k : ℕ) :
+  Measurable fun p => Junpei.JointGaussianMeasurable.minimumOptimal k p.1 p.2
+Junpei.JointGaussianMeasurable.minimumOptimal_actionLoss.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [LinearOrder A] [MeasurableSpace A] [MeasurableSingletonClass A] (k : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.FinitePosterior.actionLoss k c m (Junpei.JointGaussianMeasurable.minimumOptimal k c m) =
+    Junpei.FinitePosterior.loss (k + 1) c m
+Junpei.JointGaussianMeasurable.minimumOptimal_le_minimizer.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [LinearOrder A] [MeasurableSpace A] [MeasurableSingletonClass A] (k : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) (i : A)
+  (hi : Junpei.FinitePosterior.actionLoss k c m i = Junpei.FinitePosterior.loss (k + 1) c m) :
+  Junpei.JointGaussianMeasurable.minimumOptimal k c m ≤ i
+Junpei.ExclusionVarianceComparison.lemma11_independent_comparison (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (upper lower : ℝ) (hgap : upper ≤ lower) (h3 : m 2 ≤ upper) (h1 : lower ≤ m 0)
+  (h2 : lower ≤ m 1) (hc : ∀ (a : Draft0.BayesianModel.Arm), 1 ≤ c a) :
+  Junpei.Exclusion.exclusion c m 2 ≤
+    2 *
+      ∫ (x : ℝ),
+        ∫ (y : ℝ),
+          max (upper + x - (lower + y)) 0 ∂ProbabilityTheory.gaussianReal 0 1 ∂ProbabilityTheory.gaussianReal 0 1
+Junpei.ProseCorollaries.remark3_equal_action_losses (q k n1 n2 : ℕ) (m1 m2 : ℝ) (h1 : 0 < n1) (h2 : 0 < n2)
+  (hcap1 : n1 < q) (hcap2 : n2 < q) (hs : n1 + n2 + k = 2 * q - 1) :
+  Junpei.FinitePosterior.actionLoss k (Junpei.TwoArmOptimal.pairPrecisions n1 n2) (Junpei.TwoArmOptimal.pairMeans m1 m2)
+      0 =
+    Junpei.FinitePosterior.actionLoss k (Junpei.TwoArmOptimal.pairPrecisions n1 n2)
+      (Junpei.TwoArmOptimal.pairMeans m1 m2) 1
+Junpei.ProseCorollaries.remark3_saturated_left_strict (q k n2 : ℕ) (m1 m2 : ℝ) (h2 : 0 < n2)
+  (hs : q + n2 + k = 2 * q - 1) :
+  Junpei.FinitePosterior.actionLoss k (Junpei.TwoArmOptimal.pairPrecisions q n2) (Junpei.TwoArmOptimal.pairMeans m1 m2)
+      1 <
+    Junpei.FinitePosterior.actionLoss k (Junpei.TwoArmOptimal.pairPrecisions q n2)
+      (Junpei.TwoArmOptimal.pairMeans m1 m2) 0
+Junpei.ProseCorollaries.remark3_saturated_right_strict (q k n1 : ℕ) (m1 m2 : ℝ) (h1 : 0 < n1)
+  (hs : n1 + q + k = 2 * q - 1) :
+  Junpei.FinitePosterior.actionLoss k (Junpei.TwoArmOptimal.pairPrecisions n1 q) (Junpei.TwoArmOptimal.pairMeans m1 m2)
+      0 <
+    Junpei.FinitePosterior.actionLoss k (Junpei.TwoArmOptimal.pairPrecisions n1 q)
+      (Junpei.TwoArmOptimal.pairMeans m1 m2) 1
+Junpei.ProseCorollaries.remark3_balanced_terminal_counts (q S n1 n2 : ℕ) (hcap1 : n1 ≤ q) (hcap2 : n2 ≤ q)
+  (hs : n1 + n2 + S = 2 * q) :
+  (Draft0.Counts.balancedRun S (Junpei.TwoArmOptimal.pairCounts n1 n2)).n1 = q ∧
+    (Draft0.Counts.balancedRun S (Junpei.TwoArmOptimal.pairCounts n1 n2)).n2 = q
+Junpei.ProseCorollaries.posterior_best_arm_risk_le_exclusion.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] {S : Type u_2} [MeasurableSpace S] (i : A)
+  [Nonempty { a // a ≠ i }] (c : Junpei.FiniteGaussian.Precisions A) (m : Junpei.FiniteGaussian.Means A)
+  (ν : MeasureTheory.Measure S) [MeasureTheory.IsProbabilityMeasure ν] (J : Junpei.FiniteGaussian.Means A × S → A)
+  (hJ : Measurable J) (E : Set (Junpei.FiniteGaussian.Means A × S)) (hE : MeasurableSet E)
+  (hbest : ∀ w ∈ E, Junpei.FiniteGaussian.maxAll w.1 = w.1 i) :
+  ∫ (w : Junpei.FiniteGaussian.Means A × S),
+      E.indicator (fun w => Junpei.FiniteGaussian.maxAll w.1 - w.1 (J w))
+        w ∂(Junpei.FinitePosterior.posteriorLaw c m).prod ν ≤
+    Junpei.FiniteModelExclusion.exclusion i c m
+Junpei.ProseCorollaries.error_regret_same_exponential_rate.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] {Ω : Type u_2} [MeasurableSpace Ω]
+  (ν : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure ν] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) (J : ℕ → Ω → A)
+  (hJ : ∀ (T : ℕ), Measurable (J T)) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.ProseCorollaries.recommendationError ν best (J T))
+      Filter.atTop =
+    Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.ProseCorollaries.frequentistRegret ν μ best (J T))
+      Filter.atTop
+Junpei.ProseCorollaries.error_regret_same_upper_exponential_rate.{u_1, u_2} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] {Ω : Type u_2} [MeasurableSpace Ω]
+  (ν : MeasureTheory.Measure Ω) [MeasureTheory.IsProbabilityMeasure ν] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) (J : ℕ → Ω → A)
+  (hJ : ∀ (T : ℕ), Measurable (J T)) :
+  Filter.limsup (Junpei.RegretExponent.rate fun T => Junpei.ProseCorollaries.recommendationError ν best (J T))
+      Filter.atTop =
+    Filter.limsup (Junpei.RegretExponent.rate fun T => Junpei.ProseCorollaries.frequentistRegret ν μ best (J T))
+      Filter.atTop
+Junpei.ProseCorollaries.Footnote14.counterexample_to_necessary_scale :
+  0 < Draft0.BadEvent.underestimationConstant ∧
+    (∀ (T : ℕ),
+        5 ≤ T →
+          Draft0.BadEvent.underestimationConstant * Draft0.Rates.invPower 4 T ≤
+            (ProbabilityTheory.gaussianReal 0 (↑T ^ 3)⁻¹).real
+              (Set.Ici (Junpei.ProseCorollaries.Footnote14.logarithmicGap T))) ∧
+      ¬Junpei.ProseCorollaries.Footnote14.logarithmicGap =O[Filter.atTop]
+          Junpei.ProseCorollaries.Footnote14.standardDeviation
+Junpei.Footnote14Scale.logarithmicGap_not_bigO_paper_scale :
+  ¬Junpei.ProseCorollaries.Footnote14.logarithmicGap =O[Filter.atTop] fun T => ↑T ^ (-3 / 2)
+Junpei.Footnote14Scale.polynomial_tail_does_not_require_paper_scale :
+  ¬∀ (gap : ℕ → ℝ),
+      (∀ (T : ℕ), 0 ≤ gap T) →
+        Junpei.Footnote14Scale.PolynomialTailLowerBound gap → gap =O[Filter.atTop] fun T => ↑T ^ (-3 / 2)
+Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) :
+  Junpei.PosteriorStateHistory.MinimizesHistoryRisk π t H c m ↔ Junpei.SequentialRisk.MinimizesActualRisk π t H c m
+Junpei.InitialHistoryMain.theorem2 (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy),
+                Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal π T →
+                  c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret π T Δ
+Junpei.InitialHistoryMain.theorem2_exponential_rate (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal (family T) T) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (family T) T Δ) Filter.atTop = 0
+Junpei.FixedGaussian.FlatInitialization.normalizedFlat_observation_joint_law.{u_1} {A : Type u_1} [Fintype A]
+  [Nonempty A] [DecidableEq A] (n : A → ℕ) (y : (a : A) → Fin (n a) → ℝ) (hn : ∀ (a : A), 0 < n a) (a : A) :
+  MeasureTheory.Measure.map (Junpei.ObservationBridge.rawObservation a)
+      ((Junpei.FixedGaussian.FlatInitialization.normalizedFlatLaw n y).prod (ProbabilityTheory.gaussianReal 0 1)) =
+    MeasureTheory.Measure.map
+      (Junpei.ObservationBridge.reconstructedObservation (fun b => ↑(n b))
+        (Junpei.FixedGaussian.FlatInitialization.dataMeans n y) a)
+      ((ProbabilityTheory.gaussianReal 0 (Junpei.FiniteGaussian.innovation (fun b => ↑(n b)) a)).prod
+        (Junpei.FinitePosterior.centeredLaw (Junpei.FiniteGaussian.advance (fun b => ↑(n b)) a)))
+Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq (π : Junpei.Policy.StatePolicy) (t H : ℕ)
+  (n : Draft0.BayesianModel.Counts) (y : (a : Draft0.BayesianModel.Arm) → Fin (n a) → ℝ)
+  (hn : ∀ (a : Draft0.BayesianModel.Arm), 0 < n a) :
+  ∫ (p :
+      Junpei.Policy.SeedArray (H + 1) ×
+        Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+          Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm H),
+      Junpei.EmbeddingRandomized.randomizedPayoff
+        (Junpei.PolicyContinuation.rawTree π t H n (Junpei.FixedGaussian.FlatInitialization.dataMeans n y))
+        p ∂(Junpei.Policy.seedLaw (H + 1)).prod (Junpei.FixedGaussian.FlatInitialization.flatWorldLaw H n y) =
+    Junpei.SequentialRisk.continuationRisk π t H n (Junpei.FixedGaussian.FlatInitialization.dataMeans n y)
+Junpei.UniformSampling.uniform_frequentist_rate_limit.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.Tendsto
+    (Junpei.RegretExponent.rate fun T => Junpei.UniformSampling.regret T μ best (Junpei.UniformSampling.allocation T))
+    Filter.atTop (nhds ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A))))
+Junpei.UniformSampling.uniform_frequentist_rate.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.liminf
+      (Junpei.RegretExponent.rate fun T => Junpei.UniformSampling.regret T μ best (Junpei.UniformSampling.allocation T))
+      Filter.atTop =
+    ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A)))
+Junpei.UniformSampling.uniform_error_log_limit.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.Tendsto (fun T => -Real.log (Junpei.UniformSampling.error T μ best (Junpei.UniformSampling.allocation T)) / ↑T)
+    Filter.atTop (nhds (Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A))))
+Junpei.UniformSampling.observed_uniform_frequentist_rate_limit.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] (μ : Junpei.FiniteGaussian.Means A) (best : A)
+  [Nonempty { a // a ≠ best }] (hbest : ∀ (a : A), a ≠ best → μ a < μ best) :
+  Filter.Tendsto
+    (Junpei.RegretExponent.rate fun T =>
+      Junpei.UniformSampling.observedRegret T μ best (Junpei.UniformSampling.allocation T))
+    Filter.atTop (nhds ↑(Junpei.ProseCorollaries.minimumGap μ best ^ 2 / (4 * ↑(Fintype.card A))))
+Junpei.RealPrecisionPolicy.canonical_rawRisk.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] [LinearOrder A] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (u : Junpei.PolicyContinuation.Seeds H) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.EmbeddingExecution.rawRisk (Junpei.RealPrecisionPolicy.rawTree Junpei.RealPrecisionPolicy.canonical H c m u) c
+      m =
+    Junpei.FinitePosterior.loss H c m
+Junpei.RealPrecisionPolicy.canonical_actualRisk.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] [LinearOrder A] (H : ℕ) (c : Junpei.FiniteGaussian.Precisions A)
+  (m : Junpei.FiniteGaussian.Means A) (hc : ∀ (a : A), 0 < c a) :
+  Junpei.RealPrecisionPolicy.actualRisk Junpei.RealPrecisionPolicy.canonical H c m = Junpei.FinitePosterior.loss H c m
+Junpei.RealPrecisionPolicy.canonical_sequentiallyOptimal.{u_1} {A : Type u_1} [Fintype A] [Nonempty A] [DecidableEq A]
+  [MeasurableSpace A] [MeasurableSingletonClass A] [LinearOrder A] :
+  Junpei.RealPrecisionPolicy.SequentiallyOptimal Junpei.RealPrecisionPolicy.canonical
+Junpei.RealPrecisionPolicy.exists_globally_borel_sequentiallyOptimal.{u_1} {A : Type u_1} [Fintype A] [Nonempty A]
+  [DecidableEq A] [MeasurableSpace A] [MeasurableSingletonClass A] [LinearOrder A] :
+  ∃ π, Junpei.RealPrecisionPolicy.SequentiallyOptimal π
+'Junpei.InitialOptimal.minimizing_rawTree_repair_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialOptimal.minimizing_trace_repair_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.HistoryPolicy.toRaw_family_feasible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.rawTree_stack_law_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.AdaptivePosteriorSufficiency.normalized_history_posterior' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.JointGaussianMeasurable.minimumOptimal_joint_measurable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.ExclusionVarianceComparison.lemma11_independent_comparison' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.ProseCorollaries.error_regret_same_exponential_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.ProseCorollaries.Footnote14.counterexample_to_necessary_scale' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.Footnote14Scale.polynomial_tail_does_not_require_paper_scale' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.theorem2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.theorem2_exponential_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.FlatInitialization.flat_continuationRisk_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.UniformSampling.uniform_frequentist_rate_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.UniformSampling.observed_uniform_frequentist_rate_limit' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.RealPrecisionPolicy.exists_globally_borel_sequentiallyOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,34 @@
+SUBMISSION PROVENANCE
+
+This is revision 3. All 155 revision 2 proof modules are preserved byte for
+byte, including the four modules that closed the general Theorem 1 gap and
+the existing Footnote 14 counterexample. One new module, containing 12 public
+theorems, proves the requested corrected Gaussian-tail equivalence. The root
+import, signature audit, aggregate audit, and portable verifier include the
+new proof. See REVISION_NOTES.txt and source_equivalence.json for the precise
+distinction from revision 2.
+The Lean toolchain and dependency pins are unchanged. Historical namespaces
+and module names (including Draft0) are preserved.
+
+manuscript/junpei_version.pdf is the exact supplied manuscript, not a corrected
+edition. Its SHA-256 is:
+e8bd134e3463a4606354a6ac7c86ff1f95b96f77d5a8dbf0658fbc9b64ed5263
+
+original_project_run/ contains the report, machine-readable results, and all
+18 recorded command logs from the original-project verification. Its relative
+source paths refer to that earlier revision. previous_submission_run/ preserves
+the first packaged release's report, verifier, declaration inventory, and logs.
+revision2_run/ preserves the complete revision 2 verification records, its
+verifier, aggregate declaration audit, declaration inventory, revision notes,
+and source comparison. These are historical records; they do not verify
+revision 3's added proofs.
+
+The submission has a portable verification driver. Its own REPORT.txt,
+verification_results.json, and logs/ record the run performed in this project.
+The build uses the exact pinned Lean and dependency revisions. Dependency
+caches may be reused; --fresh recompiles all local proof modules. The compiled
+outputs and dependency cache are not included in the release archive.
+
+The submission adds usage instructions, a manuscript-to-code map, navigation
+indexes, and administrative packaging tools. These documents are not Lean
+proofs. The original project remains available separately in the workspace.

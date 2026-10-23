@@ -1,0 +1,2129 @@
+=== PDF PAGE 1 ===
+Suboptimal Frequentist Performance of the Flat-Prior Generalized
+Bayes Optimal Algorithm in Best Arm Identification
+Junpei Komiyama ∗
+July 13, 2026
+Abstract
+We consider the fixed-budget best arm identification problem with rewards following normal dis-
+tributions. In this problem, the forecaster is givenKarms (or treatments) andTtime steps. The
+forecaster attempts to find the arm with the largest mean, via an adaptive experiment conducted using
+an algorithm. The algorithm’s performance is evaluated by “simple regret”, reflecting the quality of
+the estimated best arm. While frequentist simple regret can decrease exponentially with respect to
+T, the optimal Bayesian simple regret admits anO(1/T)upper bound under suitable regularity con-
+ditions on the prior. This paper demonstrates that the flat-prior generalized Bayes algorithm, which
+minimizes posterior expected simple regret after a fixed one-sample-per-arm initialization, does not
+yield an exponential decrease in simple regret under certain parameter settings. This contrasts with
+the numerous findings that suggest the asymptotic equivalence of Bayesian and frequentist approaches
+in fixed sampling regimes. Although this generalized Bayes optimal algorithm is formulated by a re-
+cursive equation that is virtually impossible to compute exactly, we lay the groundwork for its analysis
+by introducing a novel concept termed theexpected Bellman improvement.
+Quote
+The following paragraph appears in a conversation between Joseph Leo Doob and James Laurie Snell
+[Snell, 1997].
+While writing my book I (Doob) had an argument with Feller. He asserted that everyone said
+“random variable” and I asserted that everyone said “chance variable. ” We obviously had to
+use the same name in our books, so we decided the issue by a stochastic procedure. That is,
+we tossed for it and he won.
+The coin that Doob and Feller tossed separated our world, where we discuss the randomness of random
+variables, from a parallel world where we discuss the chanciness of chance variables. In this paper, we con-
+sider a generalized Bayes optimal algorithm, which computes the consequences over all the exponentially
+many parallel worlds.
+∗junpei@komiyama.info
+1
+
+=== PDF PAGE 2 ===
+1 Introduction
+This paper addresses the problem of identifying the best arm (or treatment) among multiple options
+from a fixed number of samples. This problem associates each arm with an (unknown) parameterized
+distribution, which is a (noisy) signal of the quality of the treatment. To maximize the overall effectiveness
+of the treatments, the forecaster uses an algorithm that adaptively determines which arms to select.
+Such adaptive allocation is essential for solving many practical problems, including A/B testing in online
+platforms [Li et al., 2010], simulation optimization [Malkomes et al., 2021], and clinical trials [Thompson,
+1933, Villar et al., 2015]. Among the best-known algorithms for sequential selection are the multi-armed
+bandit algorithms, such as Thompson sampling [Thompson, 1933], and upper confidence bounds [Lai
+and Robbins, 1985, Auer et al., 2002]. Although multi-armed bandit algorithms solve the exploration–
+exploitation tradeoff to maximize total effectiveness during the rounds, they have limited ability to detect
+the best arm [Bubeck et al., 2009], and are thus suboptimal for our aim.
+The machine learning literature refers to the process of finding the best-quality arm as best arm
+identification (BAI; Audibert et al. 2010). Unlike multi-armed bandit algorithms, BAI algorithms are
+designed solely to deliver the most effective exploration. 1 BAI has two settings, namely, the fixed-budget
+setting which the number of samples is fixed, and the fixed-confidence setting in which the forecaster stops
+when the confidence level on the best arm reaches a predefined threshold. In this paper, we consider the
+former setting. Popular algorithms for fixed-budget identification include successive rejects (SR; Audibert
+et al. 2010) and successive halving [Karnin et al., 2013]. There are also several Bayesian algorithms that
+utilize a prior, such as top-two Thompson sampling [Russo, 2020], knowledge gradient (KG; Gupta and
+Miescke 1994), and expected improvement (EI; Jones et al. 1998). A Bayesian algorithm is initialized
+with a prior belief, and the forecaster learns from each sample to build a posterior belief. Given that,
+we know the dynamics of the posterior belief as a distribution, exact minimization of the Bayes risk
+can be formulated as dynamic programming. Nonetheless, exact dynamic programming solutions are
+computationally intractable because of the curse of dimensionality [Russo, 2020, Powell and Ryzhov,
+2013]. Consequently, KG and EI are designed to provide the one-step lookahead approximations of an
+exactly optimal dynamic programming solution.
+While some classes of Bayesian algorithms are known to perform optimally in the fixed-confidence
+setting [Shang et al., 2020], limited results are known regarding their performance in the fixed-budget
+setting. This paper considers the flat-prior generalized Bayes optimal algorithm in the context of fixed-
+budget identification. In the field of statistical decision theory, the Bayes optimal algorithm is deeply
+connected to a minimax estimator that maximizes the worst-case performance. We are interested in the
+following research question: Does this generalized Bayes optimal algorithm have a good performance in the
+frequentist measure? On the contrary, we show that the flat-prior generalized Bayes optimal algorithm
+performs sub-optimally with some of the worst model parameters, which implies that maximizing the
+posterior objective differs substantially from maximizing the frequentist objective. A Bayesian measure
+requires it to optimize the performance averaged over the prior, whereas a frequentist measure requires
+1Although the term “best arm identification” has appeared only recently, several strands of research share the same goal,
+among which ranking and selection (RS; Bechhofer 1954) is among the best known. Several works, such as Russo [2020],
+Hong et al. [2021], consider the difference between BAI and RS, and we briefly discuss work related to RS in Section 6.
+However, because BAI and RS share several overlapping ideas, we do not explicitly outline the difference.
+2
+
+=== PDF PAGE 3 ===
+an algorithm to optimize the performance against any case. The fact that the generalized Bayes optimal
+algorithm is suboptimal means that even if we enhance KG and EI to plan more than one step ahead,
+their performance in a frequentist measure might not improve.
+Note that this discrepancy between Bayesian and frequentist measures differs considerably from the
+situation in standard statistical inference with non-adaptive samples. For a fixed-sample problem, the
+Bernstein–von Mises theorem describes the asymptotic equivalence of Bayesian and frequentist inference.
+However, in an adaptive sampling scheme, underestimation of an arm due to the randomness of the
+empirical mean results in a smaller number of samples of the arm in the future. Bayesian and frequentist
+BAI algorithms are both robust against such randomness but with different confidence levels. Bayesian
+algorithms are robust up to a polynomially small underestimation, whereas frequentist algorithms are
+robust up to an exponentially small underestimation.
+Our results offer analytical innovation by establishing foundational principles for a formal analysis
+that yields exact solutions in dynamic programming. This is notable because it enables solutions that
+extend beyond the conventional one- or two-step lookahead. We demonstrate several instances in which
+it is feasible to perform exact analyses of dynamic programming regardless of the need to project the
+evolution of the posterior over extended future periods
+The structure of the paper is as follows. The rest of this section establishes the problem. Section
+2 formalizes the Bayes optimal algorithm. Section 3 describes our main results, and Sections 4–5 describes
+their derivation. Section 6 discusses related work, and Section 7 concludes the paper. Most details of the
+proofs appear in the appendices.
+1.1 Problem setup
+Fix integersK≥2andT≥K. We consider the normal BAI problem withKarms andTsamples.
+Each armi∈[K] ={1,2,...,K}is associated with an (unknown) parameterµ i∈R. We useµ=
+(µ1,µ 2,...,µ K)to denote the set of parameters associated with the arms. Under a fixed parameterµ,
+let  
+Xi,n
+
+i∈[K],n≥1
+be mutually independent random variables such thatX i,n∼N(µ i,1). The sequence(X i,n)n≥1 is the
+reward stack of armi. The problem involvesTrounds, and at each roundt= 1,2,...,T, the forecaster
+can choose one of the arms. If armihas previously been chosenn−1times, choosing it at roundtreveals
+X(t) :=X i,n. In particular, conditionally on the past and onI(t) =i,X(t)∼N(µ i,1). Here,N(µ i,1)
+is a normal distribution with meanµ i and unit variance.
+Putµ∗ := maxi∈[K]µi and fix the tie-breaking conventioni ∗ := min arg maxi∈[K]µi. The goal of the
+forecaster is to identify an arm with meanµ ∗ using an effective algorithm. Any such algorithm comprises
+a sampling ruleI(1),I(2),I(3),...,I(T)and a recommendation ruleJ(T). LetU(0),U(1),...be i.i.d.
+standard normal external randomizers, independent of all reward stacks, and define
+Ft :=σ(U(0),...,U(t),I(1),X(1),...,I(t),X(t)), t= 0,1,...,T,
+where the lists involvingI(s),X(s)are empty whent= 0. Then the sampling ruleI(t)isF t−1-measurable,
+meaning that the algorithm chooses an arm at roundtaccording to the observation history{I(s),X(s)} s<t
+3
+
+=== PDF PAGE 4 ===
+and the external randomizers{U(s)} s<t.2 An algorithm is deterministic when it does not use the infor-
+mation of{U(s)} s<t.
+Formally, an algorithm is fixed independently of the unknown parameterµ. Thus, the same Borel
+decision maps are used under everyP µ: for suitable Borel mapsφ t andψ T ,
+I(t) =φ t
+ 
+U(0:t−1),I(1:t−1),X(1:t−1)
+
+,
+J(T) =ψ T
+ 
+U(0:T),I(1:T),X(1:T)
+
+.
+The parameterµchanges only the law of the reward stacks, not these decision maps.
+The recommendation rule is used to choose an armJ(T)∈[K]that isF T -measurable. The perfor-
+mance of the forecaster, which follows algorithmA, is measured by the simple regret
+Rµ(T,A) =µ ∗−Eµ[µJ(T) ],(1)
+which is the expected difference between the means of the best arm and the recommended armJ(T). We
+omitAfromR µ(T,A)andR H(T,A)when it is clear which algorithm is used.
+The simple regret formulated by Eq. (1) is frequentist in the sense that it assumes thatµis fixed
+(but unknown). In contrast, a Bayesian approach considers a known proper distributionHofµ∈R K
+and evaluates an algorithm with respect to these expected values. When using the ordinary Bayesian
+risk below, we assumeE H[maxi|µi|]<∞. More concretely, the Bayesian simple regret is given by
+RH(T,A) =E H[Rµ(T,A)] :=
+Z
+Rµ(T,A)dH(µ),
+which marginalizesR µ(T,A)over the priorH=H(µ).
+1.2 Convergence rates: Frequentist simple regret compared with Bayesian simple
+regret
+A good horizon-indexed family of algorithms, from the frequentist perspective, achieves exponentially
+small regret as a function ofTat every instance with a unique best arm.
+Definition 1.(Frequentist rate) Let(A T )T≥K be a horizon-indexed family of BAI algorithms, and let
+Γsatisfy0<Γ(µ)<∞for everyµwith a unique best arm. The family(A T )T≥K has frequentist rate
+Γ(µ)if, for every suchµ,
+Rµ(T,AT )≤e −Γ(µ)T+o(T),
+whereo(T)is a function ofK,µ,andTthat grows more slowly thanTwhen we viewKandµas
+constants.
+Put
+H1(µ) :=
+X
+i̸=i∗
+1
+(µ∗−µi)2.
+2
+4
+
+=== PDF PAGE 5 ===
+There is a universal constantc SR >0such that the successive rejects algorithm [Audibert et al., 2010]
+has the frequentist rateΓ SR(µ) =c SR/(logKH 1(µ)). For unit-variance Gaussian arms, the uniform
+algorithm that draws every arm equally and recommends the largest empirical mean has the rate
+Γunif(µ) = 1
+4K min
+i̸=i∗
+(µ∗−µi)2,
+up to the rounding of the allocation. Depending on the instance, this rate can be a factor of orderK,
+up to logarithmic terms, smaller than the rate of SR. More recently, Komiyama et al. [2022] derived the
+possible value of the rateΓ(µ).
+For the regular prior class considered by Komiyama et al. [2021], the optimal Bayesian simple regret
+admits anO(1/T)upper bound. More concretely, they showed that
+RH(T)≤ Cbayes(H)
+T +o
+ 1
+T
+
+,
+where the valueC bayes(H)depends on the priorH.
+Remark 1.(Reward distribution) The upper-bound analysis of Audibert et al. [2010] assumes rewards
+supported on[0,1], whereas the lower-bound construction of Carpentier and Locatelli [2016] uses Bernoulli
+arms. Corresponding exponential guarantees can also be derived for Gaussian arms with unit variance.
+Indeed, a Gaussian empirical mean satisfies a Gaussian concentration inequality with the same exponential
+form as Hoeffding’s inequality; this supplies the concentration step needed in the analogous upper-bound
+argument. The corresponding Gaussian lower bounds follow by the same change-of-measure method
+using Gaussian Kullback–Leibler divergences. Elsewhere, while the results of Komiyama et al. [2021]
+apply specifically to Bernoulli arms, an analogousO(1/T)upper bound can be derived for Gaussian
+arms under corresponding regularity assumptions, provided we are not interested in the magnitude of the
+constant.
+This paper considers the flat-prior generalized Bayes algorithm defined below. The algorithm draws
+every arm once and, conditional on the resulting proper posterior, minimizes posterior expected simple
+regret at every subsequent state. Our main result demonstrates that the flat-prior generalized Bayes algo-
+rithm does not feature an exponential frequentist simple regret, despite its pointwise posterior optimality
+after initialization.
+2 Flat-Prior Generalized Bayes Optimal Algorithm and Loss Function
+In this section, we formalize the flat-prior generalized Bayes algorithm that minimizes posterior expected
+simple regret after the fixed initialization.
+2.1 Flat-prior generalized Bayes optimal algorithm
+First, we define the flat-prior generalized Bayes optimal algorithm, and then we represent it as a dynamic
+programming problem.
+5
+
+=== PDF PAGE 6 ===
+Definition 2.(Algorithms and posterior-state policies) An algorithmAis
+A= (I(1),...,I(T),J(T)),
+where eachI(t)isF t−1-measurable andJ(T)isF T -measurable. LetAbe the set of all such algorithms,
+and put
+Ainit :={A∈A:I(t) =tfor everyt∈[K]}.
+Thus every algorithm inA init samples each arm once during the fixed initialization.
+Let
+GK :=
+( KO
+k=1
+N(mk,1/nk) :m k∈R, nk >0
+)
+be the proper product-Gaussian posterior state space. We identifyG K withR K×(0,∞) K through
+(m1,...,m K,n 1,...,n K)and equip it with the corresponding Borelσ-field. A horizon-Tposterior-state
+policy is a collectionq= (q K+1,...,q T+1 )of Borel mapsq t :G K×R→[K]. Following the fixed
+initialization, it induces a history algorithmA q∈A init by
+I(t) =q t
+ 
+H(t−1),U(t−1)
+
+, t=K+ 1,...,T,
+J(T) =q T+1
+ 
+H(T),U(T)
+
+.
+The second argument realizes randomized kernels; deterministic policies simply ignore it.
+Definition 3.(Flat-prior generalized Bayes optimal algorithm) Equip eachµ i with Lebesgue measure,
+independently across arms, and use the fixed initialization. The resulting posteriorH(K)belongs toG K
+for every realized initialization.
+Fort∈{K+ 1,...,T+ 1}andH∈G K, letΠ t(H)be the class of continuation policies satisfying the
+same nonanticipativity and parameter-independence requirements as the algorithms above. Concretely,
+adjoin i.i.d. standard normal randomizersV(t−1),...,V(T), independent ofµand all continuation
+rewards. Everyπ∈Π t(H)is represented by Borel mapsa π
+s andd π such that
+Iπ(s) =a π
+s (H,V(t−1:s−1),I π(t:s−1),X π(t:s−1)), s=t,...,T,
+Jπ(T) =d π(H,V(t−1:T),I π(t:T),X π(t:T)),
+where empty index ranges are omitted. These decision maps are fixed beforeµ∼His drawn and are
+the same for every realized value ofµ. At each sampling round they use only the displayed, previously
+revealed information; in particular, no map has access to the latent parameter or to an unobserved
+reward. Thus a continuation policy may be history-dependent and randomized, but is nonanticipative
+and independent of the latent parameter. Whent=T+ 1, only the terminal recommendation remains.
+Forπ∈Π t(H), letE π
+H denote expectation under the joint continuation law obtained by drawingµ∼H,
+generating future rewards conditionally onµ, and applyingπ, including its external randomization.
+For a posterior-state policyq, writeπ q
+t,T (H)for the continuation induced byq t,...,q T+1 from state
+(H,t). The policyq ∗ issequentially posterior optimalif, for everyt∈{K+ 1,...,T+ 1}and every
+6
+
+=== PDF PAGE 7 ===
+H∈G K,
+πq∗
+t,T (H)∈arg min
+π∈Πt(H)
+Eπ
+H
+
+µ∗−µJπ(T)
+
+.(2)
+A flat-prior generalized Bayes optimal algorithmA ∗
+T is any algorithmA q∗
+induced by a sequentially
+posterior-optimal state policyq ∗.
+In particular, whenT >K, everyH∈G K satisfies
+πq∗
+K+1,T (H)∈arg min
+π∈ΠK+1(H)
+Eπ
+H[µ∗−µJπ(T) ].(3)
+WhenT=K, Eq. (2) att=T+ 1gives the terminal posterior Bayes recommendation directly after
+initialization.
+The improper measure is used only to obtain the posterior after the common fixed initialization; we
+never integrate a risk with respect to that measure. Thus, Definition 3 is a pointwise posterior (generalized
+Bayes) definition. The pointwise requirement makes behavior at arbitrary posterior states explicit but
+does not impose a canonical tie-breaking rule among posterior-optimal actions. For randomized state
+policies, statements below that an action or recommendation belongs to a specified set are understood
+pointwise in the posterior state and almost surely in the corresponding external randomizer; modifications
+on randomizer-null sets are immaterial. This posterior-state convention identifies histories having the
+same posterior. It does not change risk relative to optimization only atH(K). Indeed, off-path actions
+can be replaced without changing the on-path law, and the Bellman principle implies that a policy
+satisfying Eq. (3) can choose a nonminimizing action only on a set of posterior-predictive histories of
+probability zero; otherwise a local replacement by a minimizing continuation would strictly reduce its
+posterior risk. Over a finite horizon, both the posterior-predictive law and the law under every fixed
+Gaussian parameterµhave everywhere-positive densities for the observed reward vector. They are
+therefore mutually absolutely continuous. Such null-history modifications also have zero frequentist
+probability and do not changeR µ(T). We hence identify policies that differ only by these null-history
+modifications with their sequentially optimal versions.
+The same Gaussian-state dynamic program applies whenever the posterior at the start of continuation
+is a proper product-Gaussian distribution; this includes independent proper Gaussian priors as well as
+the initialized flat prior used here. For a general proper prior with finite first moment, the Bellman
+principle still applies on the full posterior-distribution state space, but the Gaussian sufficient-statistic
+recursion below need not apply. Unless the reduced two-armed problem is explicitly under discussion,
+“Bayes optimal algorithm” below refers to the flat-prior generalized Bayes optimal algorithm.
+2.2 Posterior and sufficient statistics
+We use the flat measure from Definition 3, which results in the posterior mean matching the empirical
+mean after initialization. By definition,T≥KandI(t) =tfort∈[K], so every posterior used by the
+continuation policy is proper.
+7
+
+=== PDF PAGE 8 ===
+Fort≥K, the sufficient statistics(S i(t),Ni(t))for each armiare
+Si(t) =
+X
+s≤t:I(s)=i
+X(s)
+Ni(t) =
+X
+s≤t:I(s)=i
+1,
+and the posterior of armiat the end of roundt≥Kis identified by these sufficient statisticsH(t) =
+(H1(t),H 2(t),...,H K(t))as
+Hi(t) =N
+Si(t)
+Ni(t), 1
+Ni(t)
+
+.
+The posterior onµis fully specified by the sufficient statistics. Henceforth, we use the posteriorH(t)
+and the sufficient statistics(S i(t),Ni(t))i∈[K] interchangeably. We also recognize thatˆµi(t) =S i(t)/Ni(t)
+and(ˆµi(t),Ni(t))i∈[K] represent sufficient statistics.
+2.3 State evolution
+The computation of the Bayes optimal algorithm can be formalized as an undiscounted episodic Markov
+decision process (MDP). In particular, the state at the current roundtis represented as a set of sufficient
+statisticsH r(t−1) =H(t−1). We useX r(·),N r(·),ˆµr
+i(·),I r(·),J r(·), andH r(·)to represent the
+corresponding quantity in the posterior. 3 The state transition is represented as follows: when we draw
+armi,H r
+j(t) =H r
+j(t−1)forj̸=i. ForH r
+i (t),
+˜µi∼N
+
+ˆµr
+i(t−1), 1
+N r
+i (t−1)
+
+Xr(t)∼N(˜µi,1)
+ˆµr
+i(t) = N r
+i (t−1)ˆµr
+i(t−1) +X r(t)
+N r
+i (t−1) + 1
+N r
+i (t) =N r
+i (t−1) + 1.
+In view of the MDP, the algorithm receives no loss 4 for choosing an action because this is a pure explo-
+ration setting.
+For later use, we define the transition on an arbitrary proper product-Gaussian posterior. Write
+H=
+KO
+k=1
+N(mk,1/nk), n k >0,
+and letU i(H,x)be the posterior obtained after observing rewardxfrom armi: itsi-th mean and
+3At any given time stept, an algorithm can only access the sequencesI(1),X(1),I(2),X(2),...,I(t−1),X(t−1)that
+have been drawn from the true distribution. The Bayes optimal algorithm at roundtcalculates the value function and the
+action value function using a recursive formula that includes samples from the future time stepst,t+ 1,t+ 2,...,T. These
+are virtual samples, drawn from the posterior distribution.
+4This is because the valuesX(1),X(2)...,X(T)do not directly affect the final objective of minimizing the simple regret.
+We use the term “reward” for the valuesX(1),X(2)...,X(T), whereas we use the terms “loss” or “simple regret” for
+representing the quantity that we would like to minimize.
+8
+
+=== PDF PAGE 9 ===
+precision are(n imi +x)/(ni + 1)andn i + 1, respectively, and all other coordinates are unchanged. The
+posterior-predictive law of that reward is
+Xi|H∼N
+
+mi,1 + 1
+ni
+
+.(4)
+For any proper product-Gaussian posteriorG, letm j(G)denote itsj-th posterior mean; in particular,
+mj(H) =m j for the representation above. We call a posterior reachable if it is obtained from the fixed
+one-sample-per-arm initialization by finitely many Gaussian updates, or by restricting such a posterior
+to an active subset of arms. Every reachable posterior has positive-integer precisionsn k. All actual and
+posterior-predictive states used in the proof of Theorem 2 are reachable in this sense.
+2.4 Value function and action value function
+The second argument of the loss function records the number of remaining sampling opportunities, not
+the number of observations used to construct its first argument. Thus, for every proper product-Gaussian
+posteriorH, we defineL(H,t)fort∈{K+ 1,...,T+ 1}, even whenHwas obtained after a number
+of observations different fromt−1. This convention makes the skipped-round valueL(H(t−1),t+ 1)
+well-defined.
+Fix the measurable terminal tie-breaking rule
+bJ(H) := min arg max
+k∈[K]
+mk.(5)
+The terminal posterior loss is
+L(H,T+ 1) :=E H
+h
+µ∗−µ bJ(H)
+i
+.(6)
+Fort=T,T−1,...,K+ 1, define the action loss and value function by the backward recursion
+Li(H,t) :=E Xi|H
+
+L
+ 
+Ui(H,Xi),t+ 1
+
+,(7)
+L(H,t) := min
+i∈[K]
+Li(H,t).(8)
+For any nonempty active arm setI⊆[K], writeH I for the corresponding product posterior and put
+µ∗
+I := max
+k∈I
+µk,∆ I
+j :=µ∗
+I−µj, bJI(HI) := min arg max
+j∈I
+mj.
+DefineLI andLI
+i by Eqs. (6)–(8), with[K]replaced byI,µ ∗ byµ∗
+I, and bJby bJI. The stage domains are
+unchanged by this restriction:L I(·,t)is defined fort∈{K+ 1,...,T+ 1}, whereasL I
+i (·,t)is defined for
+t∈{K+ 1,...,T}. We suppress the superscript for the full problem. We also suppress it in the reduced
+two-armed problem; thus, whenever the argument isH r
+\3, every maximum, recommendation, loss, and
+gap∆ j is restricted to arms1and2. Equation (7) is equivalent to integrating first over˜µ i∼N(m i,1/ni)
+and then overX i∼N(˜µi,1), as in the state evolution above.
+All these losses are finite because Gaussian first moments are finite. They are Borel measurable by
+backward induction. Since the action set is finite, the argmin is nonempty at every state, and choosing its
+9
+
+=== PDF PAGE 10 ===
+smallest element gives a measurable deterministic Markov policy. Randomized Bayes optimal policies may
+randomize only among the minimizing actions, almost surely with respect to their external randomizers.
+2.5 Expected Bellman improvement
+The loss functionL(H(t−1),t)is recursively defined and “virtually impossible to solve” [Powell and
+Ryzhov, 2013, Russo, 2020]. However, we derive a lower bound for a specific example by introducing
+several novel ideas. First, leveraging the fact that the only actual loss is incurred at the terminal state,
+we define the expected Bellman improvement (EBI) for an arm, which represents the expected value
+gained from sampling that arm.
+Definition 4.(Expected Bellman improvement of armi) For every proper product-Gaussian posterior
+Handt∈{K+ 1,...,T}, the EBI of armiis defined by
+Bi(H,t) :=L(H,t+ 1)−L i(H,t).(9)
+The valueL(H(t−1),t+ 1)represents the loss function when a sample at roundtis discarded. 5 It is
+a feasible policy in the definition ofL i(H,t)to ignore the observation from armiand then run a policy
+attainingL(H,t+ 1). Consequently,
+Li(H,t)≤L(H,t+ 1), B i(H,t)≥0.
+Therefore, the EBI indicates the decrease in the loss function due to a single sample from armi. Since
+L(H(t−1),t+ 1)does not depend on armi, maximizing of the action value function−L i(H(t−1),t)
+is equivalent to maximizingB i(H(t−1),t). We can now redefine the Bayes optimal algorithm in terms
+of the EBI:
+Theorem 1.(Bayes optimal algorithm) Fort=K+ 1,...,T, the flat-prior generalized Bayes optimal
+algorithmA∗
+T is such that
+I(t)∈arg max
+i∈[K]
+Bi(H(t−1),t)
+J(T)∈arg max
+i∈[K]
+ˆµi(T),
+and its conditional posterior expected simple regret at posteriorH(t−1)at the beginning of roundt
+isL(H(t−1),t). For every realized proper posteriorH(K), this algorithm minimizes the conditional
+posterior simple regret in Eq. (3).
+Proof.For a terminal posteriorH= N
+iN(mi,1/ni), the posterior expected loss of recommending arm
+jis
+EH[µ∗]−m j.
+It is therefore minimized exactly by the arms with maximal posterior mean, which proves the terminal
+assertion. Backward induction and Eq. (8) show thatL(H,t)is the minimum posterior expected terminal
+5Note thatt+ 1is indeed correctly placed in Eq. (9). It indicates one round fewer thant.
+10
+
+=== PDF PAGE 11 ===
+loss over all continuation policies with roundst,t+1,...,Tremaining, and that an action is Bayes optimal
+exactly when it minimizesL i(H,t). Finally, Eq. (9) subtracts eachL i(H,t)from the same quantity
+L(H,t+ 1), so minimizing the former is equivalent to maximizing the EBI. Applying the recursion from
+the realized proper posteriorH(K)proves Eq. (3).
+Thus, the Bayes optimal algorithm chooses an arm with the largest EBI.
+2.6 One-step lookahead approximations
+Since the Bayes optimal algorithm is difficult to calculate, several approximations have been considered.
+The knowledge-gradient rule is the one-step lookahead policy
+IKG(t)∈arg max
+i∈[K]
+EXi|H(t−1)
+
+max
+j∈[K]
+mj
+ 
+Ui
+ 
+H(t−1),X i
+
+−max
+j∈[K]
+mj
+ 
+H(t−1)
+
+,
+where, separately for each candidate armi, the expectation is taken under the candidate-action posterior-
+predictive law in Eq. (4) [Gupta and Miescke, 1994, Frazier et al., 2008]. A corresponding posterior-mean
+expected-improvement rule retains only the positive improvement of the candidate arm over the current
+largest posterior mean:
+IEI(t)∈arg max
+i∈[K]
+EXi|H(t−1)
+"
+mi
+ 
+Ui
+ 
+H(t−1),X i
+
+−max
+j∈[K]
+mj
+ 
+H(t−1)
+
++
+#
+,
+where(x) + := max{x,0}[Jones et al., 1998, Bull, 2011].
+Several known results demonstrate the suboptimality of KG and EI inK-armed BAI, which we
+describe in Section 6. In this paper, the convergence rate is characterized according to the Bayes optimal
+algorithm rather than its one-step approximations KG and EI. We show that the Bayes optimal algorithm
+performs very differently from the frequentist BAI, despite not making any myopic approximation.
+3 Main Result: Suboptimality of the Bayes Optimal Algorithm
+The following is this paper’s main theorem.
+Theorem 2.(Main theorem) Let∆ G >0, letK= 3, and putµ (0) = (0,0,∆ G). There are constants
+c,C >0andT 0, possibly depending on∆ G but not onTor on the selected posterior-optimal policy, such
+that, for every oddT≥T 0 and every flat-prior generalized Bayes optimal algorithmA ∗
+T of horizonT,
+Rµ(0)(T,A∗
+T )≥cT −C.(10)
+Consequently, for every horizon-indexed family(A ∗
+T )T≥3 obtained by choosing one flat-prior generalized
+Bayes optimal algorithm at each horizon,
+lim inf
+T→∞
+− 1
+T log Rµ(0)(T,A∗
+T ) = 0,
+so no such family has a positive frequentist rate atµ (0).
+11
+
+=== PDF PAGE 12 ===
+The proof of Theorem 2 explicitly constructs an instance for which Eq. (10) holds. Notably, Theorem 2
+implies the following.
+Remark 2.Lettingµ (0) be an instance satisfying Theorem 2, for a family of algorithms(A freq
+T )T≥1 that
+has a positive frequentist rate atµ (0),
+lim sup
+T→∞
+Rµ(0)(T,A∗
+T )
+Rµ(0)(T,A freq
+T )
+=∞,
+with the ratio interpreted as+∞whenever its denominator is zero.
+That is, the frequentist regret of the generalized Bayes optimal algorithm for this instance is arbitrarily
+worse than an algorithm with a frequentist rate (e.g., SR and uniform). Conditionally on every initialized
+posteriorH(K), its posterior risk is no larger than that of any other continuation policy inA init, by
+Definition 3.
+Theorem 2 implies that the nature of the generalized Bayes algorithmA ∗
+T differs substantially from
+that of the algorithms designed for a frequentist measure. A frequentist guarantee seeks exponential
+convergence at every fixed unique-best instance, whereas Theorem 2 exhibits an instance at whichA ∗
+T
+does not converge exponentially. The generalized Bayes algorithmA ∗
+T optimizes posterior expected
+performance at every initialized state and places greater weight on cases with a small gap between the
+optimal and suboptimal arms; it does not explore arms that only improve the higher-order polynomial
+ofT −1.
+4 Proof of Theorem 2
+The high-level idea behind the proof of Theorem 2 can be understood by considering a three-armed
+instance in whichµ 1 =µ 2 < µ3. With a polynomially small probability inT −1, arm3(the best arm)
+is underestimated, and consequently,ˆµ1,ˆµ2 >ˆµ3. Whenˆµ 3 is very small, the Bayes optimal algorithm
+allocates all samples to arms1and2because this more effectively reduce the Bayesian simple regret,
+which leads to underestimation of the best arm.
+Formally, let∆ G >0be an arbitrary constant. Letµ (0) = (µ(0)
+1 ,µ (0)
+2 ,µ (0)
+3 ) = (0,0,∆ G). For ease of
+discussion, letTbe odd and letT ′ be such that2T ′ + 1 =T. Furthermore, letC U >0be such that
+180< (CU−6) 2
+4 (11)
+holds.6 For each armiandn≥1, define
+Si,n :=
+nX
+m=1
+Xi,m,ˆµ i,n := Si,n
+n .
+WheneverN i(t) =n, the observed sufficient statistics satisfyS i(t) =S i,n andˆµi(t) = ˆµi,n. The variables
+withn > Ni(t)are still well-defined by the reward stack, even though they have not been observed by
+6It suffices thatC U≥33.
+12
+
+=== PDF PAGE 13 ===
+the algorithm. We also define the following events.
+X:={ˆµ 3,1≤−C U
+p
+logT},
+Yi :=
+
+|ˆµi,T′|≤ 1
+T 2
+
+,
+Zi :=
+\
+n∈[T′]
+
+
+|ˆµi,n−ˆµi,T′|≤3
+p
+logT
+vuut
+T′−1X
+m=n
+1
+m2
+
+
+,
+ET :=X∩Y 1∩Y 2∩Z 1∩Z 2,
+W(t) :=E T∩{N 1(t−1),N 2(t−1)≤T ′,N 3(t−1)≤1}.
+EventXindicates that the first observation from the best arm, obtained during the fixed initialization,
+is a large underestimation. Fori= 1,2, eventY i indicates that the empirical mean of armsiwithT ′-th
+draw is very close to the mean, and eventZ i,i= 1,2, indicates that the mean of armsidoes not drift
+drastically. EventW(t)indicates that both arms1and2are not drawn in more than half the rounds
+and that arm3is only drawn once. For any two eventsAandB, letA,B=A∩B.
+Henceforth, probabilities of the eventsX,Y i,Z i, andW(t)are under the frequentist model with
+true parameterµ (0). Probabilities explicitly associated with the recursive posterior evolution are instead
+under the indicated posterior-predictive law. Derivations of all lemmas appear in the appendices.
+Lemma 3.(Underestimation of the best arm) For all sufficiently largeT, we have
+P[X]≥ T− (CU +∆G)2
+2
+2(CU + ∆G)√2πlogT =:f 1.
+Proof.Underµ (0),ˆµ3,1∼N(∆ G,1). Putz T =C U
+√logT+ ∆ G. For all sufficiently largeT,z T≥
+√
+2,
+and Lemma 10 gives
+P[X] = Φc(zT )≥ 1
+2zT
+√
+2πe−z2
+T/2.
+ForlogT≥1,
+zT≤(C U + ∆G)
+p
+logT, z 2
+T≤(C U + ∆G)2 logT.
+Substitution yields the claimed bound.
+Lemma 4.(Probability that the two means are close) For all sufficiently largeT, the following holds:
+P[Yi]≥ 1
+2
+r
+1
+πT 3 =:f 2.
+By using the fact thatˆµ i,T′ ∼N(0,(T ′)−1), Lemma 4 follows from the tail bound of the normal
+distribution. Proofs of Lemma 4 and subsequent lemmas are found in the appendix.
+Lemma 5.(Non-drastic drift) The following holds for each armi= 1,2:
+P[Yi,Zc
+i ]≤2T −7/2 =:f 3.
+13
+
+=== PDF PAGE 14 ===
+We usepoly(T−1)to describe a quantity that is polynomial inT −1. According to Lemmas 3–5,X,Y 1,
+Y2,Z 1, andZ 2 occur with probabilitypoly(T −1). The following lemmas bound the EBI under eventsX,
+Y1,Y 2,Z 1, andZ 2. All asymptotic bounds in Lemmas 6–8 and their supporting lemmas are uniform over
+the roundtand over every reachable integer-precision posteriorH(t−1)whose underlying reward-stack
+realization satisfies the stated eventW(t); their constants may depend onC U but not ont,T, or the
+realized posterior.
+Lemma 6.Assume thatW(t)holds. Then,
+B3(Hr(t−1),t) =O
+
+T− (CU−6)2
+4
+
+=o
+ 
+T−180
+.
+Lemma 7.Assume thatW(t)holds for at<T. Then,
+B1(Hr(t−1),t),B 2(Hr(t−1),t) = Ω(T −178).
+Moreover, ifN j(t−1) =T ′,j= 1,2, then 7
+Bj(Hr(t−1),t)<max(B 1(Hr(t−1),t),B 2(Hr(t−1),t)).
+Lemma 8.(Last round) Assume thatW(T)holds. Then
+B1(Hr(T−1),T), B 2(Hr(T−1),T) = Ω(T −22),
+and consequentlyI(T)̸= 3for every generalized Bayes optimal action.
+Lemma 6 provides an upper bound forB 3(t)underW(t). Lemma 7 provides lower bounds forB 1(t)
+andB 2(t)underW(t).
+Given these lemmas, we can provide the main theorem.
+Proof of Theorem 2.By Theorem 1 and the null-set convention following Definition 3, the selected action
+is EBI-maximizing and the terminal recommendation is posterior-mean maximizing under the frequentist
+lawP µ(0) almost surely. Accordingly, all event inclusions below are understood moduloP µ(0)-null sets.
+The eventE T impliesW(4). We first show that, fort∈{4,5,...,T−1},W(t)impliesW(t+ 1).
+Lemmas 6 and 7 imply thatB 3(H(t−1),t)<B 1(H(t−1),t), so every EBI-maximizing action belongs
+to{1,2}. Moreover, Lemma 7 shows that armi∈{1,2}is not EBI-maximizing ifN i(t−1) =T ′. Hence
+W(t+ 1)holds almost surely onW(t).
+It follows thatW(T)holds almost surely onE T . Lemmas 6 and 8 then imply thatI(T)̸= 3almost
+surely onW(T). At the beginning of roundT, the two counts in{N 1(T−1),N 2(T−1)}areT ′ and
+T′−1. Letk∈{1,2}be an arm that is not drawn at roundT. ThenN k(T)∈{T ′−1,T ′}and
+ˆµk(T)≥−3
+p
+logT
+vuut
+∞X
+m=1
+1
+m2− 1
+T 2 (byY k,Zk)
+7Becauset<TandN 3(t−1) = 1, this impliesN k(t−1)<T ′ fork∈{1,2}\{j}.
+14
+
+=== PDF PAGE 15 ===
+≥−π
+r
+3 logT
+2 − 1
+T 2≥−6
+p
+logT
+>−C U
+p
+logT
+(by Eq. (11))
+≥ˆµ3,1 = ˆµ3(T).
+Since the terminal recommendation is posterior-mean maximizing almost surely, the strict inequality
+ˆµk(T)>ˆµ 3(T)impliesJ(T)̸= 3almost surely onW(T). Consequently,
+Pµ(0)(ET∩{J(T) = 3}) = 0,
+and thereforeP µ(0)[J(T)̸= 3]≥P µ(0)[ET ]. It follows that
+Rµ(0)(T,A∗
+T ) = ∆GPµ(0)[J(T)̸= 3]
+≥Pµ(0)[ET ]∆G
+≥f 1(f2−f 3)2∆G,(by Lemmas 3–5)
+where the last step also uses independence of the reward sequences of the three arms. For all sufficiently
+largeT,
+f2−f 3≥ 1
+4√πT−3/2, 1√logT ≥T −1.
+Substituting these two inequalities into the preceding probability lower bound shows that, for a constant
+c>0independent ofT, the right-hand side is at leastcT −C with, for example,C= (C U + ∆G)2/2 + 4.
+It remains to verify the stated consequence. Fix an arbitrary horizon-indexed family(A ∗
+T )T≥3 satis-
+fying the condition in the theorem, and putr T = Rµ(0)(T,A∗
+T )and use the convention−log 0 = +∞.
+Since0≤r T≤∆ G for everyT,
+− 1
+T logrT≥− 1
+T log ∆G.
+On the odd subsequence, the polynomial lower bound gives
+− 1
+T logrT≤ ClogT−logc
+T −→0.
+The first display gives a global asymptotic lower bound of zero, and the odd subsequence gives the
+matching upper bound for the limit inferior. Hence the limit inferior in the theorem is zero.
+5 Proof Sketches of Lemmas 6 and 7
+(Note: This section is moved from Appendix to Main Paper)
+This section describes the main ideas of the proofs of Lemmas 6 and 7. Lemmas 6 and 7 are very
+different from the previous lemmas. Whereas Lemmas 3–5 deal with probabilities under the true param-
+eterµ (0), Lemmas 6 and 7 are about how the Bayes optimal algorithm values the sample from each arm
+iat roundt, which is represented by the recursive formula of Eq. (7). In particular, the latter lemmas
+15
+
+=== PDF PAGE 16 ===
+bound the EBIB i(H(t−1),t) =L(H(t−1),t+ 1)−L i(H(t−1),t)given the true posteriorH(t−1).
+We first describe the evolution ofH r(t−1)in Section 5.1. Derivation of Lemmas 6 and 7 are sketched
+in Sections 5.2 and 5.3, respectively.
+5.1 Evolution of the posterior in the loss function
+This section describes the evolution ofH r(s)fors≥t−1. At the beginning of roundt, the Bayes
+optimal algorithm only observesI(1),X(1),I(2),X(2),...,I(t−1),X(t−1), which were drawn from the
+true distribution:8
+X(t′)∼N(µ I(t′),1).
+The valueL i(H(t−1),t)involves future rewardsI r(t),X r(t),I r(t+ 1),X r(t+ 1),...,I r(T),X r(T),
+which are random variables that are generated under the posterior-predictive law induced byH(t−1),
+rather than under the fixed true parameter. 9 Namely, fors≥t−1andi=I(s+ 1),
+˜µi(s)∼N
+
+ˆµr
+i(s), 1
+N r
+i (s)
+
+Xr(s+ 1)∼N(˜µ i(s),1)
+ˆµi(s+ 1) = N r
+i (s)ˆµr
+i(s) +X r(s+ 1)
+N r
+i (s) + 1 ,
+or equivalently,
+ˆµr
+i(s+ 1)−ˆµ r
+i(s)∼N
+
+0, 1
+N r
+i (s)(N r
+i (s) + 1)
+
+and the posterior is updated accordingly. In other words, drawing armiwith its posteriorN(ˆµr
+i(s),1/N r
+i (s))
+reduces its variance from1/N r
+i (s)to1/(N r
+i (s) + 1).
+5.2 Sketch of the proof of Lemma 6
+Lemma 6 provides an upper bound for the EBI of arm3when the posterior probability of the arm being
+best is small. In the proof of Lemma 6, we derive Lemmas 11 and 12. Lemma 11 bounds the exclusion
+loss
+R(3)
+Hr(t−1) =EHr(t−1)
+
+µ3−min
+j̸=3
+µj
+
++
+
+.
+This exclusion loss also upper-bounds
+EHr(t−1)[1[i∗(µ) = 3]Rµ(T)],
+the portion of the Bayesian simple regret arising when arm3is optimal. Lemma 12 then uses the exclusion
+loss to bound the EBI.
+The greatest challenge in bounding the EBIB i(Hr(t−1),t) =L(H r(t−1),t+ 1)−L i(Hr(t−
+1),t)lies in its adaptivity. A slight difference in the posteriorH r(s)can change the selection sequence
+8Note that we consider the frequentist setting in which the (unknown) true parameters exist.
+9The Bayes optimal algorithm does not know the true parameterµand instead evaluates future outcomes using the
+posteriorH(t−1).
+16
+
+=== PDF PAGE 17 ===
+Ir(s),I r(s+ 1),...,I r(T), and thus it is generally difficult to compute the EBI exactly. The high-level
+idea of Lemma 12 is as follows. When an arm is very unlikely to be the best arm (i.e., under eventX),
+the next sample for that arm does not significantly improve the simple regret. Notice that the difference
+betweenL(H r(t−1),t+ 1)andL i(Hr(t−1),t)is derived from the draw for armiat roundt. To bound
+the EBI, we introduce amock-samplealgorithm, along with its lossL mock(Hr(t−1),t), which utilizes
+the external randomizerU r(t)such that
+U r(t),I r(t+ 1),X r(t+ 1),I r(t+ 2),X r(t+ 2),...,I r(T),X r(T)
+ofL mock(Hr(t−1),t), and
+Xr(t),I r(t+ 1),X r(t+ 1),I r(t+ 2),X r(t+ 2),...,I r(T),X r(T)
+ofL i(Hr(t−1),t)
+have exactly the same distribution. Settingi= 3, we have
+B3(Hr(t−1),t) :=L(H r(t−1),t+ 1)−L 3(Hr(t−1),t)
+≤L mock(Hr(t−1),t)−L 3(Hr(t−1),t)
+(by optimality ofL(H r(t−1),t+ 1))
+≤R (3)
+Hr(t−1).
+5.3 Sketch of the proof of Lemma 7
+Lemma 7 provides a lower bound for the EBIB i(Hr(t−1),t) =L(H r(t−1),t+ 1)−L i(H(t−1),t)
+fori= 1,2. Note that we define the eventsY 1,Y 2,Z 1, andZ 2 such that ˆ∆(t) := ˆµ1(t)−ˆµ2(t)is small.
+Ifˆµ1(t)−ˆµ2(t)is small enough and arm3is sufficiently worse than the other two arms, we can expect
+that drawing arm1or2reduces the loss function bypoly(T −1). Again, evaluatingL(H r(t−1),t+ 1)−
+Li(Hr(t−1),t)exactly is very challenging in general, as the drawsI r(t),I r(t+ 1),I r(t+ 2),...,I r(T)
+depend on the recursive computation of the future rewards. We solve this problem in steps as follows:
+(A) First, when the probability of arm3being best is very small (i.e., under eventX), we can show that
+|L(Hr(t−1),t+ 1)−L(H r
+\3(t−1),t+ 1)|
+is also small, whereH r
+\3(t−1)is the posterior in the two-armed instance with arm3removed. In
+other words, we have reduced a three-armed instance to a two-armed instance (Section E.1).
+(B) Second, in the two-armed instance, there exists a Bayes optimal continuation that always draws a
+smaller-count arm, with ties resolved by a fixed count-only rule. Therefore, we can explicitly obtain
+the distribution of ˆ∆r(T−1)given ˆ∆(t−1). In the two-armed problem, we show thatW(t)implies a
+sufficiently small ˆ∆(t−1), which yields a sufficiently small ˆ∆r(T−1)with probabilityΩ(poly(T −1)),
+providing anΩ(poly(T −1))value forL(H r
+\3(T−1),T+ 1)−L i(Hr
+\3(T−1),T). These results yield
+anΩ(poly(T −1))lower bound for the EBIB i(Hr
+\3(t−1),t)in the two-armed instance (Section E.2).
+(C) Finally, by using (A) and (B), we derive Lemma 7 (Section E.3).
+17
+
+=== PDF PAGE 18 ===
+As a byproduct of the analysis, we have obtained an explicit count-balancing Bayes optimal continu-
+ation for the two-armed problem.
+Remark 3.(Characterization of the Bayes optimal algorithm forK= 2) In the reduced two-armed state
+considered here, Lemma 17 implies thatL 1(Hr
+\3(t−1),t) =L 2(Hr
+\3(t−1),t)ifN 1(t−1),N 2(t−1)<T ′.
+IfN 1(t−1) =T ′ andN 2(t−1)<T ′, thenL 1(Hr
+\3(t−1),t)>L 2(Hr
+\3(t−1),t). Consequently, with the
+remaining budget in this reduced problem, a Bayes optimal continuation balances the terminal counts at
+T′ each.
+6 Related Work
+This section reviews related studies concerning Bayesian algorithms in the context of sequential decision-
+making. The multi-armed bandit problem [Robbins, 1952] involves multiple treatment arms and decisions
+made using samples obtained sequentially via experiments. The aim is to maximize the sum of the re-
+wards, which boils down to cumulative regret minimization (CRM). Although this problem has attracted
+considerable attention from the machine learning community, this study has focused on another estab-
+lished branch of bandit problems, BAI, in which the goal is to identify the treatment arm with the largest
+mean. Finding the best treatment essentially concerns simple regret minimization (SRM). The different
+goals of these two approaches results in significant differences between the approaches of CRM and SRM
+algorithms to balancing exploration and exploitation.
+Best arm identification (SRM):Although the term “best arm identification” was coined in the early
+2010s [Audibert et al., 2010, Bubeck et al., 2011], similar ideas had already attracted substantial attention
+in various fields [Paulson, 1964, Maron and Moore, 1997, Even-Dar et al., 2006]. Audibert et al. [2010]
+proposed the successive rejects algorithm, which demonstrates frequentist simple regret with the order of
+exp(−Γ(µ)T)for someΓ(µ). Elsewhere, Carpentier and Locatelli [2016] showed an instanceµfor which
+thisΓ(µ)is optimal up to a constant factor. For a fixed instance with a unique best arm and a positive
+minimum gap, the probability of errorP[J(T)̸=i ∗]has the same exponential rate as the frequentist
+simple regret (Audibert et al. 2010, Section 2), and is also commonly used to evaluate a BAI algorithm.
+The aforementioned works focus on fixed-budget identification, in which the horizonTis fixed. There
+is also a significant body of literature devoted to fixed-confidence identification. In this scenario, the
+forecaster is given a confidence levelδand aims to stop the sampling as soon as they are confident in the
+identification with a probability of1−δ. For fixed-confidence identification, several algorithms are known,
+such as successive elimination [Even-Dar et al., 2006], track and stop [Garivier and Kaufmann, 2016], and
+top-two algorithms [Russo, 2020, Shang et al., 2020, Jourdan et al., 2022, You et al., 2023]. The designs
+of fixed-confidence and fixed-budget algorithms are markedly different [Carpentier and Locatelli, 2016,
+Komiyama et al., 2022, Degenne, 2023].
+Ranking and selection:A particularly interesting strand of research concerns the RS problem [Hong
+et al., 2021]. RS and BAI have substantial overlap: RS includes static, multistage, and fully sequential
+procedures, and its fixed-budget formulation can itself be expressed as a dynamic program. One influential
+RS approximation is the optimal computing budget allocation approach initiated by Chen et al. [2000].
+18
+
+=== PDF PAGE 19 ===
+In its oracle static form, an allocation is chosen to maximize the probability of correct selection:
+max
+Nj∈N,Nj≥1P
+jNj=T
+Pµ
+
+ˆµi∗(Ni∗)>max
+j̸=i∗
+ˆµj(Nj)
+
+.(12)
+The oracle objective depends on the unknown model parameters; practical OCBA procedures replace
+them with estimates and update the allocation as data are collected. Elsewhere, Glynn and Juneja [2004]
+observed an asymptotically optimal allocation for Eq. (12) based on the large deviation theory. Additional
+adaptive algorithms have been developed based on Bayesian ideas. For example, the seminal work by
+Chick and Inoue [2001] proposed a two-stage method called the expected value of information algorithm,
+in which the information from the first stage is used as a prior to optimize the allocation of the second
+stage. The KG algorithm [Gupta and Miescke, 1994] also adopts a Bayesian approach. However, the
+analytical properies of KG are little understood. The results of Ryzhov et al. [2012] show the discounted
+version of KG most frequently drawing the best arm. Elsewhere, Wang and Powell [2018] have further
+characterized KG without giving a rate for the simple regret. Another well-known one-step lookahead
+algorithm is EI [Jones et al., 1998, Bull, 2011]. Ryzhov [2016] showed that EI draws suboptimal arms
+Θ(logT)times, implying the suboptimality of EI in terms of the frequentist simple regret (or probability
+of error). Qin et al. [2017] and Chen and Ryzhov [2019] proposed modified versions of EI with an
+exponential rate of convergence.
+Bayesian algorithms for CRM:Thompson sampling [Thompson, 1933] is among the oldest of the
+heuristics and is known to be asymptotically optimal in terms of the frequentist CRM [Agrawal and
+Goyal, 2012, Kaufmann et al., 2012, Komiyama et al., 2015]. One of the seminal results regarding
+Bayesian CRM is the Gittins index theorem [Gittins, 1989, Weber, 1992], which states that minimizing
+the discounted Bayesian regret can be achieved by computing the Gittins indices of individual arms. 10
+The Bayes optimal algorithms for CRM and SRM differ considerably. In the former setting, the algorithm
+obtains a reward at the end of each round. In the latter setting, the corresponding reward is delayed
+until roundT, which makes our problem particularly challenging.
+7 Discussion
+This paper has considered the BAI problem. We have demonstrated that the flat-prior generalized Bayes
+algorithm, which is pointwise optimal for posterior expected performance after the fixed initialization,
+does not have a frequentist rate of simple regret. For some frequentist instances, posterior optimization
+assigns too little value to recovering an arm that was severely underestimated during initialization. A high-
+level implication is that if an approximate Bayesian algorithm exhibits a uniform exponential convergence,
+this results not from considering a lookahead but from some idea that lends it the robustness preferred
+by frequentists. A challenge in analyzing a sequential decision-making algorithm is its flexibility. The
+decisionI(t)at roundtdepends on the results of the Bellman equation, which is difficult to compute
+exactly. Accordingly, we have introduced a quantity called the EBI, which represents the improvement
+of the Bayesian simple regret from a single sample. We have introduced several novel ideas for analyzing
+10Note that the Gittins index is no longer optimal in the context of undiscounted regret [Berry and Fristedt, 1985]; see
+also Section 1.3.3 in Kaufmann [2014].
+19
+
+=== PDF PAGE 20 ===
+the EBI and obtained an explicit count-balancing Bayes optimal continuation for two-armed BAI as a
+byproduct.
+It is worth remarking on the unusual instance from which we derived Theorem 2. We have provided an
+instance in whichµ 1 =µ 2. The two suboptimal arms are then statistically tied, so there is no uniquely
+better one to distinguish; posterior uncertainty about their ordering nevertheless keeps the marginal
+value of sampling both arms significant. Our proof exploits this exact tie and does not establish the same
+phenomenon when all means are distinct. This is a limitation of our results and highlights the following
+open problem.
+Conjecture 9.(Open problem: Exponential convergence of the Bayes optimal algorithm for almost all
+parameters) Under some regularity conditions over the prior, the Bayes optimal algorithm has a regret
+that falls exponentially withTfor almost all the instances.
+References
+J. Laurie Snell. A conversation with Joe Doob.Statistical Science, 12(4):301 – 311, 1997. doi: 10.1214/
+ss/1030037961. URLhttps://doi.org/10.1214/ss/1030037961.
+Lihong Li, Wei Chu, John Langford, and Robert E. Schapire. A contextual-bandit approach to personal-
+ized news article recommendation. InProceedings of the 19th International Conference on World Wide
+Web, WWW ’10, page 661–670. Association for Computing Machinery, 2010. ISBN 9781605587998.
+doi: 10.1145/1772690.1772758.
+Gustavo Malkomes, Bolong Cheng, Eric Hans Lee, and Mike Mccourt. Beyond the pareto efficient
+frontier: Constraint active search for multiobjective experimental design. InProceedings of the 38th
+International Conference on Machine Learning, volume 139, pages 7423–7434. PMLR, 2021.
+William R Thompson. On the likelihood that one unknown probability exceeds another in view of the
+evidence of two samples.Biometrika, 1933.
+Sof´ ıa S. Villar, Jack Bowden, and James Wason. Multi-armed Bandit Models for the Optimal Design of
+Clinical Trials: Benefits and Challenges.Statistical Science, 30(2):199 – 215, 2015. doi: 10.1214/14-
+STS504.
+T.L Lai and Herbert Robbins. Asymptotically efficient adaptive allocation rules.Advances in Applied
+Mathematics, 6(1):4–22, 1985. ISSN 0196-8858. doi: https://doi.org/10.1016/0196-8858(85)90002-8.
+Peter Auer, Nicol` o Cesa-Bianchi, and Paul Fischer. Finite-time analysis of the multiarmed bandit prob-
+lem.Machine Learning, 47:235–256, 05 2002. doi: 10.1023/A:1013689704352.
+S´ ebastien Bubeck, R´ emi Munos, and Gilles Stoltz. Pure Exploration in Multi-armed Bandits Problems.
+InAlgorithmic Learning Theory, 20th International Conference, ALT 2009, Porto, Portugal, October
+3-5, 2009. Proceedings, volume 5809 ofLecture Notes in Computer Science, pages 23–37. Springer,
+2009. doi: 10.1007/978-3-642-04414-4 7.
+20
+
+=== PDF PAGE 21 ===
+Jean-Yves Audibert, S´ ebastien Bubeck, and R´ emi Munos. Best arm identification in multi-armed bandits.
+InCOLT 2010 - The 23rd Conference on Learning Theory, pages 41–53. Omnipress, 2010.
+Robert E. Bechhofer. A Single-Sample Multiple Decision Procedure for Ranking Means of Normal Pop-
+ulations with known Variances.The Annals of Mathematical Statistics, 25(1):16 – 39, 1954. doi:
+10.1214/aoms/1177728845.
+Daniel Russo. Simple bayesian algorithms for best-arm identification.Oper. Res., 68(6):1625–1647, 2020.
+doi: 10.1287/opre.2019.1911.
+L. Jeff Hong, Weiwei Fan, and Jun Luo. Review on ranking and selection: A new perspective.Frontiers
+of Engineering Management, 8(3):321–343, Sep 2021.
+Zohar Karnin, Tomer Koren, and Oren Somekh. Almost optimal exploration in multi-armed bandits.
+InInternational Conference on Machine Learning, Proceedings of Machine Learning Research, pages
+1238–1246. PMLR, 17–19 Jun 2013.
+Shanti Swarup Gupta and Klaus J. Miescke. Bayesian look ahead one stage sampling allocations for
+selecting the largest normal mean.Statistical Papers, 35:169–177, 1994.
+Donald R. Jones, Matthias Schonlau, and William J. Welch. Efficient global optimization of expensive
+black-box functions.Journal of Global Optimization, 13(4):455–492, Dec 1998.
+W.B. Powell and I.O. Ryzhov.Optimal Learning. Wiley Series in Probability and Statistics. Wiley, 2013.
+ISBN 9781118309841.
+Xuedong Shang, Rianne de Heide, Pierre M´ enard, Emilie Kaufmann, and Michal Valko. Fixed-confidence
+guarantees for bayesian best-arm identification. InThe 23rd International Conference on Artificial
+Intelligence and Statistics, AISTATS 2020, 26-28 August 2020, volume 108 ofProceedings of Machine
+Learning Research, pages 1823–1832. PMLR, 2020.
+Junpei Komiyama, Taira Tsuchiya, and Junya Honda. Minimax optimal algorithms for fixed-budget best
+arm identification. InAdvances in Neural Information Processing Systems 35: Annual Conference on
+Neural Information Processing Systems 2022, NeurIPS 2022, New Orleans, LA, USA, November 28 -
+December 9, 2022, 2022.
+Junpei Komiyama, Kaito Ariu, Masahiro Kato, and Chao Qin. Optimal simple regret in bayesian best
+arm identification.CoRR, abs/2111.09885, 2021.
+Alexandra Carpentier and Andrea Locatelli. Tight (lower) bounds for the fixed budget best arm identi-
+fication bandit problem. InConference on Learning Theory, 2016.
+Peter I. Frazier, Warren B. Powell, and Savas Dayanik. A knowledge-gradient policy for sequential
+information collection.SIAM J. Control Optim., 47(5):2410–2439, sep 2008.
+Adam D. Bull. Convergence rates of efficient global optimization algorithms.Journal of Machine Learning
+Research, 12(88):2879–2904, 2011.
+21
+
+=== PDF PAGE 22 ===
+Herbert Robbins. Some aspects of the sequential design of experiments.Bulletin of the American
+Mathematical Society, 1952.
+S´ ebastien Bubeck, R´ emi Munos, and Gilles Stoltz. Pure exploration in finitely-armed and continuous-
+armed bandits.Theoretical Computer Science, 412(19):1832–1852, 2011.
+Edward Paulson. A Sequential Procedure for Selecting the Population with the Largest Mean fromk
+Normal Populations.The Annals of Mathematical Statistics, 1964.
+Oden Maron and Andrew W. Moore. The racing algorithm: Model selection for lazy learners.Artificial
+Intelligence Review, 11(1):193–225, Feb 1997. ISSN 1573-7462.
+Eyal Even-Dar, Shie Mannor, Yishay Mansour, and Sridhar Mahadevan. Action elimination and stop-
+ping conditions for the multi-armed bandit and reinforcement learning problems.Journal of machine
+learning research, 2006.
+Aur´ elien Garivier and Emilie Kaufmann. Optimal best arm identification with fixed confidence. In
+Conference on Learning Theory, Proceedings of Machine Learning Research, 2016.
+Marc Jourdan, R´ emy Degenne, Dorian Baudry, Rianne de Heide, and Emilie Kaufmann. Top two algo-
+rithms revisited. InAdvances in Neural Information Processing Systems 35: Annual Conference on
+Neural Information Processing Systems 2022, NeurIPS 2022, New Orleans, LA, USA, November 28 -
+December 9, 2022, 2022.
+Wei You, Chao Qin, Zihao Wang, and Shuoguang Yang. Information-directed selection for top-two
+algorithms. InThe Thirty Sixth Annual Conference on Learning Theory, COLT 2023, 12-15 July
+2023, Bangalore, India, volume 195 ofProceedings of Machine Learning Research, pages 2850–2851.
+PMLR, 2023.
+R´ emy Degenne. On the existence of a complexity in fixed budget bandit identification. InThe Thirty
+Sixth Annual Conference on Learning Theory, COLT 2023, 12-15 July 2023, Bangalore, India, volume
+195 ofProceedings of Machine Learning Research, pages 1131–1154. PMLR, 2023.
+Chun-Hung Chen, Jianwu Lin, Enver Y¨ ucesan, and Stephen E. Chick. Simulation budget allocation
+for further enhancing theefficiency of ordinal optimization.Discrete Event Dynamic Systems, 10(3):
+251–270, July 2000.
+Peter Glynn and Sandeep Juneja. A large deviations perspective on ordinal optimization. InWinter
+Simulation Conference, volume 1. IEEE, 2004.
+Stephen E. Chick and Koichiro Inoue. New two-stage and sequential procedures for selecting the best
+simulated system.Operations Research, 49(5):732–743, 2001.
+Ilya O. Ryzhov, Warren B. Powell, and Peter I. Frazier. The knowledge gradient algorithm for a general
+class of online learning problems.Oper. Res., 60(1):180–195, 2012. doi: 10.1287/opre.1110.0999.
+Yingfei Wang and Warren B. Powell. Finite-time analysis for the knowledge-gradient policy.SIAM J.
+Control. Optim., 56(2):1105–1129, 2018. doi: 10.1137/16M1073388.
+22
+
+=== PDF PAGE 23 ===
+Ilya O. Ryzhov. On the convergence rates of expected improvement methods.Operations Research, 64
+(6):1515–1528, 2016.
+Chao Qin, Diego Klabjan, and Daniel Russo. Improving the expected improvement algorithm. InAdvances
+in Neural Information Processing Systems, volume 30. Curran Associates, Inc., 2017.
+Ye Chen and Ilya O. Ryzhov. Complete expected improvement converges to an optimal budget allocation.
+Advances in Applied Probability, 51(1):209–235, 2019. doi: 10.1017/apr.2019.9.
+Shipra Agrawal and Navin Goyal. Analysis of thompson sampling for the multi-armed bandit problem. In
+Conference on Learning Theory, volume 23 ofJMLR Proceedings, pages 39.1–39.26. JMLR.org, 2012.
+Emilie Kaufmann, Nathaniel Korda, and R´ emi Munos. Thompson sampling: An asymptotically optimal
+finite-time analysis. InAlgorithmic Learning Theory - 23rd International Conference, ALT 2012,
+volume 7568, pages 199–213. Springer, 2012.
+Junpei Komiyama, Junya Honda, and Hiroshi Nakagawa. Optimal regret analysis of thompson sampling
+in stochastic multi-armed bandit problem with multiple plays. InProceedings of the 32nd International
+Conference on Machine Learning, ICML 2015, volume 37, pages 1152–1161, 2015.
+J. C. Gittins.Multi-armed Bandit Allocation Indices. Wiley, Chichester, NY, 1989.
+Richard Weber. On the gittins index for multiarmed bandits.The Annals of Applied Probability, pages
+1024–1033, 1992.
+Donald A. Berry and Bert Fristedt. Bandit problems: Sequential allocation of experiments. 1985.
+Emilie Kaufmann.Analysis of Bayesian and Frequentist strategies for Sequential Resource Allocation.
+PhD Thesis, TELECOM ParisTech, 2014. URLhttp://chercheurs.lille.inria.fr/ekaufman/
+TheseEmilie.pdf.
+William Feller.An Introduction to Probability Theory and Its Applications., volume 1 ofThird edition.
+John Wiley & Sons Inc., New York, 1968.
+A General Lemma
+Lemma 10(Normal tail bound; Feller 1968).Letϕ(x) :=e −x2/2/
+√
+2πbe the probability density function
+(pdf) of a standard normal random variable. LetΦ c(x) =
+R∞
+x ϕ(x′)dx′. Then, for anyx>0, the following
+inequality holds:  1
+x− 1
+x3
+e−x2/2
+√
+2π ≤Φ c(x)≤ 1
+x
+e−x2/2
+√
+2π .
+23
+
+=== PDF PAGE 24 ===
+B Proof of Lemma 4
+Sinceˆµi,T′ is a zero-mean normal random variable with varianceT ′−1 andT ′ = (T−1)/2≥T/3for
+T≥3, we have
+P
+
+|ˆµi,T′|≤ 1
+T 2
+
+= 2
+r
+T′
+2π
+Z T−2
+0
+exp(−T′x2/2)dx
+≥ 2
+T 2
+r
+T
+6π exp
+
+− T′
+2T 4
+
+≥ 1
+2
+r
+1
+πT 3
+for all sufficiently largeT.
+C Proof of Lemma 5
+Forn≤T ′, put
+Dn := ˆµi,n−ˆµi,T′, v n := 1
+n− 1
+T′.
+ThenD n∼N(0,v n), and
+T′−1X
+m=n
+1
+m2≥
+T′−1X
+m=n
+1
+m(m+ 1) =v n.
+Consequently, a Gaussian tail bound and a union bound give
+P[Yi,Zc
+i ]≤
+T′−1X
+n=1
+P
+
+|Dn|>3
+p
+logT
+vuut
+T′−1X
+m=n
+m−2
+
+
+≤2T ′ exp
+
+−9
+2 logT
+
+≤2T −7/2.
+This proves Lemma 5.
+D Proof of Lemma 6
+In this section, we obtain an upper bound forB i =L(H r(t−1),t+ 1)−L i(Hr(t−1),t). The gap
+betweenL(H r(t−1),t+ 1)andL i(Hr(t−1),t)is derived from the draw of armiat roundt. However,
+bounding the difference is challenging because a slight change in the posterior can drastically affect the
+subsequent choice of arms. We introduce a mock-sample loss that simulates the Bayes optimal algorithm
+with a slightly modified posterior so that the difference betweenH r(t−1)andH r(t)is absorbed. In the
+proof, we derive Lemmas 11 and 12. Lemma 6 is a straightforward corollary of these two lemmas.
+Lemma 11.For a posteriorHand an armi, define the exclusion loss
+R(i)
+H :=EH
+
+µi−min
+j̸=i
+µj
+
++
+
+.
+Assume that eventW(t)holds. Then,
+R(3)
+Hr(t−1)≤g 0
+24
+
+=== PDF PAGE 25 ===
+whereg 0 =g 0(T,CU)isO
+
+T− (CU−6)2
+4
+
+.
+Proof of Lemma 11.We first boundˆµ 1(t)andˆµ 2(t)from below:
+ˆµi(t−1) = ˆµi,Ni(t−1)
+≥−3
+p
+logT
+vuut
+∞X
+m=1
+1
+m2− 1
+T 2
+(byY iZi)
+≥−π
+r
+3 logT
+2 − 1
+T 2
+≥−6
+p
+logT.
+LetC F = 6,x∼N(−C U
+√logT,1), andy∼N(−C F
+√logT,1)be independent. UnderW(t), the
+posterior mean ofµ 3 is at most that ofx, and the posterior mean of eachµ i,i= 1,2, is at least that ofy.
+The fixed initialization givesN k(t−1)≥1for every arm (andN 3(t−1) = 1underW(t)), so all posterior
+variances are at most one. Adding independent zero-mean Gaussian noise if necessary and using that
+z7→z + is increasing and convex, we obtain
+R(3)
+Hr(t−1)
+≤
+2X
+i=1
+EHr(t−1)[(µ3−µi)+]
+≤2E[(x−y) +]
+= 2√
+4π
+Z ∞
+0
+zexp
+
+−(z+ (CU−CF )√logT) 2
+4
+
+dz
+≤ 2√πT−(CU−CF )2/4 =:g 0,
+which isO
+
+T− (CU−CF )2
+4
+
+=O
+
+T− (CU−6)2
+4
+
+.
+Lemma 12.(Upper bound of the EBI) For anyt∈{K+ 1,...,T}, the following inequality holds:
+Bi(Hr(t−1),t)≤R (i)
+Hr(t−1).
+Proof of Lemma 12.By definition,
+Bi(Hr(t−1),t) :=L(H r(t−1),t+ 1)−L i(Hr(t−1),t).
+We first introduce the notion of mock-sample loss.
+Definition 5.(Mock-sample loss) Independently ofµ∼H r(t−1), let
+µ′
+i∼N
+
+ˆµr
+i(t−1), 1
+N r
+i (t−1)
+
+,
+25
+
+=== PDF PAGE 26 ===
+Ui,0,Ui,1,...|µ ′
+i
+i.i.d.∼ N(µ′
+i,1), U r(t) :=U i,0.
+That is,U r(t)is a simulated sample that is obtained from the external randomizer. Moreover, let
+(Sr′
+j ,N r′
+j ) =
+(
+(Sr
+i (t−1) +U r(t),N r
+i (t−1) + 1)(j=i)
+(Sr
+j(t−1),N r
+j (t−1))(j̸=i)
+be the updated posterior. Letπ mock
+i be the randomized recursive policy that applies a measurable Bayes-
+optimal continuation from this mock-updated state and thereby determines the complete future adaptive
+sequenceI r(t+ 1),...,I r(T)as if(S r′
+j ,N r′
+j )j∈[K] wereH r(t), uses the corresponding posterior-predictive
+pseudo-stream whenever that internal policy samples armi, and recommends an arm other thani. At
+each actual sampling opportunity it draws the arm requested by the internal policy. If that arm isi, it
+discards the actual observation and supplies the nextU i,r to the internal policy; otherwise it supplies the
+actual observation. Put
+Jmock
+i (T) := min arg max
+j∈[K]\{i}
+ˆµr
+j(T),
+Lmock(Hr(t−1),t) :=E πmock
+i
+Hr(t−1)
+h
+µ∗−µJmock
+i (T)
+i
+,
+where the expectation includes the posterior-predictive continuation and all auxiliary randomization.
+Thusπ mock
+i ∈Π t+1(Hr(t−1)): its actual sampling opportunities aret+1,...,T, whereasU i,0 is auxiliary
+randomization rather than an actual sample.
+Then, the following inequalities hold:
+L(Hr(t−1),t+ 1)≤L mock(Hr(t−1),t)≤L i(Hr(t−1),t) + R (i)
+Hr(t−1).
+The first inequality follows because the mock-sample rule is a feasible randomized policy with onlyT−t
+actual samples. Whenever its internal rule asks for a sample from armi, the actual observation can be
+discarded and a posterior-predictive pseudo-observation can be generated by the external randomizer.
+ThusL(H r(t−1),t+ 1), which is the minimum risk among all such policies, cannot be larger. 11
+For the second inequality, couple this pseudo-stream with the real-sample policy definingL i(Hr(t−
+1),t), and modify only its terminal recommendation so that it never recommends armi. The posterior
+is a product across arms. Consequently, the joint law of the arm-istream and the parameters and
+observations of all other arms is unchanged when the real arm-istream is replaced by its independent
+posterior-predictive copy. For every recommendationJ̸=i, the loss admits the decomposition
+µ∗−µJ = max
+j̸=i
+µj−µJ +
+
+µi−max
+j̸=i
+µj
+
++
+.
+The second term does not depend on the sampling or recommendation rule, while the joint distribution
+relevant to the first term is identical under the two coupled policies. Hence the mock loss equals the loss
+11Equivalently, at timet−1the external randomizer first generates an independent copyµ ′
+i from the posterior ofµ i and
+then generates the entire pseudo-reward stream of armiconditionally onµ ′
+i. This stream has the same posterior-predictive
+law as the real reward stream of armi.
+26
+
+=== PDF PAGE 27 ===
+of the real-sample policy with armiexcluded only from its terminal recommendation.
+If the original policy recommends an arm other thani, the modification does not change its recom-
+mendation. If it recommendsi, the increase in loss is at most(µ i−minj̸=iµj)+. Therefore,
+Lmock(Hr(t−1),t)−L i(Hr(t−1),t)≤E Hr(t−1)
+
+µi−min
+j̸=i
+µj
+
++
+
+= R(i)
+Hr(t−1).
+Proof of Lemma 6.Lemma 6 directly follows from Lemmas 11 and 12 withi= 3.
+E Proof of Lemma 7
+This section derives a lower bound forB i(Hr(t−1),t) :=L(H r(t−1),t+ 1)−L i(Hr(t−1),t)for arms
+i= 1,2.
+E.1 Reduction to a two-armed problem
+The following lemma bounds the gap between the three-armed best arm identification problem and the
+two-armed best arm identification problem in which one of the arms has been removed.
+Lemma 13.(Reduction to a two-armed problem) LetH r
+\i be the posterior of the two-armed instance
+in which armihas been removed. The following inequality holds:
+|L(Hr(t−1),t+ 1)−L(H r
+\3(t−1),t+ 1)|≤R (3)
+Hr(t−1).(13)
+Similarly, we have
+|Lj(Hr(t−1),t)−L j(Hr
+\3(t−1),t)|≤R (3)
+Hr(t−1).(14)
+forj∈{1,2}.
+Proof of Lemma 13.PutE 3 = R(3)
+Hr(t−1). The following coupling argument applies with any fixed number
+of remaining samples. Embed an optimal two-armed policy into the three-armed problem by never
+sampling or recommending arm3. If its recommendation isJ∈{1,2}, then pointwise
+max
+k∈[3]
+µk−µJ = max
+k∈{1,2}
+µk−µJ +
+
+µ3−max
+k∈{1,2}
+µk
+
++
+≤max
+k∈{1,2}
+µk−µJ +
+
+µ3−min
+k∈{1,2}
+µk
+
++
+.
+Taking posterior expectations and then the infimum over three-armed policies gives, at either stages=t
+ors=t+ 1,
+L(Hr(t−1),s)−L(H r
+\3(t−1),s)≤E 3.
+Conversely, in the two-armed problem simulate an independent posterior-predictive stream for arm
+3and run an optimal three-armed policy internally. Whenever that policy requests arm3, consume the
+27
+
+=== PDF PAGE 28 ===
+round by drawing either real arm and discard that real observation. If the internal terminal recommenda-
+tion is in{1,2}, keep it; if it is arm3, replace it by a posterior-best arm in{1,2}. Coupling the imaginary
+arm-3parameter and stream with their genuine three-armed counterparts, the pointwise increase in loss
+is at most(µ 3−mink∈{1,2}µk)+. Hence
+L(Hr
+\3(t−1),s)−L(H r(t−1),s)≤E 3.
+Combining the last two displays withs=t+ 1proves Eq. (13). Repeating the same two embeddings
+while requiring the first action at stagetto bej∈{1,2}proves Eq. (14).
+E.2 Bounds on the two-armed problem
+This subsection considers the loss of the two-armed best arm identification problem in which arm3has
+been removed. The goal here is to show thatB i(Hr
+\3(t−1),t)isΩ(poly(T −1))if ˆ∆r(t−1) := ˆµr
+1(t−1)−
+ˆµr
+2(t−1)is sufficiently small. To achieve this, we take the following steps. First, Section E.2.1 considers
+Bi(Hr
+\3(T−1),T)at roundT(i.e., the last round); we show thatB i(Hr
+\3(T−1),T)isΩ(poly(T −1))
+when ˆ∆r(T−1)is small. Second, Section E.2.2 shows that there exists a Bayes optimal continuation
+in the two-armed problem that draws a smaller-count arm at every round and resolves ties by a fixed
+count-only rule. This selected continuation has a deterministic allocation sequence, which enables us to
+evaluate the distribution ofH r
+\3(T−1)givenH r
+\3(t−1). Third, Section E.2.3 shows thatW(t)implies
+that ˆ∆(t−1)is sufficiently small thatB i(Hr
+\3(t−1),t)isΩ(poly(T −1)).
+E.2.1 Marginal loss reduction
+First, the following lemma evaluates the simple regret given ˆ∆r(T)(i.e., the simple regret afterTdraws).
+Lemma 14.(Evaluation of the Bayesian simple regret afterTrounds) Letrbe a zero-mean normal
+random variable with varianceV r = 1/(N r
+1(T)) + 1/(N r
+2(T)). Then,
+L(Hr
+\3(T),T+ 1) :=E Hr
+\3(T) [∆Jr(T) ] = 1√2πVr
+Z ∞
+−∞
+(r−| ˆ∆r(T)|) + exp
+
+− r2
+2Vr
+
+dr.
+Proof.In the posteriorH r
+\3(T),µ i, fori= 1,2, are distributed as:
+µi∼N
+
+ˆµr
+i(T), 1
+N r
+i (T)
+
+and thus for{i,j}={1,2},
+(µi−µj)−(ˆµr
+i(T)−ˆµr
+j(T))∼N(0,V r).(15)
+Eq. (15) implies that the quantityV r = 1/(N r
+1(T))+1/(N r
+2(T))is the variance ofµ 1−µ 2 in the posterior,
+which we call posterior variance. Letj= bJ(H r
+\3(T))and letibe the other arm. Thenˆµ r
+j(T)≥ˆµ r
+i(T)by
+Eq. (5). Armjis recommended, and the simple regret is non-zero only when 12 µi>µ j; namely,
+∆Jr(T) = (µi−µj)+
+12That is, the signs ofˆµr
+j(T)−ˆµr
+i(T)andµ j−µi are different.
+28
+
+=== PDF PAGE 29 ===
+and thus
+EHr
+\3(T) [∆Jr(T) ] = 1√2πVr
+Z ∞
+−∞
+(x−| ˆ∆r(T)|) + exp
+
+− x2
+2Vr
+
+dx(by Eq. (15)).
+The following inequality quantifies the expected decrease in the loss function due to the last sample
+i=I r(T).
+Lemma 15.(One-step improvement with theT-th draw) The following inequality holds:
+L(Hr
+\3(T−1),T+ 1)−L i(Hr
+\3(T−1),T)
+≥P
+3
+2| ˆ∆r(T−1)|≤l≤2| ˆ∆r(T−1)|
+
+×P
+h
+r≥| ˆ∆r(T−1)|
+i
+×| ˆ∆r(T−1)|
+=:g 1( ˆ∆r(T−1),N r
+1(T−1),N r
+2(T−1),i)≥0.
+wherelandrare independent zero-mean normal random variables with respective variances
+Vl = 1
+N r
+i (T−1)(1 +N r
+i (T−1)) ,
+Vr = 1
+N r
+1(T) + 1
+N r
+2(T) = 1
+N r
+1(T−1) + 1
+N r
+2(T−1) −Vl.
+The probabilities are taken under their respective marginal laws. The displayed lower boundg 1 is strictly
+positive whenever| ˆ∆r(T−1)|>0. When ˆ∆r(T−1) = 0, the one-step improvement itself is still strictly
+positive, but the particular lower bound above is zero; the last assertion below supplies the bound used
+for that case. In particular, ifN r
+1(T−1)andN r
+2(T−1)are positive integers smaller thanTand
+T−2≤| ˆ∆r(T−1)|≤2T −2, then
+g1( ˆ∆r(T−1),N r
+1(T−1),N r
+2(T−1),i) = Ω(T −6).
+The implied constant is uniform over the stated count and gap ranges and overi∈{1,2}. Moreover, if
+N r
+1(T−1),N r
+2(T−1)≤T ′ and| ˆ∆r(T−1)|≤10 √logT/T, then, for eitheri= 1,2,
+L(Hr
+\3(T−1),T+ 1)−L i(Hr
+\3(T−1),T) = Ω(T −22).
+Proof of Lemma 15.By the update rule of the Bayesian posterior, we have
+ˆ∆r(T)− ˆ∆r(T−1)∼N(0,V l).(16)
+On the one hand,
+L(Hr
+\3(T−1),T+ 1) =E Hr
+\3(T−1)
+
+∆ bJ{1,2}(Hr
+\3(T−1))
+
+29
+
+=== PDF PAGE 30 ===
+is the loss when we make the immediate Bayes recommendation after roundT−1. On the other hand,
+Li(Hr
+\3(T−1),T)
+is the loss when we sampleI r(T) =iand chooses recommendation armJ r(T)after we update ˆ∆r(T−1).
+The sampleI r(T) =ireduces the posterior variance fromV r +Vl toV r.
+For ease of discussion, 13 assume that ˆ∆r(T−1)≥0. LetΦ r andΦ l be the corresponding Gaussian
+probability measures with variancesV r andV l, and putd= ˆ∆r(T−1)≥0. We have
+L(Hr
+\3(T−1),T+ 1)−L i(Hr
+\3(T−1),T)
+=
+Z Z
+((r+l)−d) +dΦr(r)dΦl(l)
+−
+Z Z
+(r−|d−l|) +dΦr(r)dΦl(l)
+(by Lemma 14 and Eq. (16))
+≥P
+3
+2d≤l≤2d
+
+×P[r≥d]×d.(17)
+Indeed, forl≤dthe two integrands coincide. Forl>d, writingu=l−d, their difference is(r+u) +−
+(r−u) +≥0; on{3d/2≤l≤2d, r≥d}it is at leastd.
+We next evaluate Eq. (17) whenT −2≤d≤2T −2. The stated count condition implies thatV r,Vl≥
+1/T 2, and thus
+P
+3
+2d≤l≤2d
+
+:= 1√2πVl
+Z
+1[3d/2≤l≤2d] exp
+
+− l2
+2Vl
+
+dl
+≥ 1√
+2π
+Z
+1[3d/2≤l≤2d] exp
+
+−T 2l2
+2
+
+dl
+≥ 1√
+2π× 1
+2T 2×exp
+ 
+−T 2×
+ 4
+T 2
+2
+× 1
+2
+!
+= Ω(T−2).
+After the last draw both counts are at mostT, soV r≥2/T. Hence, uniformly ford≤2T −2,
+P[r≥d] = Φ c
+ d√Vr
+
+≥ 1
+4
+for all sufficiently largeT. Together with the precedingΩ(T −2)interval probability andd≥T −2, this
+gives the stronger boundΩ(T −4), and in particular the statedΩ(T −6)bound.
+For the last assertion, leta=T −2 and use instead the event
+d+a≤l≤d+ 2a, r≥2a.
+13Deriving the same result in the case of ˆ∆r(T−1)≤0is straightforward.
+30
+
+=== PDF PAGE 31 ===
+On this event the pointwise improvement is at least2a. If both current counts are at mostT ′, thenV l≥
+1/(T′(T′+1))>4/T 2. Underd≤10 √logT/T, the Gaussian density oflthroughout the displayed interval
+is at least a constant timesT−18. Hence the probability of thel-event isΩ(T −20). AlsoP[r≥2a]≥1/4for
+all sufficiently largeT, sinceV r≥2/(T ′ + 1). The resulting improvement isΩ(T −2T−20) = Ω(T−22).
+The following lemma states that the optimal strategy at roundTis to draw the arm given by
+arg miniN r
+i (T−1).
+Lemma 16.(Optimal action at roundT) Assume thatN r
+1(T−1)andN r
+2(T−1)are positive integers
+withN r
+1(T−1) +N r
+2(T−1) = 2T ′−1. Leti= arg max k∈{1,2}N r
+k(T−1)and letj̸=i. The odd total
+impliesN r
+j (T−1)<N r
+i (T−1), withN r
+i (T−1)≥T ′ andN r
+j (T−1)≤T ′−1. Then,
+Li(Hr
+\3(T−1),T)−L j(Hr
+\3(T−1),T)≥g 2( ˆ∆r(T−1),N r
+1(T−1),N r
+2(T−1))
+for some nonnegative functiong 2( ˆ∆r(T−1),N r
+1(T−1),N r
+2(T−1)); the inequality is strict whenever the
+two counts differ. In particular, ifT −2≤| ˆ∆r(T−1)|≤2T −2, then
+g2( ˆ∆r(T−1),N r
+1(T−1),N r
+2(T−1)) = Ω(T −8).
+The implied constant is uniform over all states satisfying the stated count and gap conditions.
+Proof of Lemma 16.LetV(N) = 1/(N(N+ 1)). By assumption,N r
+i (T−1)> N r
+j (T−1)and thus
+V(N r
+i (T−1))<V(N r
+j (T−1)). By the update rule of the Bayesian posterior, ifI r(T) =i, then we have
+ˆ∆r(T)− ˆ∆r(T−1)∼N(0,V(N r
+i (T−1))).
+Moreover, the distribution of a normal variable with varianceV(N r
+j (T−1))is the same as the distribution
+of two independent normal variables with variancesV(N r
+i (T−1))andV(N r
+j (T−1))−V(N r
+i (T−1)),
+and so, ifI r(T) =j, then
+ˆ∆r(T)− ˆ∆r(T−1)∼N
+ 
+0,V(N r
+j (T−1))
+
+∼N(0,V(N r
+i (T−1))) +N
+ 
+0,V(N r
+j (T−1))−V(N r
+i (T−1))
+
+.
+Let
+r∼N(0,V r),whereV r = 1
+Ni(T−1) + 1
+Nj(T−1) + 1 ,
+l∼N(0,V l),whereV l =V(N i(T−1)),
+g∼N(0,V g),whereV g =V(N j(T−1))−V(N i(T−1))
+be three independent zero-mean normal random variables. Note also that the posterior variance is
+1
+N r
+1(T) + 1
+N r
+2(T) =
+(
+Vr +Vg (ifI(T) =i),
+Vr (otherwise, ifI(T) =j).
+31
+
+=== PDF PAGE 32 ===
+By symmetry, assumed:=| ˆ∆r(T−1)|= ˆ∆r(T−1)>0. Then,
+Li(Hr
+\3(T−1),T)−L j(Hr
+\3(T−1),T)
+=
+Z Z Z
+((r+g)−| ˆ∆r(T−1)−l|) +dΦr(r)dΦl(l)dΦg(g)
+−
+Z Z Z
+(r−| ˆ∆r(T−1)−l−g|) +dΦr(r)dΦl(l)dΦg(g).(18)
+For fixedl, putδ=d−land integrate first over(r,g). The resulting conditional difference is the Bayes
+value of observing the additional Gaussian signalgwhen the current posterior-mean difference isδ. It
+is nonnegative: the policy that ignoresgis feasible after observing it. Equivalently, this follows directly
+from conditional Bayes optimality. Thus the portions of thel-integral outside any selected set may be
+discarded after, rather than before, integration over(r,g).
+Ond/4≤l≤d/3, we haveδ∈[2d/3,3d/4]>0. For such a fixedl, the integrand in Eq. (18) is
+pointwise nonnegative: it is zero wheng≤δ, and wheng >δit equals
+(r+g−δ) +−(r−(g−δ)) +≥0.
+Moreover, on3δ/2≤g≤2δandr≥δ, it is at leastδ. The intervals used below satisfy these conditions
+uniformly overl∈[d/4,d/3]. Therefore, Eq. (18) gives
+Li(Hr
+\3(T−1),T)−L j(Hr
+\3(T−1),T)≥P
+d
+4≤l≤ d
+3
+
+×P
+9d
+8 ≤g≤ 4d
+3
+
+×P
+
+r≥ 3d
+4
+
+× 2d
+3
+=:g 2( ˆ∆r(T−1),N r
+1(T−1),N r
+2(T−1)).
+Whend= 0, strict positivity follows by first conditioning on anyl̸= 0(an event of probability one) and
+applying the same calculation withδ=|l|.
+We next evaluateg 2 forT −2≤d≤2T −2. Since the two counts are distinct positive integers no larger
+thanT, the functionV(n) = 1/[n(n+ 1)]gives
+Vl =V(N r
+i (T−1))≥ 1
+T(T+ 1) ≥T −3,
+and, becauseN r
+j (T−1)≤N r
+i (T−1)−1,
+Vg =V(N r
+j (T−1))−V(N r
+i (T−1))
+≥V(N r
+i (T−1)−1)−V(N r
+i (T−1)) = 2
+(N r
+i (T−1)−1)N r
+i (T−1)(N r
+i (T−1) + 1) ≥T −3,
+whereas both variances are at most1/2. On the two integration intervals,|l|,|g|≤3T −2, so the corre-
+sponding Gaussian densities are bounded below by a positive universal constant for all sufficiently large
+T. Both interval probabilities are thereforeΩ(T −2). Moreover,V r≥T −1 impliesP[r≥3d/4]≥1/4for
+all sufficiently largeT. Multiplication by2d/3 = Ω(T −2)yields the strongerΩ(T −6)bound and hence
+32
+
+=== PDF PAGE 33 ===
+the statedg 2 = Ω(T−8)bound. In particular,
+P[d/4≤l≤d/3] = Ω(T −2).(19)
+E.2.2 Characterization of the two-armed problem
+in Section E.2.1, the reduction of the loss by the last sample was quantified. Based on this result,
+the following lemma provides an explicit count-balancing Bayes optimal continuation for the two-armed
+problem.
+Lemma 17.For every proper two-armed posteriorH r
+\3(s−1)with positive-integer precisions and every
+stages∈{K+1,...,T}, every armi∈arg min k∈{1,2}N r
+k(s−1)belongs toarg min j∈{1,2}Lj(Hr
+\3(s−1),s).
+Proof of Lemma 17.Write the current posterior of the differenceD=µ 1−µ 2 as
+D∼N(d,v), v= 1
+n1
++ 1
+n2
+,
+wheren k =N r
+k(s−1). Consider first a deterministic allocation of the remainingS=T−s+ 1samples,
+and letm 1,m 2 be its final counts. Gaussian conjugacy gives
+ˆD(T)−d∼N(0,v−w), w= 1
+m1
++ 1
+m2
+.(20)
+Here ˆD(T) := ˆµr
+1(T)−ˆµ r
+2(T)denotes the terminal posterior-mean difference under this deterministic
+allocation. The order of the samples does not affect this law.
+Conditionally on the current posterior, the expected terminal reward of the recommended arm is
+E[µJ(T) ] =E
+
+max
+k=1,2
+E[µk|H r
+\3(T)]
+
+= 1
+2 E
+h
+ˆµr
+1(T) + ˆµr
+2(T) +| ˆD(T)|
+i
+.
+The quantityE[max(µ 1,µ 2)]under the current posterior is fixed before the experiment, so minimizing
+posterior expected simple regret is equivalent to maximizing this expected terminal reward. The expec-
+tation of the sum of the two posterior means is fixed by the martingale property. Moreover, for fixedd,
+the quantity
+E[|d+ √qZ|], Z∼N(0,1),
+is nondecreasing inq, and is strictly increasing whenever the two compared values ofqdiffer. Indeed,
+ifq 2 > q1, write aN(0,q 2)variable as the sum of independentN(0,q 1)andN(0,q 2−q 1)variables and
+apply conditional Jensen’s inequality to the convex functionx7→|x|; strictness follows because the added
+Gaussian variable has positive variance. It follows from Eq. (20) that a deterministic allocation minimizes
+the terminal simple regret exactly when it minimizesw= 1/m 1 + 1/m2.
+Among all integer pairs satisfyingm k≥n k andm 1 +m 2 =n 1 +n 2 +S, this convex objective is
+minimized by making the final counts as equal as the lower boundsm k≥n k permit. Drawing an arm
+33
+
+=== PDF PAGE 34 ===
+with the smaller current count and repeating this rule produces precisely such a pair.
+It remains to justify that an adaptive allocation cannot do better. We use backward induction onS.
+The assertion forS= 1follows from the preceding comparison. Assuming it forS−1, after either first
+action an optimal continuation can be chosen to follow the smaller-count rule and hence is deterministic
+as a function of the counts. The two possible first actions therefore reduce to the deterministic final-count
+comparison above. An action on a smaller-count arm leads to a minimizing final pair, so it minimizes
+Li(Hr
+\3(s−1),s). If both first actions lead to the same optimal final pair up to order, both are optimal;
+otherwise drawing the smaller-count arm is strictly better.
+E.2.3 A lower bound for the EBI in the two-armed problem
+Section E.1 reduced the three-armed instance with posteriorH r(t−1)to the two-armed instance with
+posteriorH r
+\3(t−1). Section E.2.2 showed that the two-armed problem admits a Bayes optimal con-
+tinuation following the smaller-count rule. Given these results, we bound the EBI from below in the
+two-armed best arm identification problem. Assuming eventW(t), the following lemma provides a lower
+bound for the probability that ˆ∆r(T−1)lies in a small region around zero.
+Lemma 18.Assumet<T. Fix a deterministic tie-breaking rule that depends only on the two current
+draw counts, and suppose that, fors=t,t+ 1,...,T−1,
+Ir(s)∈arg min
+i∈{1,2}
+N r
+i (s−1),
+with ties resolved by this fixed rule. LetH r(t−1) =H(t−1)be any posterior such thatW(t)holds, and
+let ˆ∆(t−1),N 1(t−1), andN 2(t−1)be the statistics determined byH(t−1). LetP bal
+Hr
+\3(t−1) denote the
+posterior-predictive law of the virtual rewards and posterior updates, conditional on the current reduced
+posterior, under this fixed smaller-count rule. This is distinct from the frequentist reward-stack law used
+to defineW(t). Then,
+Pbal
+Hr
+\3(t−1)
+ 1
+T 2≤ ˆ∆r(T−1)≤ 2
+T 2
+
+≥c 3T−170
+for a constantc 3 >0independent oft,T, the realized posterior, and the fixed count-only tie-breaking
+rule, for all sufficiently largeT.
+Proof of Lemma 18.Putn i =N i(t−1), and letm i =N r
+i (T−1)be the counts produced by the smaller-
+count rule. The rule depends only on the counts, som i is deterministic given(n 1,n 2). By Gaussian
+conjugacy,
+ˆ∆r(T−1)− ˆ∆(t−1)∼N(0,V s), V s =
+2X
+i=1
+ 1
+ni
+− 1
+mi
+
+.(21)
+Becauset<T, at least one virtual draw occurs before roundT. Each such draw, when the sampled arm
+has countq, contributes1/[q(q+ 1)]toV s. UnderW(t)and the smaller-count rule, the terminal counts
+at timeT−1areT ′ andT ′−1, soq+ 1≤T ′ and hence
+Vs≥ 1
+T′(T′−1) ≥T −2
+34
+
+=== PDF PAGE 35 ===
+for all sufficiently largeT.
+Definev +
+i = 1/ni−1/T′. Since{m 1,m 2}={T ′,T′−1},
+v+
+1 +v +
+2 =V s + 1
+T′−1 − 1
+T′ =V s + 1
+T′(T′−1) .
+The preceding lower bound onV s therefore gives
+v+
+1 +v +
+2 ≤2V s.(22)
+UsingY i,Z i, andm −2≤2/[m(m+ 1)], we obtain
+| ˆ∆(t−1)|≤3
+p
+logT
+2X
+i=1
+vuut
+T′−1X
+m=ni
+1
+m2 + 2
+T 2,
+( ˆ∆(t−1)) 2≤160(logT)V s.(23)
+Here the second line follows from Eq. (22),( √x+√y)2≤2(x+y), andV s≥T −2.
+Leta=T −2. From Eq. (21), the probability in the lemma equals
+1√2πVs
+Z 2a− ˆ∆(t−1)
+a− ˆ∆(t−1)
+exp
+
+− z2
+2Vs
+
+dz.
+We haveV s≤2, so the normalizing factor is bounded below by a positive constant. Throughout the
+integration interval, Eqs. (23) andV s≥T −2 give
+z2
+2Vs
+≤ (| ˆ∆(t−1)|+ 2a) 2
+2Vs
+≤164 logT
+for all sufficiently largeT. Since the interval has lengtha, the probability is at leastcT −166 for a universal
+c>0. Decreasingc 3 if necessary, this is at leastc 3T−170 for all sufficiently largeT.
+Based on the previous lemmas, we can boundB i(Hr
+\3(t−1),t).
+Lemma 19.Assume thatt < TandW(t)holds. There are constantsc 1,c 2 >0, independent oft,T,
+and the realized posterior, such that, for all sufficiently largeTand eachi∈{1,2},
+Bi(Hr
+\3(t−1),t)≥c 1T−176.(24)
+Moreover, ifN i(t−1)<T ′ andN j(t−1)≥T ′, then
+Bi(Hr
+\3(t−1),t)−B j(Hr
+\3(t−1),t)≥c 2T−178.(25)
+Proof.We first derive Eq. (24). By definition,
+Bi(Hr
+\3(t−1),t) :=L(H r
+\3(t−1),t+ 1)−L i(Hr
+\3(t−1),t).
+35
+
+=== PDF PAGE 36 ===
+Lemma 17 allows us to choose, in each of the two value functions, an optimal continuation that always
+samples a smaller-count arm and resolves equal counts by the same fixed deterministic count-only rule.
+Here is the count argument that permits the common-sample coupling. UnderW(t),N 3(t−1) = 1, and
+henceN 1(t−1) +N 2(t−1) =t−2. The continuation definingL(H r
+\3(t−1),t+ 1)hasT−tsamples,
+so its terminal count total isT−2 = 2T ′−1; a balanced optimal allocation has terminal count multiset
+{T′,T′−1}. If the forced armicurrently has count belowT ′, choose the orientation in which its skip-side
+terminal count isT ′−1; the forced problem then ends at(T ′,T′). If its current count is alreadyT ′, the
+forced problem instead ends with count multiset{T ′ + 1,T′−1}. Thus, in both cases, an optimal forced
+allocation is an optimal skip allocation plus one sample from armi.
+For a deterministic allocation, Eq. (20) and the martingale argument following it show that the
+posterior-predictive terminal risk depends on the allocation only through its terminal counts, and not
+on the order of its samples. Consequently, althoughL i(Hr
+\3(t−1),t)requires the arm-isample at stage
+t, for the purpose of evaluating its risk we may couple the observations common to the two allocations,
+place those observations first in the same deterministic order, and place the additional arm-iobservation
+last.
+Immediately before this additional observation, the counts areT ′ andT ′−1. Conditional on the
+common observations, the difference between the two losses is therefore the one-step improvement due
+to this last sample. Lemma 18 gives a uniformc 3T−170 lower bound on the displayed penultimate event
+below, and Lemma 15 gives a uniformc 4T−6 lower bound on the one-step improvement on that event.
+Therefore,
+L(Hr
+\3(t−1),t+ 1)−L i(Hr
+\3(t−1),t)
+≥P bal
+Hr
+\3(t−1)
+ 1
+T 2≤ ˆ∆r(T−1)≤ 2
+T 2
+
+×c 4T−6
+(by Lemma 15 and the discussion above)
+≥c 3c4T−176.
+(by Lemma 18)
+Takingc 1 =c 3c4 proves Eq. (24).
+We next derive Eq. (25). Notice that underN j(t−1)≥T ′ andN i(t−1)< T ′, drawing the more-
+sampled armjresults in final countsT ′+1andT ′−1, which is suboptimal in the two-armed problem. By
+Lemma 17, all samples common to the two allocations can be placed first, in any order, and are allocated
+to the under-sampled armi. The two experiments then differ only in their last sample: the balanced
+allocation samplesi, whereas the unbalanced allocation samplesj. The common penultimate counts are
+againT ′ andT ′−1. On the same event, Lemma 16 gives a uniformc 5T−8 advantage for sampling the
+smaller-count arm, while Lemma 18 supplies the factorc 3T−170. From the discussion above, we have
+Lj(Hr
+\3(t−1),t)−L i(Hr
+\3(t−1),t)
+≥P bal
+Hr
+\3(t−1)
+ 1
+T 2≤ ˆ∆r(T−1)≤ 2
+T 2
+
+×c 5T−8
+36
+
+=== PDF PAGE 37 ===
+(by Lemma 16 and the discussion above)
+≥c 3c5T−178.
+(by Lemma 18)
+Takingc 2 =c 3c5 proves Eq. (25).
+E.3 Proof of Lemma 7
+Proof of Lemma 7.Fori∈{1,2}, we have
+Bi(Hr(t−1),t) :=L(H r(t−1),t+ 1)−L i(Hr(t−1),t)
+≥L(H r
+\3(t−1),t+ 1)−L i(Hr
+\3(t−1),t)−2R (3)
+Hr(t−1)
+(by Lemma 13)
+≥c 1T−176−2R (3)
+Hr(t−1)
+(by Lemmas 11 and 19)
+≥c 1T−176−2g 0
+= Ω(T−176)−o(T −180) = Ω(T−176) = Ω(T−178).
+Moreover, letN j(t−1) =T ′ andi̸=j. ThenN i(t−1)<T ′, and
+Bi(Hr(t−1),t)−B j(Hr(t−1),t)
+≥B i(Hr
+\3(t−1),t)−B j(Hr
+\3(t−1),t)−4R (3)
+Hr(t−1)
+(by Lemma 13)
+≥c 2T−178−4g 0
+(by Lemmas 11 and 19)
+= Ω(T−178)−o(T −180) = Ω(T−178).
+Proof of Lemma 8.UnderW(T),N 3(T−1) = 1andN 1(T−1) +N 2(T−1) =T−2 = 2T ′−1. Since
+both of the latter counts are at mostT ′, they areT ′ andT ′−1. EventsY i andZ i imply
+|ˆµ1(T−1)−ˆµ 2(T−1)|≤ 2
+T 2 + 3√logT
+T′−1 ≤ 10√logT
+T
+for all sufficiently largeT. The last assertion of Lemma 15 therefore gives, fori= 1,2,
+Bi(Hr
+\3(T−1),T) = Ω(T −22).
+37
+
+=== PDF PAGE 38 ===
+Lemmas 13 and 11 now yield
+Bi(Hr(T−1),T)≥B i(Hr
+\3(T−1),T)−2g 0 = Ω(T−22).
+On the other hand, Lemma 6 givesB 3(Hr(T−1),T) =o(T −180). Hence arm3cannot maximize the
+EBI in the last round.
+F Discussion on the Tightness of the Bound
+The goal of Theorem 2 was to derive a polynomial simple regret lower bound, and its polynomial exponent
+is not expected to be tight. The following observation suggests how the probability estimate could be
+improved, but it is not used in the theorem and is not asserted here as a separate proved bound. One
+may attempt to replace
+Yi :=
+
+|ˆµi,T′|≤ 1
+T 2
+
+with a slightly larger bound of 
+|ˆµi,T′|≤ 1
+T 3/2
+
+.
+The limiting calculation is Eq. (19), in which the exponent ofexp
+ 
+−T 3l2/2
+
+remainsO(1)at theT −3/2
+scale.14 A formal improvement would require rechecking all uniform bounds in Lemmas 6–8 with the
+enlarged event. We retain the provedT −2 event for ease of exposition.
+14This part bounds|L i(Hr
+\3(T−1),T)−L j(Hr
+\3(T−1),T)|from below. This value is decomposed into several components
+ofpoly(T −1). In particular, Eq. (19) corresponds to the probability that a normal random variable with varianceT −3 is
+larger than a givenˆµr
+i(T−1)−ˆµr
+j(T−1). For this probability to bepoly(T −1), we require|ˆµr
+i(T−1)−ˆµr
+j(T−1)|=O(T −3/2).
+38

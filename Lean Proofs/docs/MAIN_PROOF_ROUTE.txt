@@ -1,0 +1,172 @@
+READING THE END-TO-END MAIN PROOF
+
+This is a navigation guide, not an independent mathematical proof check.
+Every path below is relative to the project root. Fully qualified names can
+be searched in docs/DECLARATIONS.html or inspected in Lean's InfoView.
+
+1. READ THE FINAL STATEMENT AND ITS PREMISE
+
+Open Junpei/RealPrecisionMain.lean:
+  Junpei.RealPrecisionMain.InitialHistoryRiskOptimal
+  Junpei.RealPrecisionMain.theorem2_paper_exponent
+  Junpei.RealPrecisionMain.theorem2_exponential_rate
+  Junpei.RealPrecisionMain.exists_initialHistoryRiskOptimal
+
+The policy is a Borel randomized posterior-state algorithm. The optimality
+premise compares its initial actual posterior risk with every concrete Borel
+full-history competitor, for every initialized posterior mean vector.
+The theorem uses true means (0,0,Delta), Delta>0, and sufficiently large odd T.
+The explicit exponent is (33+Delta)^2/2+4. The existence theorem establishes
+that the policy premise has witnesses.
+
+Read the definition before the proof: in Lean, the colon after a theorem name
+introduces the proposition and all arguments before it are hypotheses or
+parameters. The expression after `:= by` is the proof checked by Lean.
+Definitions specify objects; they do not by themselves prove claims about them.
+
+2. FOLLOW THE INITIALIZATION-ONLY REDUCTION
+
+  RealPrecisionMain.rawTree_restriction and continuationRisk_restriction
+    Identify the real-precision policy with its reachable integer-count model.
+
+  PosteriorStateHistory.minimizesHistoryRisk_iff
+  PosteriorStateHistory.initialHistoryRiskOptimal_iff
+    Identify minimization against concrete history policies with the raw-family
+    risk predicate used by the lower-level continuation proofs.
+
+  InitialOptimalPaths / InitialOptimalTrace
+    Derive almost-sure agreement with a measurable optimal repair from initial
+    actual-risk minimization. They also establish sampled-arm trace agreement.
+
+  FixedGaussianAbsoluteContinuous / FixedGaussianLaws / FixedGaussianTransfer
+  FixedGaussianInitialReduction
+    Transfer almost-sure agreement from posterior-predictive Gaussian laws to
+    each fixed-parameter Gaussian reward law.
+
+  FixedGaussianStackLaws / FixedGaussianStackExecution / FixedGaussianStackPath
+  FixedGaussianInitialized / FixedGaussianWindows / FixedGaussianMainLaw
+    Identify calendar-array and per-arm-stack execution and account for the
+    initial observations and independent scalar policy seeds.
+
+  Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq
+  Junpei.InitialHistoryMain.regret_repair_eq
+  Junpei.RealPrecisionMain.regret_repair_eq
+    The endpoint concerns exactly Junpei.Main.regret. It does not substitute
+    an unrelated posterior quantity for the frequentist regret in the theorem.
+
+3. FOLLOW THE CORE REGRET LOWER BOUND
+
+  Junpei/Main.lean
+    Defines the actual frequentist regret and proves the core theorem.
+
+  ProbabilityModel / Probability / ProbabilityExact / ProbabilityExactRate
+    Define the actual Gaussian-array event, prove its probability lower bound,
+    and obtain the exact real exponent used by the manuscript.
+
+  PolicyChoice / LemmaRates / ChoiceAsymptotic
+    Compare the action losses uniformly on the revised event: avoid arm 3,
+    respect the count caps, and handle the last round separately.
+
+  Policy / PolicyAE / PolicySeeds / PolicyAEExecution / Empirical
+    Define measurable policy execution, connect empirical means with the event,
+    and handle almost-sure choices and their measurable repair.
+
+  MainExactRate / RegretExponent / RegretRatio
+    Derive the printed exponent, the extended-real limit-inferior rate, and
+    Remark 2's regret-ratio consequence.
+
+The main dependencies of the action-loss comparisons are the two-arm results
+(Marginal*, TwoArmOptimal, Forecast*, Dynamic*, Coupling19*) and exclusion
+results (Exclusion*, Mock*, Embedding*, PolicyEmbedding). PROOF_MAP.txt maps
+their specific equations and numbered lemmas.
+
+4. UNDERSTAND THE BAYES-OPTIMALITY FOUNDATION
+
+Start with Junpei/GeneralOptimalityFinite.lean for Theorem 1:
+  Junpei.GeneralOptimality.FiniteHorizon.Policy
+  Junpei.GeneralOptimality.FiniteHorizon.SequentiallyOptimal
+  Junpei.GeneralOptimality.FiniteHorizon.theorem1
+  Junpei.GeneralOptimality.FiniteHorizon.exists_sequentiallyOptimal
+
+The policy has exactly N Borel sampling rules and one terminal rule, defined
+only on proper Gaussian states. For the manuscript, N=T-K and sampling index
+j=T-t records the number of draws remaining after round t. The hypothesis
+minimizes actual posterior risk against every concrete Borel history policy,
+at every proper state and every remaining horizon within this fixed budget.
+It contains no Bellman-action premise. The theorem derives the Bellman risk
+identity, EBI-maximizing sampling, and maximum-mean terminal recommendation.
+The decision rules hold almost surely in the fresh standard normal randomizer.
+
+Revision 2 adds the arbitrary-policy implication at this generality. The first
+release had a general finite-arm constructed optimum, but its arbitrary-policy
+necessity result used three arms and integer counts. Follow the new proof via:
+
+  Junpei.GeneralOptimality.toRaw_compile / actualRisk_compile
+    Compile a real-precision state policy into a concrete history competitor,
+    proving exact raw-strategy and actual-risk identities.
+
+  Junpei.GeneralOptimality.minimizing_actualRisk_eq_loss
+  Junpei.GeneralOptimality.minimizing_draw_EBI_ae / minimizing_recommend_ae
+    Compare with the compiled canonical competitor and derive the necessary
+    decision rules from single-state actual-risk minimization.
+
+  GeneralOptimalityProper / GeneralOptimalityFinite
+    Extend a proper-domain policy to the existing interpreter and pad a finite
+    rule collection only outside its budget. Direct interpreters and proved
+    raw-tree/risk equalities show that these constructions preserve the paper
+    policy's execution. No extra domain or larger-horizon optimality is assumed.
+
+FiniteGaussian / FinitePosterior provide the Bellman model and optimality proof
+for an arbitrary finite nonempty arm set with proper Gaussian posteriors.
+ObservationBridge derives the observation/update identity from the joint
+Gaussian law. EmbeddingExecution / EmbeddingRandomized establish the actual
+raw-observation risk recursion and integrability. JointGaussianMeasurable and
+RealPrecisionPolicy give jointly Borel selectors and a globally defined policy.
+
+FlatPriorInitialization / FlatPriorProduct / AdaptivePosteriorSufficiency /
+FixedGaussianFlatInitialization connect the initialized flat likelihood to the
+proper Gaussian continuation laws. The labelled-likelihood statement should
+not be read as an independent regular-conditional-law theorem for an arbitrary
+adaptive history; consult ALL_ARGUMENTS_STATUS.txt for the precise boundary.
+
+5. INSPECT THE EVIDENCE
+
+  lake env lean checks/GeneralOptimalityAudit.lean
+    Prints the exact finite/proper policy classes, actual-risk premise,
+    representation identities, Theorem 1 endpoint, and existence witness.
+
+  lake env lean checks/Footnote14CharacterizationAudit.lean
+    Prints the corrected Gaussian-tail equivalence, its hypotheses and axiom
+    dependencies, together with the earlier counterexample endpoints.
+
+  lake env lean EndToEndAudit.lean
+    Prints the actual-risk predicates, reduction endpoints, and main statements.
+
+  lake env lean BundleAudit.lean
+    Prints transitive axiom dependencies of all inventoried public theorems.
+
+  python -X utf8 verify.py --fresh
+    Rebuilds local proofs and executes every recorded audit. Use python3 where
+    appropriate. The report and raw logs describe the actual compiler run.
+
+6. DISTINGUISH THE ORIGINAL FOOTNOTE FROM ITS CORRECTED STATEMENT
+
+Keep the negative result separate when presenting this work: the original
+Footnote 14 counterexample refutes the manuscript's claimed necessary scale.
+It is not a proof of the proposed Appendix F event improvement.
+
+Revision 3 adds Junpei/Footnote14Characterization.lean. Start with
+  Junpei.Footnote14Characterization.corrected_footnote14_iff.
+For an arbitrary nonnegative sequence d, it proves that a lower bound
+P[N(0,T^-3)>=d(T)] >= c*T^(-p), with positive real c,p and a fixed natural
+T0 for all T>=T0, is equivalent to d(T)=O(T^(-3/2)*sqrt(log T)). The constants
+are independent of T and no monotonicity of d is required. The probability
+uses the actual Gaussian measure; the asymptotic relation is Lean's IsBigO.
+
+The two implications are eventuallyPolynomialTail_of_isBigO and
+isBigO_of_eventuallyPolynomialTail in the same namespace. The theorem
+realExponentPolynomialTail_iff_eventually converts the eventual natural-
+exponent predicate to the explicit positive-real-exponent statement above.
+tail_standardize identifies the probability with the standard Gaussian tail.
+These are proof dependencies checked by Lean. The original counterexample
+is retained, and the supplied PDF is unchanged.

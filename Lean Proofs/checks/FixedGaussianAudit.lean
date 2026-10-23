@@ -1,0 +1,43 @@
+import Junpei.FixedGaussianMain
+
+#check Junpei.FixedGaussian.finite_pi_absolutelyContinuous
+#check Junpei.FixedGaussian.fixed_predictive_equivalent
+#check Junpei.FixedGaussian.seeded_fixed_predictive_equivalent
+#check Junpei.FixedGaussian.adaptive_map_equivalent
+#check Junpei.FixedGaussian.ae_execution_transfer
+#check Junpei.FixedGaussian.recommendation_law_eq
+#check Junpei.FixedGaussian.minimizing_rawTree_repair_fixed_ae
+#check Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae
+#check Junpei.FixedGaussian.initialRiskOptimal_fixed_payoff_repair_eq
+
+#print axioms Junpei.FixedGaussian.finite_pi_absolutelyContinuous
+#print axioms Junpei.FixedGaussian.fixed_predictive_equivalent
+#print axioms Junpei.FixedGaussian.seeded_fixed_predictive_equivalent
+#print axioms Junpei.FixedGaussian.adaptive_map_equivalent
+#print axioms Junpei.FixedGaussian.ae_execution_transfer
+#print axioms Junpei.FixedGaussian.recommendation_law_eq
+#print axioms Junpei.FixedGaussian.minimizing_rawTree_repair_fixed_ae
+#print axioms Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae
+#print axioms Junpei.FixedGaussian.initialRiskOptimal_fixed_payoff_repair_eq
+
+#check Junpei.FixedGaussian.selected_stack_split_preserving
+#check Junpei.FixedGaussian.rawTree_stack_law_eq
+#check Junpei.FixedGaussian.initializedInput_preserving
+#check Junpei.FixedGaussian.actualRecommendation_law
+#check Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq
+#check Junpei.FixedGaussian.theorem2_initialRiskOptimal
+#check Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal
+#check Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal
+#check Junpei.FixedGaussian.remark2_initialRiskOptimal
+#check Junpei.FixedGaussian.exists_initialRiskOptimal
+
+#print axioms Junpei.FixedGaussian.selected_stack_split_preserving
+#print axioms Junpei.FixedGaussian.rawTree_stack_law_eq
+#print axioms Junpei.FixedGaussian.initializedInput_preserving
+#print axioms Junpei.FixedGaussian.actualRecommendation_law
+#print axioms Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq
+#print axioms Junpei.FixedGaussian.theorem2_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.remark2_initialRiskOptimal
+#print axioms Junpei.FixedGaussian.exists_initialRiskOptimal

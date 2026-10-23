@@ -1,0 +1,316 @@
+def Junpei.SequentialRisk.MinimizesActualRisk : Junpei.Policy.StatePolicy →
+  ℕ → ℕ → Draft0.BayesianModel.Counts → Draft0.BayesianModel.Means → Prop :=
+fun π t H c m =>
+  ∀ (s : Junpei.SequentialRisk.Family H),
+    Junpei.SequentialRisk.Feasible s →
+      Junpei.SequentialRisk.continuationRisk π t H c m ≤ Junpei.SequentialRisk.familyRisk s c m
+def Junpei.SequentialRisk.SequentialRiskOptimal : Junpei.Policy.StatePolicy → ℕ → Prop :=
+fun π T =>
+  (∀ (t : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means),
+      4 ≤ t →
+        t ≤ T →
+          (∀ (a : Draft0.BayesianModel.Arm), 0 < c a) → Junpei.SequentialRisk.MinimizesActualRisk π t (T - t + 1) c m) ∧
+    ∀ (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means),
+      (∀ (a : Draft0.BayesianModel.Arm), 0 < c a) → Junpei.SequentialRisk.MinimizesActualRisk π (T + 1) 0 c m
+Junpei.PolicyContinuation.rawTree_run_measurable (π : Junpei.Policy.StatePolicy) (t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) :
+  Measurable fun p => Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c p.1 p.2.1) p.2.2
+Junpei.PolicyContinuation.rawTree_regular (π : Junpei.Policy.StatePolicy) (t H : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (u : Junpei.PolicyContinuation.Seeds H) :
+  Junpei.EmbeddingExecution.Regular (Junpei.PolicyContinuation.rawTree π t H c m u)
+Junpei.CountModelBridge.actionLoss_eq_loss_iff (k : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (a : Draft0.BayesianModel.Arm) (hc : 0 < c a) :
+  Junpei.FinitePosterior.actionLoss k (Junpei.CountModelBridge.natPrecisions c) m a =
+      Junpei.FinitePosterior.loss (k + 1) (Junpei.CountModelBridge.natPrecisions c) m ↔
+    Draft0.BayesianModel.action k c m a = Draft0.BayesianModel.value (k + 1) c m
+Junpei.SequentialRisk.familyRisk_eq_joint {H : ℕ} (s : Junpei.SequentialRisk.Family H) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (hs : Junpei.SequentialRisk.Feasible s) :
+  Junpei.SequentialRisk.familyRisk s c m =
+    ∫ (p :
+      Junpei.PolicyContinuation.Seeds H ×
+        Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+          Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm H),
+      Junpei.EmbeddingRandomized.randomizedPayoff s
+        p ∂(Junpei.Policy.seedLaw (H + 1)).prod
+        (Junpei.EmbeddingExecution.worldLaw H (Junpei.CountModelBridge.natPrecisions c) m)
+Junpei.SequentialRisk.familyRisk_ge_loss {H : ℕ} (s : Junpei.SequentialRisk.Family H) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (hs : Junpei.SequentialRisk.Feasible s)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) :
+  Junpei.FinitePosterior.loss H (Junpei.CountModelBridge.natPrecisions c) m ≤ Junpei.SequentialRisk.familyRisk s c m
+Junpei.SequentialRisk.canonicalFamily_risk (H : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) :
+  Junpei.SequentialRisk.familyRisk (Junpei.SequentialRisk.canonicalFamily H c m) c m =
+    Junpei.FinitePosterior.loss H (Junpei.CountModelBridge.natPrecisions c) m
+Junpei.SequentialRisk.minimizing_draw_ae (π : Junpei.Policy.StatePolicy) (t H : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a)
+  (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t (H + 1) c m) :
+  ∀ᵐ (u : ℝ) ∂ProbabilityTheory.gaussianReal 0 1,
+    Draft0.BayesianModel.action H c m (π.draw t c m u) = Draft0.BayesianModel.value (H + 1) c m
+Junpei.SequentialRisk.minimizing_recommend_ae (π : Junpei.Policy.StatePolicy) (t : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a)
+  (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t 0 c m) :
+  ∀ᵐ (u : ℝ) ∂ProbabilityTheory.gaussianReal 0 1, m (π.recommend c m u) = Draft0.BayesianModel.terminal m
+Junpei.SequentialRisk.sequentialRiskOptimal_implies_aeOptimal (π : Junpei.Policy.StatePolicy) (T : ℕ)
+  (hπ : Junpei.SequentialRisk.SequentialRiskOptimal π T) : Junpei.Policy.AEOptimal π T
+Junpei.PolicyContinuationOptimal.deterministicBellman_rawRisk (T t H : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m : Draft0.BayesianModel.Means) (u : Junpei.PolicyContinuation.Seeds H) (horizon : t + H = T + 1)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) :
+  Junpei.EmbeddingExecution.rawRisk (Junpei.PolicyContinuation.rawTree (Junpei.Policy.deterministicBellman T) t H c m u)
+      (Junpei.CountModelBridge.natPrecisions c) m =
+    Junpei.FinitePosterior.loss H (Junpei.CountModelBridge.natPrecisions c) m
+Junpei.SequentialRisk.deterministicBellman_sequentialRiskOptimal (T : ℕ) :
+  Junpei.SequentialRisk.SequentialRiskOptimal (Junpei.Policy.deterministicBellman T) T
+Junpei.SequentialRisk.exists_sequentialRiskOptimal (T : ℕ) : ∃ π, Junpei.SequentialRisk.SequentialRiskOptimal π T
+Junpei.SequentialRisk.theorem2_sequentialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy),
+                Junpei.SequentialRisk.SequentialRiskOptimal π T →
+                  c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret π T Δ
+Junpei.SequentialRisk.theorem2_paper_exponent_sequentialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c T0,
+    0 < c ∧
+      ∀ (T : ℕ),
+        T0 ≤ T →
+          Odd T →
+            ∀ (π : Junpei.Policy.StatePolicy),
+              Junpei.SequentialRisk.SequentialRiskOptimal π T →
+                c * ↑T ^ (-((33 + Δ) ^ 2 / 2 + 4)) ≤ Junpei.Main.regret π T Δ
+Junpei.SequentialRisk.theorem2_exponential_rate_sequentialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ)
+  (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.SequentialRisk.SequentialRiskOptimal (family T) T) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (family T) T Δ) Filter.atTop = 0
+Junpei.SequentialRisk.remark2_sequentialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.SequentialRisk.SequentialRiskOptimal (family T) T) (rFreq : ℕ → ℝ)
+  (hF : ∀ (T : ℕ), 0 ≤ rFreq T) (hpositive : 0 < Filter.liminf (Junpei.RegretExponent.rate rFreq) Filter.atTop) :
+  Filter.limsup (Junpei.RegretRatio.ratio (fun T => Junpei.Main.regret (family T) T Δ) rFreq) Filter.atTop = ⊤
+'Junpei.PolicyContinuation.rawTree_run_measurable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.PolicyContinuation.rawTree_regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.SequentialRisk.familyRisk_eq_joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.SequentialRisk.minimizing_draw_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.SequentialRisk.minimizing_recommend_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.SequentialRisk.sequentialRiskOptimal_implies_aeOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.PolicyContinuationOptimal.deterministicBellman_rawRisk' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.SequentialRisk.deterministicBellman_sequentialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.SequentialRisk.exists_sequentialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.SequentialRisk.theorem2_sequentialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.SequentialRisk.theorem2_paper_exponent_sequentialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.SequentialRisk.theorem2_exponential_rate_sequentialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.SequentialRisk.remark2_sequentialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Junpei.InitialOptimal.InitialRiskOptimal : Junpei.Policy.StatePolicy → ℕ → Prop :=
+fun π T => ∀ (m : Draft0.BayesianModel.Means), Junpei.SequentialRisk.MinimizesActualRisk π 4 (T - 3) (fun x => 1) m
+Junpei.InitialOptimal.minimizing_seed_risk_eq (π : Junpei.Policy.StatePolicy) (t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a)
+  (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) :
+  ∀ᵐ (u : Junpei.PolicyContinuation.Seeds H) ∂Junpei.Policy.seedLaw (H + 1),
+    Junpei.EmbeddingExecution.rawRisk (Junpei.PolicyContinuation.rawTree π t H c m u)
+        (Junpei.CountModelBridge.natPrecisions c) m =
+      Junpei.FinitePosterior.loss H (Junpei.CountModelBridge.natPrecisions c) m
+Junpei.InitialOptimal.minimizing_rawTree_repair_ae (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1) (ht : 4 ≤ t)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (H + 1) ×
+      Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+        Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+          H) ∂(Junpei.Policy.seedLaw (H + 1)).prod
+      (Junpei.EmbeddingExecution.worldLaw H (Junpei.CountModelBridge.natPrecisions c) m),
+    Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2) =
+      Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2)
+Junpei.InitialOptimal.minimizing_trace_repair_ae (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1) (ht : 4 ≤ t)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) (hπ : Junpei.SequentialRisk.MinimizesActualRisk π t H c m) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (H + 1) ×
+      Junpei.FiniteGaussian.Means Draft0.BayesianModel.Arm ×
+        Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+          H) ∂(Junpei.Policy.seedLaw (H + 1)).prod
+      (Junpei.EmbeddingExecution.worldLaw H (Junpei.CountModelBridge.natPrecisions c) m),
+    Junpei.EmbeddingRaw.trace (Junpei.PolicyContinuation.rawTree π t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2) =
+      Junpei.EmbeddingRaw.trace (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) t H c m p.1)
+        (Junpei.EmbeddingExecution.observations p.2)
+Junpei.FixedGaussian.initialRiskOptimal_repair_fixed_ae (π : Junpei.Policy.StatePolicy) (T : ℕ) (hT : 3 ≤ T)
+  (hπ : Junpei.InitialOptimal.InitialRiskOptimal π T) (m μ : Draft0.BayesianModel.Means) :
+  ∀ᵐ (p :
+    Junpei.Policy.SeedArray (T - 3 + 1) ×
+      Junpei.EmbeddingRaw.RawStream Draft0.BayesianModel.Arm
+        (T - 3)) ∂(Junpei.Policy.seedLaw (T - 3 + 1)).prod (Junpei.FixedGaussian.fixedLaw (T - 3) μ),
+    Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π 4 (T - 3) (fun x => 1) m p.1) p.2 =
+      Junpei.EmbeddingRaw.run
+        (Junpei.PolicyContinuation.rawTree (Junpei.Policy.repair π T) 4 (T - 3) (fun x => 1) m p.1) p.2
+Junpei.FixedGaussian.rawTree_stack_law_eq (π : Junpei.Policy.StatePolicy) (t H : ℕ) (c : Draft0.BayesianModel.Counts)
+  (m μ : Draft0.BayesianModel.Means) (u : Junpei.PolicyContinuation.Seeds H) :
+  MeasureTheory.Measure.map (Junpei.FixedGaussian.stackRun (Junpei.PolicyContinuation.rawTree π t H c m u))
+      (Junpei.FixedGaussian.fixedLaw H μ) =
+    MeasureTheory.Measure.map (Junpei.EmbeddingRaw.run (Junpei.PolicyContinuation.rawTree π t H c m u))
+      (Junpei.FixedGaussian.fixedLaw H μ)
+Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) (hT : 3 ≤ T)
+  (hπ : Junpei.InitialOptimal.InitialRiskOptimal π T) :
+  Junpei.Main.regret π T Δ = Junpei.Main.regret (Junpei.Policy.repair π T) T Δ
+Junpei.FixedGaussian.theorem2_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy),
+                Junpei.InitialOptimal.InitialRiskOptimal π T → c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret π T Δ
+Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c T0,
+    0 < c ∧
+      ∀ (T : ℕ),
+        T0 ≤ T →
+          Odd T →
+            ∀ (π : Junpei.Policy.StatePolicy),
+              Junpei.InitialOptimal.InitialRiskOptimal π T →
+                c * ↑T ^ (-((33 + Δ) ^ 2 / 2 + 4)) ≤ Junpei.Main.regret π T Δ
+Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ)
+  (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.InitialOptimal.InitialRiskOptimal (family T) T) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (family T) T Δ) Filter.atTop = 0
+Junpei.FixedGaussian.remark2_initialRiskOptimal (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.InitialOptimal.InitialRiskOptimal (family T) T) (rFreq : ℕ → ℝ)
+  (hF : ∀ (T : ℕ), 0 ≤ rFreq T) (hpositive : 0 < Filter.liminf (Junpei.RegretExponent.rate rFreq) Filter.atTop) :
+  Filter.limsup (Junpei.RegretRatio.ratio (fun T => Junpei.Main.regret (family T) T Δ) rFreq) Filter.atTop = ⊤
+Junpei.FixedGaussian.exists_initialRiskOptimal (T : ℕ) (hT : 3 ≤ T) : ∃ π, Junpei.InitialOptimal.InitialRiskOptimal π T
+'Junpei.InitialOptimal.minimizing_rawTree_repair_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialOptimal.minimizing_trace_repair_ae' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.initialRiskOptimal_regret_repair_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.theorem2_initialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.theorem2_paper_exponent_initialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.FixedGaussian.theorem2_exponential_rate_initialRiskOptimal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.FixedGaussian.remark2_initialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.FixedGaussian.exists_initialRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal : Junpei.Policy.StatePolicy → ℕ → Prop :=
+fun π T =>
+  ∀ (m : Draft0.BayesianModel.Means), Junpei.PosteriorStateHistory.MinimizesHistoryRisk π 4 (T - 3) (fun x => 1) m
+Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff (π : Junpei.Policy.StatePolicy) (T t H : ℕ)
+  (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1)
+  (hc : ∀ (a : Draft0.BayesianModel.Arm), 0 < c a) :
+  Junpei.PosteriorStateHistory.MinimizesHistoryRisk π t H c m ↔ Junpei.SequentialRisk.MinimizesActualRisk π t H c m
+Junpei.PosteriorStateHistory.initialHistoryRiskOptimal_iff (π : Junpei.Policy.StatePolicy) (T : ℕ) (hT : 3 ≤ T) :
+  Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal π T ↔ Junpei.InitialOptimal.InitialRiskOptimal π T
+Junpei.InitialHistoryMain.regret_repair_eq (π : Junpei.Policy.StatePolicy) (T : ℕ) (Δ : ℝ) (hT : 3 ≤ T)
+  (hπ : Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal π T) :
+  Junpei.Main.regret π T Δ = Junpei.Main.regret (Junpei.Policy.repair π T) T Δ
+Junpei.InitialHistoryMain.theorem2 (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.Policy.StatePolicy),
+                Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal π T →
+                  c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret π T Δ
+Junpei.InitialHistoryMain.theorem2_paper_exponent (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c T0,
+    0 < c ∧
+      ∀ (T : ℕ),
+        T0 ≤ T →
+          Odd T →
+            ∀ (π : Junpei.Policy.StatePolicy),
+              Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal π T →
+                c * ↑T ^ (-((33 + Δ) ^ 2 / 2 + 4)) ≤ Junpei.Main.regret π T Δ
+Junpei.InitialHistoryMain.theorem2_exponential_rate (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal (family T) T) :
+  Filter.liminf (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (family T) T Δ) Filter.atTop = 0
+Junpei.InitialHistoryMain.remark2 (Δ : ℝ) (hΔ : 0 < Δ) (family : ℕ → Junpei.Policy.StatePolicy)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal (family T) T) (rFreq : ℕ → ℝ)
+  (hF : ∀ (T : ℕ), 0 ≤ rFreq T) (hpositive : 0 < Filter.liminf (Junpei.RegretExponent.rate rFreq) Filter.atTop) :
+  Filter.limsup (Junpei.RegretRatio.ratio (fun T => Junpei.Main.regret (family T) T Δ) rFreq) Filter.atTop = ⊤
+Junpei.InitialHistoryMain.exists_initialHistoryRiskOptimal (T : ℕ) (hT : 3 ≤ T) :
+  ∃ π, Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal π T
+'Junpei.PosteriorStateHistory.minimizesHistoryRisk_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.theorem2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.theorem2_paper_exponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.theorem2_exponential_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.remark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.InitialHistoryMain.exists_initialHistoryRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Junpei.RealPrecisionMain.InitialHistoryRiskOptimal : Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm →
+  ℕ → Prop :=
+fun π T =>
+  ∀ (m : Draft0.BayesianModel.Means) (ρ : Junpei.HistoryPolicy.Policy Draft0.BayesianModel.Arm),
+    Junpei.RealPrecisionPolicy.actualRisk π (T - 3) (Junpei.CountModelBridge.natPrecisions fun x => 1) m ≤
+      Junpei.HistoryPolicy.actualRisk ρ 0 (T - 3) Junpei.PosteriorStateHistory.emptyHistory
+        (Junpei.CountModelBridge.natPrecisions fun x => 1) m
+Junpei.RealPrecisionMain.rawTree_restriction (π : Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm)
+  (T t H : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (u : Junpei.PolicyContinuation.Seeds H)
+  (horizon : t + H = T + 1) :
+  Junpei.PolicyContinuation.rawTree (Junpei.RealPrecisionMain.restrict π T) t H c m u =
+    Junpei.RealPrecisionPolicy.rawTree π H (Junpei.CountModelBridge.natPrecisions c) m u
+Junpei.RealPrecisionMain.continuationRisk_restriction (π : Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm)
+  (T t H : ℕ) (c : Draft0.BayesianModel.Counts) (m : Draft0.BayesianModel.Means) (horizon : t + H = T + 1) :
+  Junpei.SequentialRisk.continuationRisk (Junpei.RealPrecisionMain.restrict π T) t H c m =
+    Junpei.RealPrecisionPolicy.actualRisk π H (Junpei.CountModelBridge.natPrecisions c) m
+Junpei.RealPrecisionMain.initialHistoryRiskOptimal_iff_restriction
+  (π : Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm) (T : ℕ) (hT : 3 ≤ T) :
+  Junpei.RealPrecisionMain.InitialHistoryRiskOptimal π T ↔
+    Junpei.PosteriorStateHistory.InitialHistoryRiskOptimal (Junpei.RealPrecisionMain.restrict π T) T
+Junpei.RealPrecisionMain.theorem2 (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c C T0,
+    0 < c ∧
+      0 < C ∧
+        ∀ (T : ℕ),
+          T0 ≤ T →
+            Odd T →
+              ∀ (π : Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm),
+                Junpei.RealPrecisionMain.InitialHistoryRiskOptimal π T →
+                  c * Draft0.Rates.invPower C T ≤ Junpei.Main.regret (Junpei.RealPrecisionMain.restrict π T) T Δ
+Junpei.RealPrecisionMain.theorem2_paper_exponent (Δ : ℝ) (hΔ : 0 < Δ) :
+  ∃ c T0,
+    0 < c ∧
+      ∀ (T : ℕ),
+        T0 ≤ T →
+          Odd T →
+            ∀ (π : Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm),
+              Junpei.RealPrecisionMain.InitialHistoryRiskOptimal π T →
+                c * ↑T ^ (-((33 + Δ) ^ 2 / 2 + 4)) ≤ Junpei.Main.regret (Junpei.RealPrecisionMain.restrict π T) T Δ
+Junpei.RealPrecisionMain.theorem2_exponential_rate (Δ : ℝ) (hΔ : 0 < Δ)
+  (family : ℕ → Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.RealPrecisionMain.InitialHistoryRiskOptimal (family T) T) :
+  Filter.liminf
+      (Junpei.RegretExponent.rate fun T => Junpei.Main.regret (Junpei.RealPrecisionMain.restrict (family T) T) T Δ)
+      Filter.atTop =
+    0
+Junpei.RealPrecisionMain.remark2 (Δ : ℝ) (hΔ : 0 < Δ)
+  (family : ℕ → Junpei.RealPrecisionPolicy.Policy Draft0.BayesianModel.Arm)
+  (hfamily : ∀ (T : ℕ), 3 ≤ T → Junpei.RealPrecisionMain.InitialHistoryRiskOptimal (family T) T) (rFreq : ℕ → ℝ)
+  (hF : ∀ (T : ℕ), 0 ≤ rFreq T) (hpositive : 0 < Filter.liminf (Junpei.RegretExponent.rate rFreq) Filter.atTop) :
+  Filter.limsup
+      (Junpei.RegretRatio.ratio (fun T => Junpei.Main.regret (Junpei.RealPrecisionMain.restrict (family T) T) T Δ)
+        rFreq)
+      Filter.atTop =
+    ⊤
+Junpei.RealPrecisionMain.exists_initialHistoryRiskOptimal (T : ℕ) :
+  ∃ π, Junpei.RealPrecisionMain.InitialHistoryRiskOptimal π T
+'Junpei.RealPrecisionMain.initialHistoryRiskOptimal_iff_restriction' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Junpei.RealPrecisionMain.theorem2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.RealPrecisionMain.theorem2_paper_exponent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.RealPrecisionMain.theorem2_exponential_rate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.RealPrecisionMain.remark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Junpei.RealPrecisionMain.exists_initialHistoryRiskOptimal' depends on axioms: [propext, Classical.choice, Quot.sound]

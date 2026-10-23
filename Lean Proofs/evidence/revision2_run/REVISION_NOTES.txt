@@ -1,0 +1,78 @@
+JUNPEI LEAN SUBMISSION — REVISION 2
+
+WHAT CHANGED
+
+The first release overstated the scope of its Theorem 1 coverage. It proved
+that a constructed policy is optimal for general finite arm sets, but its
+implication from arbitrary policy optimality to the stated sampling and
+recommendation rules was restricted to three arms and integer counts.
+Repackaging those same proofs did not establish the missing general result.
+
+Revision 2 adds four modules and 35 public theorem declarations. Its complete
+inventory is 155 proof modules and 1,505 public theorem/lemma declarations.
+The original 151 proof modules are unchanged; their proofs remain dependencies.
+
+NEW PROOF CHAIN
+
+  Junpei/GeneralOptimalityHistory.lean (6 theorems)
+    Compile posterior-state rules into concrete Borel history policies and
+    prove exact equality of raw execution and actual posterior risk.
+
+  Junpei/GeneralOptimality.lean (10 theorems)
+    Derive Bellman risk equality, EBI-maximizing draws, and maximal-mean
+    recommendations from actual-risk minimization at a single state. Package
+    the conclusions for every remaining horizon of a fixed finite budget.
+
+  Junpei/GeneralOptimalityProper.lean (8 theorems)
+    Use rules defined only on proper Gaussian states. Prove that extending
+    those rules to unused improper states preserves their direct execution
+    and actual risk; transfer the characterization to the original domain.
+
+  Junpei/GeneralOptimalityFinite.lean (11 theorems)
+    Use exactly N sampling rules, indexed by Fin N, and one terminal rule.
+    Prove that constant padding outside the budget preserves execution and
+    risk. Establish the characterization and a concrete optimal-policy witness
+    in this finite class. No rules beyond the fixed budget are hypotheses.
+
+PRINCIPAL THEOREM 1 ENDPOINT
+
+  Junpei.GeneralOptimality.FiniteHorizon.theorem1
+
+The policy is any Borel randomized posterior-state policy in the finite class.
+Its premise is actual posterior-risk minimization against all concrete Borel
+history continuation policies at each proper state and remaining horizon.
+The arm set is an arbitrary finite nonempty ordered type, including Fin K for
+every K >= 1. All posterior precisions are arbitrary strictly positive reals.
+For the paper, N = T - K and sampling index j = T - t.
+
+The theorem derives all three conclusions: actual risk equals Bellman loss;
+the selected arm maximizes EBI almost surely in the fresh Gaussian randomizer;
+and the terminal recommendation maximizes posterior mean almost surely.
+The conclusions are not assumptions in the actual-risk optimality predicate.
+The companion exists_sequentiallyOptimal theorem supplies a concrete witness.
+
+VERIFICATION AND NAVIGATION
+
+Run python -X utf8 verify.py --fresh from the project root. Mathematical
+verification is performed by Lean. Python only orchestrates the compiler,
+inventories declarations, and records file identities and compiler outputs.
+The full run now includes 11 supplementary audits. For focused inspection:
+
+  lake env lean checks/GeneralOptimalityAudit.lean
+
+REPORT.txt and verification_results.json record the current run. The aggregate
+BundleAudit.lean includes all 1,505 public theorem/lemma declarations.
+docs/PROOF_MAP.html and docs/PROOF_MAP.txt identify the new principal endpoint
+and the supporting definitions, transport identities, and existence proof.
+evidence/source_equivalence.json records the source differences from revision 1.
+
+UNCHANGED SCOPE
+
+Theorem 2 and its initial-risk-to-frequentist-regret chain are unchanged and
+included in the full verification run. The manuscript PDF is unchanged.
+Footnote 14 is deferred at the user's request: its existing counterexample is
+retained, and no new corrected-footnote claim is included in this revision.
+Conjecture 9 remains open. The contextual exclusions in ALL_ARGUMENTS_STATUS.txt
+remain exclusions; complete_literal_manuscript_formalization remains false.
+This release corrects the specific Theorem 1 gap, not every unformalized
+contextual assertion in the manuscript.

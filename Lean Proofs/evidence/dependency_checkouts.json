@@ -1,0 +1,65 @@
+﻿[
+    {
+        "name":  "mathlib",
+        "recorded_revision":  "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "checkout_revision":  "f897ebcf72cd16f89ab4577d0c826cd14afaafc7",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "plausible",
+        "recorded_revision":  "dfd06ebfe8d0e8fa7faba9cb5e5a2e74e7bd2805",
+        "checkout_revision":  "dfd06ebfe8d0e8fa7faba9cb5e5a2e74e7bd2805",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "LeanSearchClient",
+        "recorded_revision":  "99657ad92e23804e279f77ea6dbdeebaa1317b98",
+        "checkout_revision":  "99657ad92e23804e279f77ea6dbdeebaa1317b98",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "importGraph",
+        "recorded_revision":  "d768126816be17600904726ca7976b185786e6b9",
+        "checkout_revision":  "d768126816be17600904726ca7976b185786e6b9",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "proofwidgets",
+        "recorded_revision":  "556caed0eadb7901e068131d1be208dd907d07a2",
+        "checkout_revision":  "556caed0eadb7901e068131d1be208dd907d07a2",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "aesop",
+        "recorded_revision":  "725ac8cd67acd70a7beaf47c3725e23484c1ef50",
+        "checkout_revision":  "725ac8cd67acd70a7beaf47c3725e23484c1ef50",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "Qq",
+        "recorded_revision":  "dea6a3361fa36d5a13f87333dc506ada582e025c",
+        "checkout_revision":  "dea6a3361fa36d5a13f87333dc506ada582e025c",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "batteries",
+        "recorded_revision":  "8da40b72fece29b7d3fe3d768bac4c8910ce9bee",
+        "checkout_revision":  "8da40b72fece29b7d3fe3d768bac4c8910ce9bee",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    },
+    {
+        "name":  "Cli",
+        "recorded_revision":  "91c18fa62838ad0ab7384c03c9684d99d306e1da",
+        "checkout_revision":  "91c18fa62838ad0ab7384c03c9684d99d306e1da",
+        "revision_matches":  true,
+        "tracked_files_unchanged":  true
+    }
+]
