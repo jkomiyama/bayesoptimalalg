@@ -86,7 +86,20 @@ In a declaration, the parameters before the colon are assumptions, the expressio
 
 In VS Code, open this `Lean Proofs` directory as the project folder and install the **Lean 4** extension. Open `LeanProofs.lean`, search for a declaration name, and use **Go to Definition** to follow its dependencies. The Lean information panel displays theorem types and intermediate proof goals. See the [Lean community project guide](https://leanprover-community.github.io/install/project.html) for editor setup.
 
-Appendix G refers to filenames from the original modular supplement. In this single-source presentation, their contents appear as named sections of `LeanProofs.lean`: for example, `RealPrecisionMain.lean` corresponds to the `RealPrecisionMain` section. The outer namespace is now `BayesOptimal`; older records use `Junpei`. Use this README's commands instead of the old archive's `verify.py` instructions.
+### Appendix G and this repository
+
+The named mathematical statements described in Appendix G.1–G.4 are retained, including their assumptions and the stated exclusions. Appendix G's file paths and G.5 reproduction commands describe the earlier modular supplement. They do not literally apply to this single-source layout; use these replacements:
+
+| Reference in Appendix G | Location or command in this repository |
+|---|---|
+| Individual files such as `RealPrecisionMain.lean` | The corresponding named section of [LeanProofs.lean](LeanProofs.lean) |
+| `docs/PROOF_MAP.html` | [PAPER_MAP.md](PAPER_MAP.md) |
+| `BayesOptimal.optimal_action_iff_EBI_max` and `BayesOptimal.terminal_recommendation_iff` on page 42 | [BayesOptimal.DecisionRules.optimal_action_iff_EBI_max](LeanProofs.lean#L12401) and [BayesOptimal.DecisionRules.terminal_recommendation_iff](LeanProofs.lean#L12416) |
+| `python3 -X utf8 verify.py --fresh` in G.5 | Run `lake exe cache get`, then `lake env lean LeanProofs.lean`; `lake build` is also available |
+| `EndToEndAudit.lean` and `checks/*Audit.lean` | The paper-result signature checks and guarded aggregate axiom audit at the end of [LeanProofs.lean](LeanProofs.lean#L25581) |
+| `REPORT.txt`, `verification_results.json`, and `logs/` | Read the current command's exit code and terminal output; these historical record files are not distributed in this layout |
+
+Appendix G omits the former common outer namespace `Junpei`. The current full names begin with `BayesOptimal.`. The two decision-rule names in the table also use the inner namespace `DecisionRules`. The corrected Footnote 14 theorem and the historical smaller-scale counterexample both remain in the source. This documentation update does not change the PDF or the formal proofs.
 
 ## Files and verification scope
 

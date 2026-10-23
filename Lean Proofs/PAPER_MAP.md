@@ -2,7 +2,7 @@
 
 This guide follows the numbering in `junpei_final.pdf` (48 pages), including the corrected Footnote 14 and Equation (26). It describes correspondence; Lean checks the mathematical statements in [LeanProofs.lean](LeanProofs.lean). Run the commands in [README.md](README.md).
 
-Links point to declaration lines. Every name has prefix `BayesOptimal.` (omitted from link labels). **Proved** refers to the formal result with its stated assumptions. Definitions introduce objects; open or unformalized entries are not claimed as proofs. Page references use PDF pages alongside the stable theorem/equation numbers.
+Links point to declaration lines. Every name has prefix `BayesOptimal.` (omitted from link labels). Each entry states the formal assumptions and identifies the corresponding declarations. Open claims and arguments without a separate formal proof are explained in the text. Page references use PDF pages alongside the stable theorem/equation numbers.
 
 ## Contents
 
@@ -19,7 +19,7 @@ Links point to declaration lines. Every name has prefix `BayesOptimal.` (omitted
 
 ### Theorem 1: Bayes optimal actions, recommendations, and posterior risk
 
-**Status:** Proved. **PDF pages:** 10-11.
+**PDF pages:** 10-11.
 
 FiniteHorizon.theorem1 is the principal endpoint for any finite collection of N Borel sampling rules and one terminal rule, defined only on the paper's proper Gaussian states, for arbitrary finite K and positive real precisions. Its premise is actual posterior-risk minimization against concrete Borel full-history policies at each state and remaining budget H <= N. It derives the Bellman risk identity, almost-sure EBI-maximizing sampling, and maximal-mean recommendation. Padding the finite rule collection and extending outside positive precisions preserve direct execution and risk. The supporting generic theorems also derive these conclusions from single-state minimization. No Bellman-action premise, rule beyond the finite budget, or optimality at a larger horizon is assumed.
 
@@ -44,7 +44,7 @@ FiniteHorizon.theorem1 is the principal endpoint for any finite collection of N 
 
 ### Theorem 2: Polynomial frequentist regret and zero exponential-rate liminf
 
-**Status:** Proved. **PDF pages:** 11; proof 14-15.
+**PDF pages:** 11; proof 14-15.
 
 Three arms with means (0,0,Delta), every Delta>0; one policy-independent threshold and coefficient; polynomial bound at sufficiently large odd horizons. The liminf statement is over all horizons. RealPrecisionMain uses only initialization risk minimization against concrete Borel history competitors.
 
@@ -59,7 +59,7 @@ Three arms with means (0,0,Delta), every Delta>0; one policy-independent thresho
 
 ### Lemma 3: Probability of severe underestimation of arm 3
 
-**Status:** Proved. **PDF pages:** 13.
+**PDF pages:** 13.
 
 Exact printed f1; arbitrary Delta>0 and CU>0, eventually every natural horizon. The finite bound records its explicit threshold hypotheses.
 
@@ -71,7 +71,7 @@ Exact printed f1; arbitrary Delta>0 and CU>0, eventually every natural horizon. 
 
 ### Lemma 4: Small-ball probability for each zero-mean arm
 
-**Status:** Proved. **PDF pages:** 13; proof 24.
+**PDF pages:** 13; proof 24.
 
 Odd T=2q+1, q>0; actual sample mean variance 1/q; exact printed f2.
 
@@ -82,7 +82,7 @@ Odd T=2q+1, q>0; actual sample mean variance 1/q; exact printed f2.
 
 ### Lemma 5: Drift-event failure bound
 
-**Status:** Proved. **PDF pages:** 13; proof 24.
+**PDF pages:** 13; proof 24.
 
 T>=5, q<=T; revised coefficient 3 in event Z; actual Gaussian arrays, finite union bound, and zero-variance endpoint.
 
@@ -94,7 +94,7 @@ T>=5, q<=T; revised coefficient 3 in event Z; actual Gaussian arrays, finite uni
 
 ### Lemma 6: Arm 3 EBI upper bound
 
-**Status:** Proved. **PDF pages:** 14; proof 24-27.
+**PDF pages:** 14; proof 24-27.
 
 Consistent revised W states and cutoff 180<(CU-6)^2/4. Explicit paperG0 envelope and little-o(T^-180), uniform in round, state, and policy.
 
@@ -106,7 +106,7 @@ Consistent revised W states and cutoff 180<(CU-6)^2/4. Explicit paperG0 envelope
 
 ### Lemma 7: EBI lower bounds and exclusion of saturated actions
 
-**Status:** Proved. **PDF pages:** 14; proof 37.
+**PDF pages:** 14; proof 37.
 
 Sufficiently large odd T, 4<=t<T, consistent W states. Both nonbest arms have uniform positive polynomial EBI; a saturated action cannot maximize EBI.
 
@@ -119,7 +119,7 @@ Sufficiently large odd T, 4<=t<T, consistent W states. Both nonbest arms have un
 
 ### Lemma 8: Last-round exclusion of arm 3
 
-**Status:** Proved. **PDF pages:** 14; proof 37.
+**PDF pages:** 14; proof 37.
 
 Separate final-round proof including tied means. Terminal count multiset {q,q-1}, mean-gap bound, and both remaining-arm improvements of order T^-22.
 
@@ -132,7 +132,7 @@ Separate final-round proof including tied means. Terminal count multiset {q,q-1}
 
 ### Conjecture 9: Almost-every-instance exponential convergence
 
-**Status:** Open. **PDF pages:** 20.
+**PDF pages:** 20.
 
 Explicit manuscript conjecture. No proved theorem or custom axiom encodes it.
 
@@ -140,7 +140,7 @@ Explicit manuscript conjecture. No proved theorem or custom axiom encodes it.
 
 ### Lemma 10: Mills inequalities
 
-**Status:** Proved. **PDF pages:** 23.
+**PDF pages:** 23.
 
 Standard normal density and actual tail for every x>0; exact printed upper and lower factors.
 
@@ -152,7 +152,7 @@ Standard normal density and actual tail for every x>0; exact printed upper and l
 
 ### Lemma 11: Exclusion-loss Gaussian bound
 
-**Status:** Proved. **PDF pages:** 24-25.
+**PDF pages:** 24-25.
 
 Minimum-based exclusion loss; proper consistent W states. Also includes the displayed independent-Gaussian comparison on p.25.
 
@@ -164,7 +164,7 @@ Minimum-based exclusion loss; proper consistent W states. Also includes the disp
 
 ### Lemma 12: EBI bounded by exclusion loss via mock sampling
 
-**Status:** Proved. **PDF pages:** 25-27.
+**PDF pages:** 25-27.
 
 Any finite arm set with at least two arms, any finite horizon, positive real precisions. Literal minimum-index retained recommendation, independent mock stream, budget and actual-risk sandwich are constructed.
 
@@ -177,7 +177,7 @@ Any finite arm set with at least two arms, any finite horizon, positive real pre
 
 ### Lemma 13: Full/reduced posterior loss comparison
 
-**Status:** Proved. **PDF pages:** 27-28.
+**PDF pages:** 27-28.
 
 Any finite arm set with a nonempty retained set. Both policy embeddings and forced retained-arm comparison are proved with actual Gaussian risks; integer three-arm endpoints are also retained.
 
@@ -190,7 +190,7 @@ Any finite arm set with a nonempty retained set. Both policy embeddings and forc
 
 ### Lemma 14: Normalized two-arm terminal-regret integral
 
-**Status:** Proved. **PDF pages:** 28-29.
+**PDF pages:** 28-29.
 
 Arbitrary real means, nonnegative variances, positive total variance; exact Gaussian normalization factor.
 
@@ -202,7 +202,7 @@ Arbitrary real means, nonnegative variances, positive total variance; exact Gaus
 
 ### Lemma 15: One-step improvement and g1 bounds
 
-**Status:** Proved. **PDF pages:** 29-31.
+**PDF pages:** 29-31.
 
 Exact revised probability product; g1 is zero at gap zero, while actual improvement is positive. Count-uniform exponents 4 and 6, plus terminal exponent 22 including zero gap.
 
@@ -216,7 +216,7 @@ Exact revised probability product; g1 is zero at gap zero, while actual improvem
 
 ### Lemma 16: Strict advantage of smaller-count terminal action and g2 bounds
 
-**Status:** Proved. **PDF pages:** 31-33.
+**PDF pages:** 31-33.
 
 Distinct positive integer counts, arbitrary real gap; strict comparison includes zero gap. Small-gap uniform exponents 6 and 8.
 
@@ -229,7 +229,7 @@ Distinct positive integer counts, arbitrary real gap; strict comparison includes
 
 ### Lemma 17: Two-arm smaller-count policy is Bayes optimal
 
-**Status:** Proved. **PDF pages:** 33-34.
+**PDF pages:** 33-34.
 
 All positive integer precisions and real means, any finite remaining horizon. Covers both tied-count choices and adaptive competitors; deterministic terminal-variance comparison and Gaussian forecast are supporting results.
 
@@ -243,7 +243,7 @@ All positive integer precisions and real means, any finite remaining horizon. Co
 
 ### Lemma 18: Posterior forecast reaches the small-gap interval
 
-**Status:** Proved. **PDF pages:** 34-35.
+**PDF pages:** 34-35.
 
 Any deterministic count-only smaller-count tie rule. Requires t<T so at least one forecast draw occurs. Uniform lower bound with exponent 170 under revised W; predictive law remains distinct from frequentist law.
 
@@ -256,7 +256,7 @@ Any deterministic count-only smaller-count tie rule. Requires t<T so at least on
 
 ### Lemma 19: Reduced two-arm EBI gains by shared-sample coupling
 
-**Status:** Proved. **PDF pages:** 35-37.
+**PDF pages:** 35-37.
 
 Uniform exponents 176 and 178. For the forced-left comparison use rightTie; for forced-right use leftTie. Each comparison uses one fixed rule on both sides, as permitted by the paper.
 
@@ -271,7 +271,7 @@ Uniform exponents 176 and 178. For the forced-left comparison use rightTie; for 
 
 ### Definition 1: Frequentist exponential rate
 
-**Status:** Definition and consequences. **PDF pages:** 4.
+**PDF pages:** 4.
 
 Formal analysis uses extended-real normalized negative log, assigning +infinity to zero regret. The positive-liminf-to-exponential-envelope implication used in Remark 2 is proved; no literal syntax for every o(T) expression is asserted.
 
@@ -282,7 +282,7 @@ Formal analysis uses extended-real normalized negative log, assigning +infinity 
 
 ### Definition 2: Algorithms and posterior-state policies
 
-**Status:** Definition and constructions. **PDF pages:** 6.
+**PDF pages:** 6.
 
 FiniteHorizon.Policy A N contains exactly N Borel sampling rules, indexed by Fin N, and one Borel terminal rule on strictly positive real-precision Gaussian states. Its direct execution uses only the current state, fresh scalar randomizer, and selected reward. Padding unused indices and extending the proper-state domain preserve the raw strategy and actual risk. Concrete Borel history policies include past arms, rewards, and seeds; GeneralOptimality.compile explicitly represents the state policy as such a history algorithm.
 
@@ -307,7 +307,7 @@ FiniteHorizon.Policy A N contains exactly N Borel sampling rules, indexed by Fin
 
 ### Definition 3: Flat-prior generalized Bayes optimal algorithm
 
-**Status:** Definition and constructions. **PDF pages:** 6-7.
+**PDF pages:** 6-7.
 
 Flat likelihood is normalized after initialization; no risk is integrated against an improper probability prior. FiniteHorizon.SequentiallyOptimal states actual-risk optimality of the finite rule collection at every proper Gaussian state and remaining budget H <= N, against concrete Borel history competitors. This exact finite policy class has an explicit Borel canonical witness, including N = 0. Proper-domain and generic representations supply the supporting proof chain. Initialization-only endpoints remain sufficient for the main theorem.
 
@@ -326,7 +326,7 @@ Flat likelihood is normalized after initialization; no risk is integrated agains
 
 ### Definition 4: Expected Bellman improvement
 
-**Status:** Definition and consequences. **PDF pages:** 10.
+**PDF pages:** 10.
 
 EBI is skipped-round loss minus forced-action loss. Its nonnegativity and maximizing-action equivalence are proved.
 
@@ -339,7 +339,7 @@ EBI is skipped-round loss minus forced-action loss. Its nonnegativity and maximi
 
 ### Definition 5: Mock-sample loss
 
-**Status:** Definition and constructions. **PDF pages:** 25-26.
+**PDF pages:** 25-26.
 
 Independent posterior-copy latent parameter and conditional mock rewards; real sampling budget preserved. Literal minimum-index retained recommendation and its risk agree with the earlier selector's loss.
 
@@ -356,7 +356,7 @@ Independent posterior-copy latent parameter and conditional mock rewards; real s
 
 ### Equation (1): Frequentist simple regret
 
-**Status:** Definition and identities. **PDF pages:** 4.
+**PDF pages:** 4.
 
 Main.regret implements the actual reward-stack expectation at means (0,0,Delta); regret_eq identifies it with Delta times the wrong-recommendation probability. A generic finite-instance regret integral also supports error-rate equivalence.
 
@@ -369,7 +369,7 @@ Main.regret implements the actual reward-stack expectation at means (0,0,Delta);
 
 ### Equation (2): Sequential posterior risk minimization
 
-**Status:** Definition and existence. **PDF pages:** 7.
+**PDF pages:** 7.
 
 FiniteHorizon.SequentiallyOptimal is fixed-budget sequential posterior risk minimization for the literal finite collection of rules, arbitrary finite K, and strictly positive real precisions. Only remaining horizons H <= N are quantified. FiniteHorizon.theorem1 derives the risk identity and local action rules from this premise. The explicit canonical policy belongs to this finite class and attains the Bellman loss. Exact padding and proper-domain extensions transport actual risk without adding policy or optimality hypotheses.
 
@@ -391,7 +391,7 @@ FiniteHorizon.SequentiallyOptimal is fixed-budget sequential posterior risk mini
 
 ### Equation (3): Risk minimization at initialization
 
-**Status:** Definition and reduction. **PDF pages:** 7.
+**PDF pages:** 7.
 
 Concrete full-history competition at counts one; actual-risk minimization is not replaced by a Bellman-equality assumption. Equivalence of representations and transfer into the main theorem are proved. The complete repair and regret-preservation result is for three arms with integer-count states. The arbitrary-K wording of the unnumbered page-7 paragraph is broader than this certificate; Theorem 1 is a distinct general finite-arm result.
 
@@ -405,7 +405,7 @@ Concrete full-history competition at counts one; actual-risk minimization is not
 
 ### Equation (4): Posterior-predictive Gaussian reward law
 
-**Status:** Proved law. **PDF pages:** 9.
+**PDF pages:** 9.
 
 Scalar predictive Gaussian law together with the full latent-parameter/observation joint-law bridge. Positive real precisions are allowed.
 
@@ -417,7 +417,7 @@ Scalar predictive Gaussian law together with the full latent-parameter/observati
 
 ### Equation (5): Minimum-index posterior-mean maximizer
 
-**Status:** Definition and selector proofs. **PDF pages:** 9.
+**PDF pages:** 9.
 
 Exact minimum maximizing arm for finite linearly ordered arm types; attainment, least index, and Borel measurability are proved.
 
@@ -430,7 +430,7 @@ Exact minimum maximizing arm for finite linearly ordered arm types; attainment, 
 
 ### Equation (6): Terminal posterior expected regret
 
-**Status:** Definition and identities. **PDF pages:** 9.
+**PDF pages:** 9.
 
 Terminal regret is an actual posterior integral; terminalRegret_eq gives expected maximum minus selected mean. Optimal terminal loss is connected to this integral.
 
@@ -443,7 +443,7 @@ Terminal regret is an actual posterior integral; terminalRegret_eq gives expecte
 
 ### Equation (7): Action loss as expected next-state loss
 
-**Status:** Proved recursion. **PDF pages:** 9.
+**PDF pages:** 9.
 
 actionLoss_eq identifies the Gaussian innovation recursion with the posterior-loss integral; rawRisk_succ_data proves the corresponding actual observation recursion.
 
@@ -456,7 +456,7 @@ actionLoss_eq identifies the Gaussian innovation recursion with the posterior-lo
 
 ### Equation (8): Bellman loss is the minimum action loss
 
-**Status:** Definition and minimum proofs. **PDF pages:** 9.
+**PDF pages:** 9.
 
 FiniteGaussian.value is a reward-value recursion; FinitePosterior.loss subtracts it from posterior expected maximum. The exact minimum and attaining selector are proved.
 
@@ -469,7 +469,7 @@ FiniteGaussian.value is a reward-value recursion; FinitePosterior.loss subtracts
 
 ### Equation (9): EBI equals skipped-round loss minus action loss
 
-**Status:** Definition and identity. **PDF pages:** 10.
+**PDF pages:** 10.
 
 Remaining-horizon indexing differs from paper round indexing; EBI_eq is the loss-form identity.
 
@@ -480,7 +480,7 @@ Remaining-horizon indexing differs from paper round indexing; EBI_eq is the loss
 
 ### Equation (10): Main polynomial regret lower bound
 
-**Status:** Proved. **PDF pages:** 11.
+**PDF pages:** 11.
 
 Actual frequentist law, arbitrary Delta>0, all sufficiently large odd T, policy-independent constants. Paper exponent endpoint uses (33+Delta)^2/2+4.
 
@@ -493,7 +493,7 @@ Actual frequentist law, arbitrary Delta>0, all sufficiently large odd T, policy-
 
 ### Equation (11): Cutoff condition 180<(CU-6)^2/4
 
-**Status:** Hypothesis and consequences. **PDF pages:** 12.
+**PDF pages:** 12.
 
 A parameter choice in the manuscript, not a standalone universal assertion. Its consequences for little-o(T^-180), CU>=10, and the main CU=33 specialization are proved.
 
@@ -505,7 +505,7 @@ A parameter choice in the manuscript, not a standalone universal assertion. Its 
 
 ### Equation (12): OCBA oracle static-allocation objective
 
-**Status:** Contextual definition; unformalized. **PDF pages:** 19.
+**PDF pages:** 19.
 
 Displayed in the literature review. No standalone formal definition or optimal-allocation theorem for this OCBA objective is claimed in this bundle; cited large-deviation results are outside scope.
 
@@ -513,7 +513,7 @@ Displayed in the literature review. No standalone formal definition or optimal-a
 
 ### Equation (13): Absolute full-versus-reduced value-loss difference
 
-**Status:** Proved. **PDF pages:** 27.
+**PDF pages:** 27.
 
 Both full-to-reduced and reduced-to-full policy embeddings, imaginary stream, discarded dummy rewards, integrability, measurability, and the final exclusion bound are proved.
 
@@ -524,7 +524,7 @@ Both full-to-reduced and reduced-to-full policy embeddings, imaginary stream, di
 
 ### Equation (14): Absolute forced-action loss difference
 
-**Status:** Proved. **PDF pages:** 27.
+**PDF pages:** 27.
 
 Same constructed policy embeddings with the first action fixed to a retained arm.
 
@@ -535,7 +535,7 @@ Same constructed policy embeddings with the first action fixed to a retained arm
 
 ### Equation (15): Centered latent two-arm difference is Gaussian
 
-**Status:** Proved law. **PDF pages:** 28.
+**PDF pages:** 28.
 
 Difference of independent posterior Gaussian coordinates. The normalized terminal loss formula uses this law.
 
@@ -547,7 +547,7 @@ Difference of independent posterior Gaussian coordinates. The normalized termina
 
 ### Equation (16): Posterior-mean difference innovation is Gaussian
 
-**Status:** Proved law. **PDF pages:** 29.
+**PDF pages:** 29.
 
 Scalar conjugate-update law supplies variance 1/[n(n+1)]. Reflection handles either arm; multi-step distribution and regret bridges use this update.
 
@@ -559,7 +559,7 @@ Scalar conjugate-update law supplies variance 1/[n(n+1)]. Reflection handles eit
 
 ### Equation (17): One-step improvement probability-product bound
 
-**Status:** Proved bound. **PDF pages:** 30.
+**PDF pages:** 30.
 
 Exact printed g1 lower bound; pointwise event argument and actual Gaussian integral identities are formalized. The absolute gap handles both signs.
 
@@ -571,7 +571,7 @@ Exact printed g1 lower bound; pointwise event argument and actual Gaussian integ
 
 ### Equation (18): Difference of two action losses and conditional Gaussian integration
 
-**Status:** Alternative proof; displayed equality not separately proved. **PDF pages:** 32.
+**PDF pages:** 32.
 
 The exact displayed triple-integral equality is not separately certified. The linked Gaussian hinge-integral argument proves the required Lemma 16 conclusion. This entry does not certify the literal printed integral chain.
 
@@ -584,7 +584,7 @@ The exact displayed triple-integral equality is not separately certified. The li
 
 ### Equation (19): Small-gap interval probability is Omega(T^-2)
 
-**Status:** Proved bound via interval lemma. **PDF pages:** 33.
+**PDF pages:** 33.
 
 gaussian_small_interval_lower gives the finite uniform interval estimate; g2_uniform6_variance instantiates it inside the printed product bound. No separate asymptotic equality to a polynomial is claimed.
 
@@ -596,7 +596,7 @@ gaussian_small_interval_lower gives the finite uniform interval estimate; g2_uni
 
 ### Equation (20): Deterministic allocation forecast variance and order independence
 
-**Status:** Proved law and count identity. **PDF pages:** 33.
+**PDF pages:** 33.
 
 Shared-stream terminal-gap law and telescoping allocation variance cover arbitrary deterministic schedules. Risk depends only on terminal counts; the balanced-policy specialization is also named.
 
@@ -609,7 +609,7 @@ Shared-stream terminal-gap law and telescoping allocation variance cover arbitra
 
 ### Equation (21): Smaller-count forecast Gaussian law
 
-**Status:** Proved law and variance identity. **PDF pages:** 34.
+**PDF pages:** 34.
 
 Any fixed count-only smaller-count tie rule. Exact accumulated variance is initial minus final reciprocal counts.
 
@@ -620,7 +620,7 @@ Any fixed count-only smaller-count tie rule. Exact accumulated variance is initi
 
 ### Equation (22): Anchor reciprocal-variance sum is at most twice forecast variance
 
-**Status:** Proved bound. **PDF pages:** 35.
+**PDF pages:** 35.
 
 Both final count orientations {q,q-1}; positive remaining forecast variance required.
 
@@ -631,7 +631,7 @@ Both final count orientations {q,q-1}; positive remaining forecast variance requ
 
 ### Equation (23): Squared current mean gap is at most 160 log(T) times forecast variance
 
-**Status:** Proved bound. **PDF pages:** 35.
+**PDF pages:** 35.
 
 Derived from revised W with drift coefficient 3 and count constraints. Both general-rule and earlier fixed-orientation endpoints exist.
 
@@ -642,7 +642,7 @@ Derived from revised W with drift coefficient 3 and count constraints. Both gene
 
 ### Equation (24): Each reduced two-arm EBI is at least c1*T^-176
 
-**Status:** Proved bound. **PDF pages:** 35.
+**PDF pages:** 35.
 
 Actual common-sample coupling and an alternative Gaussian Bellman proof are both included.
 
@@ -653,7 +653,7 @@ Actual common-sample coupling and an alternative Gaussian Bellman proof are both
 
 ### Equation (25): Strict advantage over a saturated action is at least c2*T^-178
 
-**Status:** Proved bound. **PDF pages:** 35.
+**PDF pages:** 35.
 
 Both saturated orientations, with the count-only tie convention chosen for the forced-arm comparison.
 
@@ -666,7 +666,7 @@ Both saturated orientations, with the count-only tie convention chosen for the f
 
 ### Equation (26): Simple regret equals gap times error probability
 
-**Status:** Proved identity. **PDF pages:** 41.
+**PDF pages:** 41.
 
 For the three-arm instance (0,0,Delta), the actual frequentist simple regret is Delta times the probability of not recommending the best arm. Lean uses zero-based indices: 2 : Fin 3 is arm 3 in the paper.
 
@@ -678,7 +678,7 @@ For the three-arm instance (0,0,Delta), the actual frequentist simple regret is 
 
 ### Remark 1: Gaussian extensions of cited frequentist and Bayesian guarantees
 
-**Status:** Contextual extensions; unformalized. **PDF pages:** 5.
+**PDF pages:** 5.
 
 SR, change-of-measure lower bounds, and general-prior Bayesian O(1/T) statements are not independently reproved. Full external algorithms and regularity hypotheses are not specified in the manuscript.
 
@@ -686,7 +686,7 @@ SR, change-of-measure lower bounds, and general-prior Bayesian O(1/T) statements
 
 ### Remark 2: Regret ratio has infinite extended-real limit superior
 
-**Status:** Proved. **PDF pages:** 12.
+**PDF pages:** 12.
 
 Any nonnegative comparison-regret sequence with positive lower exponential rate; denominator zero means ratio +infinity. Initialization-only actual-risk and real-precision endpoints included.
 
@@ -698,7 +698,7 @@ Any nonnegative comparison-regret sequence with positive lower exponential rate;
 
 ### Remark 3: Two-arm action-loss ties, strict saturated comparisons, balanced counts
 
-**Status:** Proved. **PDF pages:** 18.
+**PDF pages:** 18.
 
 Literal equal-action-loss and both strict saturated-arm cases, plus balanced terminal count statement.
 
@@ -711,7 +711,7 @@ Literal equal-action-loss and both strict saturated-arm cases, plus balanced ter
 
 ### Footnote 6: CU>=33 suffices for the main cutoff
 
-**Status:** Parameter specialization. **PDF pages:** 12.
+**PDF pages:** 12.
 
 The actual main proof specializes CU=33 and obtains the explicit exponent. The footnote's parameter choice is used within that proof rather than exported as a separate footnote theorem.
 
@@ -722,7 +722,7 @@ The actual main proof specializes CU=33 and obtains the explicit exponent. The f
 
 ### Footnote 13: Negative mean-gap case in Lemma 15
 
-**Status:** Sign symmetry in formal statements. **PDF pages:** 30.
+**PDF pages:** 30.
 
 Formal bounds are stated using abs(gap), so both signs are included without an additional sign assumption.
 
@@ -733,7 +733,7 @@ Formal bounds are stated using abs(gap), so both signs are included without an a
 
 ### Historical Footnote 14 smaller-scale claim: Counterexample to necessity of the smaller O(T^(-3/2)) scale
 
-**Status:** Refuted. **PDF pages:** 39-40 (historical discussion of the earlier claim).
+**PDF pages:** 39-40 (historical discussion of the earlier claim).
 
 This refutes the earlier smaller-scale necessity claim, not the corrected footnote in junpei_final.pdf. Lean proves a positive polynomial lower bound for the logarithmically enlarged gap and proves that gap is not O(T^(-3/2)). The explicit lower bound here has order T^(-4).
 
@@ -745,7 +745,7 @@ This refutes the earlier smaller-scale necessity claim, not the corrected footno
 
 ### Corrected Footnote 14: Polynomial Gaussian-tail lower bounds exactly characterize the logarithmic gap scale
 
-**Status:** Proved. **PDF pages:** 38; Appendix G.4, 47.
+**PDF pages:** 38; Appendix G.4, 47.
 
 For every deterministic nonnegative d : Nat -> Real, an eventual lower bound c*T^(-p) for some fixed real c>0 and p>0 on the actual N(0,T^(-3)) tail at d(T) is equivalent to d(T)=O(T^(-3/2)*sqrt(log T)) in Lean IsBigO notation. Both directions are proved without monotonicity or additional regularity. This matches the corrected footnote in junpei_final.pdf and Appendix G.4. The historical smaller-scale claim is a separate entry.
 
@@ -762,7 +762,7 @@ For every deterministic nonnegative d : Nat -> Real, an eventual lower bound c*T
 
 ### Flat posterior normalization: Flat likelihood, sufficient statistics, and initialized posterior
 
-**Status:** Proved. **PDF pages:** 6-8.
+**PDF pages:** 6-8.
 
 Normalization is against Lebesgue measure; the resulting product Gaussian is a probability law. Explicit labelled adaptive likelihood normalization is proved, not an independent arbitrary-history regular-conditional-distribution theorem.
 
@@ -777,7 +777,7 @@ Normalization is against Lebesgue measure; the resulting product Gaussian is a p
 
 ### Flat posterior actual risk: Normalized flat posterior agrees with actual continuation law
 
-**Status:** Proved. **PDF pages:** 6-9.
+**PDF pages:** 6-9.
 
 Links normalized flat likelihood to the proper Gaussian posterior, observation joint law, latent/noise world, and original continuation-risk integral.
 
@@ -790,7 +790,7 @@ Links normalized flat likelihood to the proper Gaussian posterior, observation j
 
 ### Borel Bellman functions: Finite losses and measurable optimal selectors
 
-**Status:** Proved. **PDF pages:** 9-10.
+**PDF pages:** 9-10.
 
 Jointly in means and positive real precisions; exact minimum-index action. Concrete actual regret is integrable for regular Borel policy trees.
 
@@ -805,7 +805,7 @@ Jointly in means and positive real precisions; exact minimum-index action. Concr
 
 ### History competitors: Borel full-history algorithms and posterior-state execution
 
-**Status:** Proved constructions. **PDF pages:** 3-7.
+**PDF pages:** 3-7.
 
 Past arms, rewards, and randomizers represented explicitly. Compiler preserves recommendation, sampled-arm trace, real budget, measurability, and actual risk.
 
@@ -821,7 +821,7 @@ Past arms, rewards, and randomizers represented explicitly. Compiler preserves r
 
 ### Initial optimality repair: Initial-only risk minimization implies almost-sure optimal repair
 
-**Status:** Proved. **PDF pages:** 7.
+**PDF pages:** 7.
 
 From actual initial-risk optimality, not from an assumed sequential/local Bellman premise; recommendation and sampled-arm trace agreement are proved. The complete repair and regret-preservation result is for three arms with integer-count states. The arbitrary-K wording of the unnumbered page-7 paragraph is broader than this certificate; Theorem 1 is a distinct general finite-arm result.
 
@@ -834,7 +834,7 @@ From actual initial-risk optimality, not from an assumed sequential/local Bellma
 
 ### Absolute-continuity transfer: Predictive null sets are null at every fixed Gaussian parameter
 
-**Status:** Proved. **PDF pages:** 7.
+**PDF pages:** 7.
 
 Mutual absolute continuity for finite predictive and fixed-parameter Gaussian arrays, including independent policy seeds and measurable maps; transfers optimal-repair equality.
 
@@ -846,7 +846,7 @@ Mutual absolute continuity for finite predictive and fixed-parameter Gaussian ar
 
 ### Actual stack execution: Calendar arrays, per-arm reward stacks, initialization, and Main.regret
 
-**Status:** Proved. **PDF pages:** 3-4; 7; 14-15.
+**PDF pages:** 3-4; 7; 14-15.
 
 The execution-law bridge links the posterior raw-tree argument to the original frequentist per-arm-stack regret definition. It is not an assumed risk-preservation identity.
 
@@ -859,7 +859,7 @@ The execution-law bridge links the posterior raw-tree argument to the original f
 
 ### Real-precision restriction: Full real-precision state policy restricted to reachable integer states
 
-**Status:** Proved. **PDF pages:** 6-10.
+**PDF pages:** 6-10.
 
 Exact raw-tree and risk identities. Main endpoints require initialization-only optimality at the given horizon; no larger-horizon optimality assumption.
 
@@ -872,7 +872,7 @@ Exact raw-tree and risk identities. Main endpoints require initialization-only o
 
 ### EBI nonnegativity: Ignoring a sample is feasible and cannot improve optimum
 
-**Status:** Proved. **PDF pages:** 10.
+**PDF pages:** 10.
 
 Arbitrary finite arm set and positive real precisions; no EBI sign hypothesis.
 
@@ -882,7 +882,7 @@ Arbitrary finite arm set and positive real precisions; no EBI sign hypothesis.
 
 ### Probability and path bridge: Actual bad-event probability and policy-independent path induction
 
-**Status:** Proved. **PDF pages:** 13-15.
+**PDF pages:** 13-15.
 
 Revised coefficient-3 event, actual independent arrays, measurability, probability factorization, and bad-event implication. Main proof turns these into wrong recommendation and regret.
 
@@ -895,7 +895,7 @@ Revised coefficient-3 event, actual independent arrays, measurability, probabili
 
 ### Exclusion regret contribution: Best-arm-event posterior regret is bounded by exclusion loss
 
-**Status:** Proved. **PDF pages:** 16.
+**PDF pages:** 16.
 
 Arbitrary measurable terminal decision with independent auxiliary noise; min-based exclusion expectation.
 
@@ -905,7 +905,7 @@ Arbitrary measurable terminal decision with independent auxiliary noise; min-bas
 
 ### Error/regret rate equivalence: Error probability and simple regret have equal exponential rates
 
-**Status:** Proved. **PDF pages:** 18.
+**PDF pages:** 18.
 
 Finite unique-best positive-gap instances; min/max-gap sandwich, equality of lower and upper extended-real rates, including zero-error horizons.
 
@@ -917,7 +917,7 @@ Finite unique-best positive-gap instances; min/max-gap sandwich, equality of low
 
 ### Uniform sampling: Uniform-sampling frequentist exponent minGap^2/(4K)
 
-**Status:** Proved. **PDF pages:** 5.
+**PDF pages:** 5.
 
 Explicit exact-budget floor/remainder allocation, all sufficiently large horizons; full regret-rate limit and error exponent. Observed recommendation uses rewards, without a latent-parameter argument.
 
@@ -930,7 +930,7 @@ Explicit exact-budget floor/remainder allocation, all sufficiently large horizon
 
 ### Mock-policy construction: Independent posterior copy and literal minimum-index mock policy
 
-**Status:** Proved. **PDF pages:** 25-27.
+**PDF pages:** 25-27.
 
 Shared independent Gaussian blocks, actual risk, measurable execution, budget preservation, and exact terminal rule. No separate compression of arbitrary auxiliary blocks into one scalar seed is claimed.
 
@@ -944,7 +944,7 @@ Shared independent Gaussian blocks, actual risk, measurable execution, budget pr
 
 ### Two policy embeddings: Both directions of full/reduced policy comparison
 
-**Status:** Proved. **PDF pages:** 27-28.
+**PDF pages:** 27-28.
 
 Reverse simulation uses an independent imaginary stream and discards real dummy observations. The final endpoints discharge simulator measurability, feasibility, risk identities, and coupling bounds.
 
@@ -958,7 +958,7 @@ Reverse simulation uses an independent imaginary stream and discards real dummy 
 
 ### Common-sample coupling: Allocation order invariance and coupled risk gains
 
-**Status:** Proved. **PDF pages:** 33; 35-37.
+**PDF pages:** 33; 35-37.
 
 Per-arm Gaussian innovation streams realize conjugate observation laws. Product-stream risk equals recursive posterior risk; coupled differences give the Lemma 19 bounds.
 
@@ -972,7 +972,7 @@ Per-arm Gaussian innovation streams realize conjugate observation laws. Product-
 
 ### Lemma 19 stronger tie interpretation: One globally fixed left-tie rule cannot serve both forced-arm comparisons
 
-**Status:** Refuted stronger interpretation. **PDF pages:** 36.
+**PDF pages:** 36.
 
 Negative certificate is within the lemma's count/state domain, but the stronger interpretation is not the paper's allowed orientation choice. This is not a refutation of Lemma 19.
 
@@ -983,7 +983,7 @@ Negative certificate is within the lemma's count/state domain, but the stronger 
 
 ### General proper-prior Bellman assertion: Non-Gaussian proper priors with finite first moment
 
-**Status:** Unformalized. **PDF pages:** 7.
+**PDF pages:** 7.
 
 Current general finite-arm optimality theorems concern proper product-Gaussian posteriors. No separate theorem for every non-Gaussian finite-first-moment prior is supplied.
 
@@ -991,7 +991,7 @@ Current general finite-arm optimality theorems concern proper product-Gaussian p
 
 ### KG/EI definitions and literature: One-step heuristics and literature comparisons
 
-**Status:** Outside formal targets. **PDF pages:** 11; 18-20.
+**PDF pages:** 11; 18-20.
 
 No independent verification of all cited algorithms, literature rates, historical claims, or numerical illustrations is claimed.
 
@@ -999,7 +999,7 @@ No independent verification of all cited algorithms, literature rates, historica
 
 ### Appendix F proposal: Enlarged-event improvement
 
-**Status:** Explicitly unproved. **PDF pages:** 38.
+**PDF pages:** 38.
 
 The manuscript's proposed enlarged-event argument remains unproved. The footnote counterexample is not a proof of this proposal; the main theorem keeps the original event.
 
