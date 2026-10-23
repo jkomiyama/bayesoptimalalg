@@ -33,20 +33,22 @@ import Mathlib.Topology.Order.LiminfLimsup
 /-!
 # Lean proofs for the Bayes-optimal best-arm identification paper
 
-All project definitions and proofs are contained in this file. The only external
-library is mathlib. No other source file from this repository is required.
+All project definitions and proofs are in this file. README.md gives setup
+instructions and a table in the paper's order. PAPER_MAP.md links theorems,
+lemmas, definitions, equations, and remarks to their exact declarations here,
+including the formal assumptions and coverage limits.
 
 ## Reproduce the verification
 
-Install elan (Lean's toolchain manager), then prepare the pinned mathlib checkout:
+Install elan (Lean's toolchain manager), then run from this directory:
 
-    git clone https://github.com/leanprover-community/mathlib4.git mathlib4
-    cd mathlib4
-    git checkout f897ebcf72cd16f89ab4577d0c826cd14afaafc7
     lake exe cache get
-    lake env lean "/absolute/path/to/LeanProofs.lean"
+    lake build
 
-The checkout selects Lean 4.24.0. A successful check returns exit code 0.
+To check the whole source again, run: lake env lean LeanProofs.lean
+
+lean-toolchain and lake-manifest.json pin Lean 4.24.0 and mathlib.
+A successful check returns exit code 0.
 The final guarded axiom audit covers all 1,517 public theorem/lemma
 certificates and fails unless its axiom dependencies are exactly propext,
 Classical.choice, and Quot.sound. Proof checking is performed by Lean.
@@ -54,13 +56,18 @@ Classical.choice, and Quot.sound. Proof checking is performed by Lean.
 ## Main results (search for these fully qualified names)
 
 Theorem 1: BayesOptimal.GeneralOptimality.FiniteHorizon.theorem1
-Theorem 2: BayesOptimal.Main.theorem2_real_exponent
+Theorem 2: BayesOptimal.RealPrecisionMain.theorem2
+Printed exponent: BayesOptimal.RealPrecisionMain.theorem2_paper_exponent
+Rate consequence: BayesOptimal.RealPrecisionMain.theorem2_exponential_rate
 Frequentist-law connection: BayesOptimal.FixedGaussian.initialRiskOptimal_regret_repair_eq
 Corrected Gaussian-tail equivalence:
   BayesOptimal.Footnote14Characterization.corrected_footnote14_iff
 
-The final checks list the numbered paper results. Supporting definitions and
-lemmas precede their uses; section headings provide navigation.
+The final checks list the numbered paper results. The body is in dependency
+order because Lean requires definitions before their uses. Its descriptive
+section headings are not paper section numbers. Follow README.md and
+PAPER_MAP.md to read in paper order. Appendix G's former module filenames now
+identify sections within this file.
 
 This is a single-file presentation of the revision-3 formalization. It preserves
 its statements and proof scripts, with descriptive namespace names. The corrected
@@ -72,7 +79,7 @@ scope: a successful check does not certify every sentence of the manuscript.
 set_option autoImplicit false
 set_option warningAsError true
 
-/-! ## 1. Foundations.Counts -/
+/-! ## Foundations.Counts -/
 section
 
 /-!
@@ -483,7 +490,7 @@ end BayesOptimal.Foundations.Counts
 
 end
 
-/-! ## 2. Foundations.Drift -/
+/-! ## Foundations.Drift -/
 section
 
 namespace BayesOptimal.Foundations.Drift
@@ -729,7 +736,7 @@ end BayesOptimal.Foundations.Drift
 
 end
 
-/-! ## 3. Foundations.Gaussian -/
+/-! ## Foundations.Gaussian -/
 section
 
 /-!
@@ -1254,7 +1261,7 @@ end BayesOptimal.Foundations.Gaussian
 
 end
 
-/-! ## 4. Foundations.SmallBall -/
+/-! ## Foundations.SmallBall -/
 section
 
 /-!
@@ -1431,7 +1438,7 @@ end BayesOptimal.Foundations.SmallBall
 
 end
 
-/-! ## 5. Foundations.Rates -/
+/-! ## Foundations.Rates -/
 section
 
 /-!
@@ -1782,7 +1789,7 @@ end BayesOptimal.Foundations.Rates
 
 end
 
-/-! ## 6. Foundations.PredictiveBound -/
+/-! ## Foundations.PredictiveBound -/
 section
 
 /-!
@@ -1936,7 +1943,7 @@ end BayesOptimal.Foundations.PredictiveBound
 
 end
 
-/-! ## 7. Foundations.BadEvent -/
+/-! ## Foundations.BadEvent -/
 section
 
 /-!
@@ -2644,7 +2651,7 @@ end BayesOptimal.Foundations.BadEvent
 
 end
 
-/-! ## 8. Foundations.BadEvent50 -/
+/-! ## Foundations.BadEvent50 -/
 section
 
 /-!
@@ -2822,7 +2829,7 @@ end BayesOptimal.Foundations.BadEvent50
 
 end
 
-/-! ## 9. Foundations.BayesianModel -/
+/-! ## Foundations.BayesianModel -/
 section
 
 /-!
@@ -2991,7 +2998,7 @@ end BayesOptimal.Foundations.BayesianModel
 
 end
 
-/-! ## 10. Foundations.BellmanAlgebra -/
+/-! ## Foundations.BellmanAlgebra -/
 section
 
 /-!
@@ -3053,7 +3060,7 @@ end BayesOptimal.Foundations.BellmanAlgebra
 
 end
 
-/-! ## 11. Foundations.PredictiveLaw -/
+/-! ## Foundations.PredictiveLaw -/
 section
 
 /-!
@@ -3139,7 +3146,7 @@ end BayesOptimal.Foundations.PredictiveLaw
 
 end
 
-/-! ## 12. Foundations.CorrectedLemma17 -/
+/-! ## Foundations.CorrectedLemma17 -/
 section
 
 /-!
@@ -3219,7 +3226,7 @@ end BayesOptimal.Foundations.CorrectedLemma17
 
 end
 
-/-! ## 13. Foundations.TwoArmBellman -/
+/-! ## Foundations.TwoArmBellman -/
 section
 
 /-!
@@ -3735,7 +3742,7 @@ end BayesOptimal.Foundations.TwoArmBellman
 
 end
 
-/-! ## 14. Foundations.ThreeArmComparison -/
+/-! ## Foundations.ThreeArmComparison -/
 section
 
 /-!
@@ -4114,7 +4121,7 @@ end BayesOptimal.Foundations.ThreeArmComparison
 
 end
 
-/-! ## 15. Foundations.TerminalBounds -/
+/-! ## Foundations.TerminalBounds -/
 section
 
 /-!
@@ -4451,7 +4458,7 @@ end BayesOptimal.Foundations.TerminalBounds
 
 end
 
-/-! ## 16. Foundations.TwoArmGain -/
+/-! ## Foundations.TwoArmGain -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -4804,7 +4811,7 @@ end BayesOptimal.Foundations.TwoArmGain
 
 end
 
-/-! ## 17. Foundations.DynamicGain -/
+/-! ## Foundations.DynamicGain -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -5022,7 +5029,7 @@ end BayesOptimal.Foundations.DynamicGain
 
 end
 
-/-! ## 18. Foundations.GaussianTail -/
+/-! ## Foundations.GaussianTail -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -5195,7 +5202,7 @@ end BayesOptimal.Foundations.GaussianTail
 
 end
 
-/-! ## 19. Foundations.TerminalDrift -/
+/-! ## Foundations.TerminalDrift -/
 section
 
 namespace BayesOptimal.Foundations.TerminalDrift
@@ -5333,7 +5340,7 @@ end BayesOptimal.Foundations.TerminalDrift
 
 end
 
-/-! ## 20. Foundations.DynamicPolicy -/
+/-! ## Foundations.DynamicPolicy -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -5666,7 +5673,7 @@ end BayesOptimal.Foundations.DynamicPolicy
 
 end
 
-/-! ## 21. Foundations.EvenCounts -/
+/-! ## Foundations.EvenCounts -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -5883,7 +5890,7 @@ end BayesOptimal.Foundations.EvenCounts
 
 end
 
-/-! ## 22. Foundations.EvenDrift -/
+/-! ## Foundations.EvenDrift -/
 section
 
 namespace BayesOptimal.Foundations.EvenDrift
@@ -6057,7 +6064,7 @@ end BayesOptimal.Foundations.EvenDrift
 
 end
 
-/-! ## 23. Foundations.EvenDynamicGain -/
+/-! ## Foundations.EvenDynamicGain -/
 section
 
 /-!
@@ -6307,7 +6314,7 @@ end BayesOptimal.Foundations.EvenDynamicGain
 
 end
 
-/-! ## 24. Foundations.EvenDynamicPolicy -/
+/-! ## Foundations.EvenDynamicPolicy -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -6591,7 +6598,7 @@ end BayesOptimal.Foundations.EvenDynamicPolicy
 
 end
 
-/-! ## 25. Foundations.PosteriorRegret -/
+/-! ## Foundations.PosteriorRegret -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -6746,7 +6753,7 @@ end BayesOptimal.Foundations.PosteriorRegret
 
 end
 
-/-! ## 26. Foundations.MainBridge -/
+/-! ## Foundations.MainBridge -/
 section
 
 /-!
@@ -6906,7 +6913,7 @@ end BayesOptimal.Foundations.MainBridge
 
 end
 
-/-! ## 27. Foundations.PolicyPaths -/
+/-! ## Foundations.PolicyPaths -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -7038,7 +7045,7 @@ end BayesOptimal.Foundations.PolicyPaths
 
 end
 
-/-! ## 28. Foundations.FrequentistModel -/
+/-! ## Foundations.FrequentistModel -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -7186,7 +7193,7 @@ end BayesOptimal.Foundations.FrequentistModel
 
 end
 
-/-! ## 29. Foundations.Execution -/
+/-! ## Foundations.Execution -/
 section
 
 namespace BayesOptimal.Foundations.Execution
@@ -7271,7 +7278,7 @@ end BayesOptimal.Foundations.Execution
 
 end
 
-/-! ## 30. Foundations.PathInduction -/
+/-! ## Foundations.PathInduction -/
 section
 
 namespace BayesOptimal.Foundations.PathInduction
@@ -7356,7 +7363,7 @@ end BayesOptimal.Foundations.PathInduction
 
 end
 
-/-! ## 31. Foundations.Optimality -/
+/-! ## Foundations.Optimality -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -7469,7 +7476,7 @@ end BayesOptimal.Foundations.Optimality
 
 end
 
-/-! ## 32. Foundations.PosteriorLaw -/
+/-! ## Foundations.PosteriorLaw -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -7670,7 +7677,7 @@ end BayesOptimal.Foundations.PosteriorLaw
 
 end
 
-/-! ## 33. Foundations.MainTheorem -/
+/-! ## Foundations.MainTheorem -/
 section
 
 /-!
@@ -7845,7 +7852,7 @@ end BayesOptimal.Foundations.MainTheorem
 
 end
 
-/-! ## 34. Foundations.Regression -/
+/-! ## Foundations.Regression -/
 section
 
 /-!
@@ -7906,7 +7913,7 @@ end BayesOptimal.Foundations.Regression
 
 end
 
-/-! ## 35. FiniteGaussian -/
+/-! ## FiniteGaussian -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -8137,7 +8144,7 @@ end BayesOptimal.FiniteGaussian
 
 end
 
-/-! ## 36. FinitePosterior -/
+/-! ## FinitePosterior -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -8559,7 +8566,7 @@ end BayesOptimal.FinitePosterior
 
 end
 
-/-! ## 37. FiniteModelExclusion -/
+/-! ## FiniteModelExclusion -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -8865,7 +8872,7 @@ end BayesOptimal.FiniteModelExclusion
 
 end
 
-/-! ## 38. MockStream -/
+/-! ## MockStream -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -9077,7 +9084,7 @@ end BayesOptimal.MockStream
 
 end
 
-/-! ## 39. FiniteModelMeasurable -/
+/-! ## FiniteModelMeasurable -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -9218,7 +9225,7 @@ end BayesOptimal.FiniteModelMeasurable
 
 end
 
-/-! ## 40. MockSample -/
+/-! ## MockSample -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -9472,7 +9479,7 @@ end BayesOptimal.MockSample
 
 end
 
-/-! ## 41. EmbeddingDirect -/
+/-! ## EmbeddingDirect -/
 section
 
 set_option linter.unusedSectionVars false
@@ -9661,7 +9668,7 @@ end BayesOptimal.EmbeddingDirect
 
 end
 
-/-! ## 42. EmbeddingRaw -/
+/-! ## EmbeddingRaw -/
 section
 
 set_option linter.unusedSectionVars false
@@ -9844,7 +9851,7 @@ end BayesOptimal.EmbeddingRaw
 
 end
 
-/-! ## 43. MockPolicy -/
+/-! ## MockPolicy -/
 section
 
 set_option linter.unusedSectionVars false
@@ -10048,7 +10055,7 @@ end BayesOptimal.MockPolicy
 
 end
 
-/-! ## 44. ObservationBridge -/
+/-! ## ObservationBridge -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -10301,7 +10308,7 @@ end BayesOptimal.ObservationBridge
 
 end
 
-/-! ## 45. EmbeddingExecution -/
+/-! ## EmbeddingExecution -/
 section
 
 set_option linter.unusedSectionVars false
@@ -10704,7 +10711,7 @@ end BayesOptimal.EmbeddingExecution
 
 end
 
-/-! ## 46. MockMeasurable -/
+/-! ## MockMeasurable -/
 section
 
 set_option linter.unusedSectionVars false
@@ -10915,7 +10922,7 @@ end BayesOptimal.MockMeasurable
 
 end
 
-/-! ## 47. MockMeasure -/
+/-! ## MockMeasure -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -10987,7 +10994,7 @@ end BayesOptimal.MockMeasure
 
 end
 
-/-! ## 48. MockLaw -/
+/-! ## MockLaw -/
 section
 
 set_option linter.unusedSectionVars false
@@ -11074,7 +11081,7 @@ end BayesOptimal.MockLaw
 
 end
 
-/-! ## 49. EmbeddingRandomized -/
+/-! ## EmbeddingRandomized -/
 section
 
 set_option linter.unusedSectionVars false
@@ -11178,7 +11185,7 @@ end BayesOptimal.EmbeddingRandomized
 
 end
 
-/-! ## 50. MockRisk -/
+/-! ## MockRisk -/
 section
 
 set_option linter.unusedSectionVars false
@@ -11349,7 +11356,7 @@ end BayesOptimal.MockRisk
 
 end
 
-/-! ## 51. MockTie -/
+/-! ## MockTie -/
 section
 
 set_option linter.unusedSectionVars false
@@ -11830,7 +11837,7 @@ end BayesOptimal.MockTie
 
 end
 
-/-! ## 52. JointGaussianMeasurable -/
+/-! ## JointGaussianMeasurable -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -12016,7 +12023,7 @@ end BayesOptimal.JointGaussianMeasurable
 
 end
 
-/-! ## 53. FlatPriorInitialization -/
+/-! ## FlatPriorInitialization -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -12125,7 +12132,7 @@ end BayesOptimal.FlatPriorInitialization
 
 end
 
-/-! ## 54. FlatPriorProduct -/
+/-! ## FlatPriorProduct -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -12239,7 +12246,7 @@ end BayesOptimal.FlatPriorProduct
 
 end
 
-/-! ## 55. AdaptivePosteriorSufficiency -/
+/-! ## AdaptivePosteriorSufficiency -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -12350,7 +12357,7 @@ end BayesOptimal.AdaptivePosteriorSufficiency
 
 end
 
-/-! ## 56. BayesOptimal -/
+/-! ## DecisionRules -/
 section
 
 namespace BayesOptimal.DecisionRules
@@ -12426,7 +12433,7 @@ end BayesOptimal.DecisionRules
 
 end
 
-/-! ## 57. CountComparison -/
+/-! ## CountComparison -/
 section
 
 set_option warningAsError true
@@ -12623,7 +12630,7 @@ end BayesOptimal.Comparison
 
 end
 
-/-! ## 58. Dynamic -/
+/-! ## Dynamic -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -12923,7 +12930,7 @@ end BayesOptimal.Dynamic
 
 end
 
-/-! ## 59. Exclusion -/
+/-! ## Exclusion -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -13185,7 +13192,7 @@ end BayesOptimal.Exclusion
 
 end
 
-/-! ## 60. ExclusionTail -/
+/-! ## ExclusionTail -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -13284,7 +13291,7 @@ end BayesOptimal.ExclusionTail
 
 end
 
-/-! ## 61. ExclusionBounds -/
+/-! ## ExclusionBounds -/
 section
 
 open MeasureTheory ProbabilityTheory Filter Asymptotics
@@ -13382,7 +13389,7 @@ end BayesOptimal.ExclusionBounds
 
 end
 
-/-! ## 62. ExclusionPerm -/
+/-! ## ExclusionPerm -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -13487,7 +13494,7 @@ end BayesOptimal.ExclusionPerm
 
 end
 
-/-! ## 63. GaussianComparison -/
+/-! ## GaussianComparison -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -13633,7 +13640,7 @@ end BayesOptimal.Comparison.Gaussian
 
 end
 
-/-! ## 64. Marginal -/
+/-! ## Marginal -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter Asymptotics
@@ -13786,7 +13793,7 @@ end BayesOptimal.Marginal
 
 end
 
-/-! ## 65. MarginalTerminal -/
+/-! ## MarginalTerminal -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter Asymptotics
@@ -13938,7 +13945,7 @@ end BayesOptimal.Marginal
 
 end
 
-/-! ## 66. Forecast -/
+/-! ## Forecast -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -14150,7 +14157,7 @@ end BayesOptimal.Forecast
 
 end
 
-/-! ## 67. ForecastTerminal -/
+/-! ## ForecastTerminal -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -14237,7 +14244,7 @@ end BayesOptimal.Forecast
 
 end
 
-/-! ## 68. PolicyChoice -/
+/-! ## PolicyChoice -/
 section
 
 open MeasureTheory ProbabilityTheory Filter Asymptotics
@@ -14371,7 +14378,7 @@ end BayesOptimal.PolicyChoice
 
 end
 
-/-! ## 69. ChoiceAsymptotic -/
+/-! ## ChoiceAsymptotic -/
 section
 
 open Filter Asymptotics
@@ -14459,7 +14466,7 @@ end BayesOptimal.PolicyChoice
 
 end
 
-/-! ## 70. TwoArmOptimal -/
+/-! ## TwoArmOptimal -/
 section
 
 /-!
@@ -14661,7 +14668,7 @@ end BayesOptimal.TwoArmOptimal
 
 end
 
-/-! ## 71. Information -/
+/-! ## Information -/
 section
 
 /-! Information cannot increase optimal posterior expected regret.
@@ -14814,7 +14821,7 @@ end BayesOptimal.Information
 
 end
 
-/-! ## 72. ForecastRules -/
+/-! ## ForecastRules -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -14970,7 +14977,7 @@ end BayesOptimal.Forecast
 
 end
 
-/-! ## 73. CommonSample -/
+/-! ## CommonSample -/
 section
 
 /-! Explicit common observation streams and deterministic observation schedules.
@@ -15221,7 +15228,7 @@ end BayesOptimal.CommonSample
 
 end
 
-/-! ## 74. Coupling19Counts -/
+/-! ## Coupling19Counts -/
 section
 
 /-! A single globally fixed left-tie rule cannot supply the skip orientation
@@ -15380,7 +15387,7 @@ end BayesOptimal.Coupling19
 
 end
 
-/-! ## 75. Coupling19 -/
+/-! ## Coupling19 -/
 section
 
 /-! Explicit arm-dependent optimal allocations, permutation of their common
@@ -15637,7 +15644,7 @@ end BayesOptimal.Coupling19
 
 end
 
-/-! ## 76. Coupling19Rates -/
+/-! ## Coupling19Rates -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -15787,7 +15794,7 @@ end BayesOptimal.Coupling19
 
 end
 
-/-! ## 77. Coupling19Saturated -/
+/-! ## Coupling19Saturated -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -15950,7 +15957,7 @@ end BayesOptimal.Coupling19
 
 end
 
-/-! ## 78. CommonSampleLaw -/
+/-! ## CommonSampleLaw -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -16128,7 +16135,7 @@ end BayesOptimal.CommonSample
 
 end
 
-/-! ## 79. CommonSampleJoint -/
+/-! ## CommonSampleJoint -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -16279,7 +16286,7 @@ end BayesOptimal.CommonSample
 
 end
 
-/-! ## 80. CommonSampleIntegral -/
+/-! ## CommonSampleIntegral -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -16368,7 +16375,7 @@ end BayesOptimal.CommonSample
 
 end
 
-/-! ## 81. CountModelBridge -/
+/-! ## CountModelBridge -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -16452,7 +16459,7 @@ end BayesOptimal.CountModelBridge
 
 end
 
-/-! ## 82. Coupling19Stream -/
+/-! ## Coupling19Stream -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -16542,7 +16549,7 @@ end BayesOptimal.Coupling19
 
 end
 
-/-! ## 83. EmbeddingCoupling -/
+/-! ## EmbeddingCoupling -/
 section
 
 set_option linter.unusedSectionVars false
@@ -16747,7 +16754,7 @@ end BayesOptimal.EmbeddingCoupling
 
 end
 
-/-! ## 84. EmbeddingMeasurable -/
+/-! ## EmbeddingMeasurable -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -16886,7 +16893,7 @@ end BayesOptimal.EmbeddingMeasurable
 
 end
 
-/-! ## 85. PolicyEmbedding -/
+/-! ## PolicyEmbedding -/
 section
 
 set_option linter.unusedSectionVars false
@@ -17040,14 +17047,14 @@ end BayesOptimal.PolicyEmbedding
 
 end
 
-/-! ## 86. EmbeddingAudit -/
+/-! ## EmbeddingAudit -/
 section
 
 
 
 end
 
-/-! ## 87. Probability -/
+/-! ## Probability -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -17258,7 +17265,7 @@ end BayesOptimal.Probability
 
 end
 
-/-! ## 88. ProbabilityModel -/
+/-! ## ProbabilityModel -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -17381,7 +17388,7 @@ end BayesOptimal.Probability
 
 end
 
-/-! ## 89. Policy -/
+/-! ## Policy -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -17524,7 +17531,7 @@ end BayesOptimal.Policy
 
 end
 
-/-! ## 90. PathInduction -/
+/-! ## PathInduction -/
 section
 
 namespace BayesOptimal.PathInduction
@@ -17672,7 +17679,7 @@ end BayesOptimal.PathInduction
 
 end
 
-/-! ## 91. Empirical -/
+/-! ## Empirical -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -17746,7 +17753,7 @@ end BayesOptimal.Empirical
 
 end
 
-/-! ## 92. ExclusionAsymptotics -/
+/-! ## ExclusionAsymptotics -/
 section
 
 open Filter Asymptotics
@@ -17793,7 +17800,7 @@ end BayesOptimal.ExclusionAsymptotics
 
 end
 
-/-! ## 93. ExclusionLoss -/
+/-! ## ExclusionLoss -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -17930,14 +17937,14 @@ end BayesOptimal.ExclusionLoss
 
 end
 
-/-! ## 94. ExclusionAudit -/
+/-! ## ExclusionAudit -/
 section
 
 
 
 end
 
-/-! ## 95. ExclusionVarianceComparison -/
+/-! ## ExclusionVarianceComparison -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -17999,7 +18006,7 @@ end BayesOptimal.ExclusionVarianceComparison
 
 end
 
-/-! ## 96. FixedGaussianAbsoluteContinuous -/
+/-! ## FixedGaussianAbsoluteContinuous -/
 section
 
 set_option linter.unusedSectionVars false
@@ -18050,7 +18057,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 97. FixedGaussianLaws -/
+/-! ## FixedGaussianLaws -/
 section
 
 set_option linter.unusedSectionVars false
@@ -18150,7 +18157,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 98. FixedGaussianTransfer -/
+/-! ## FixedGaussianTransfer -/
 section
 
 set_option linter.unusedSectionVars false
@@ -18239,7 +18246,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 99. PolicyContinuation -/
+/-! ## PolicyContinuation -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -18359,7 +18366,7 @@ end BayesOptimal.PolicyContinuation
 
 end
 
-/-! ## 100. PolicyContinuationOptimal -/
+/-! ## PolicyContinuationOptimal -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -18436,7 +18443,7 @@ end BayesOptimal.PolicyContinuationOptimal
 
 end
 
-/-! ## 101. PolicyAE -/
+/-! ## PolicyAE -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -18564,7 +18571,7 @@ end BayesOptimal.Policy
 
 end
 
-/-! ## 102. PolicySeeds -/
+/-! ## PolicySeeds -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -18773,7 +18780,7 @@ end BayesOptimal.Policy
 
 end
 
-/-! ## 103. PolicyAEExecution -/
+/-! ## PolicyAEExecution -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -18833,7 +18840,7 @@ end BayesOptimal.Policy
 
 end
 
-/-! ## 104. ProbabilityPolynomial -/
+/-! ## ProbabilityPolynomial -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -18957,7 +18964,7 @@ end BayesOptimal.Probability
 
 end
 
-/-! ## 105. TailRatio -/
+/-! ## TailRatio -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter
@@ -19121,7 +19128,7 @@ end BayesOptimal.TailRatio
 
 end
 
-/-! ## 106. ProbabilityExact -/
+/-! ## ProbabilityExact -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter
@@ -19236,7 +19243,7 @@ end BayesOptimal.Probability
 
 end
 
-/-! ## 107. RegretExponent -/
+/-! ## RegretExponent -/
 section
 
 open Filter
@@ -19341,7 +19348,7 @@ end BayesOptimal.RegretExponent
 
 end
 
-/-! ## 108. Main -/
+/-! ## Main -/
 section
 
 open MeasureTheory ProbabilityTheory Filter Set
@@ -19476,7 +19483,7 @@ end BayesOptimal.Main
 
 end
 
-/-! ## 109. ProbabilityExactRate -/
+/-! ## ProbabilityExactRate -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter
@@ -19624,7 +19631,7 @@ end BayesOptimal.Probability
 
 end
 
-/-! ## 110. MainExactRate -/
+/-! ## MainExactRate -/
 section
 
 open Filter
@@ -19673,7 +19680,7 @@ end BayesOptimal.Main
 
 end
 
-/-! ## 111. RegretRatio -/
+/-! ## RegretRatio -/
 section
 
 open Filter
@@ -19791,7 +19798,7 @@ end BayesOptimal.RegretRatio
 
 end
 
-/-! ## 112. SequentialRisk -/
+/-! ## SequentialRisk -/
 section
 
 open MeasureTheory ProbabilityTheory Filter
@@ -20079,7 +20086,7 @@ end BayesOptimal.SequentialRisk
 
 end
 
-/-! ## 113. InitialOptimalDisintegration -/
+/-! ## InitialOptimalDisintegration -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -20192,7 +20199,7 @@ end BayesOptimal.InitialOptimal
 
 end
 
-/-! ## 114. InitialOptimalPaths -/
+/-! ## InitialOptimalPaths -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -20370,7 +20377,7 @@ end BayesOptimal.InitialOptimal
 
 end
 
-/-! ## 115. FixedGaussianInitialReduction -/
+/-! ## FixedGaussianInitialReduction -/
 section
 
 set_option linter.unusedSectionVars false
@@ -20425,7 +20432,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 116. FixedGaussianStackLaws -/
+/-! ## FixedGaussianStackLaws -/
 section
 
 set_option linter.unusedSectionVars false
@@ -20565,7 +20572,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 117. FixedGaussianStackExecution -/
+/-! ## FixedGaussianStackExecution -/
 section
 
 set_option linter.unusedSectionVars false
@@ -20726,7 +20733,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 118. FixedGaussianInitialized -/
+/-! ## FixedGaussianInitialized -/
 section
 
 set_option linter.unusedSectionVars false
@@ -20834,7 +20841,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 119. FixedGaussianWindows -/
+/-! ## FixedGaussianWindows -/
 section
 
 set_option linter.unusedSectionVars false
@@ -20900,7 +20907,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 120. FixedGaussianStackPath -/
+/-! ## FixedGaussianStackPath -/
 section
 
 set_option autoImplicit false
@@ -21088,7 +21095,7 @@ end BayesOptimal.FixedGaussian.StackPath
 
 end
 
-/-! ## 121. FixedGaussianMainLaw -/
+/-! ## FixedGaussianMainLaw -/
 section
 
 set_option linter.unusedSectionVars false
@@ -21196,7 +21203,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 122. FixedGaussianMain -/
+/-! ## FixedGaussianMain -/
 section
 
 open MeasureTheory ProbabilityTheory Filter
@@ -21279,7 +21286,7 @@ end BayesOptimal.FixedGaussian
 
 end
 
-/-! ## 123. FixedGaussianFlatInitialization -/
+/-! ## FixedGaussianFlatInitialization -/
 section
 
 set_option linter.unusedSectionVars false
@@ -21419,7 +21426,7 @@ end BayesOptimal.FixedGaussian.FlatInitialization
 
 end
 
-/-! ## 124. ProseCorollariesFootnote14 -/
+/-! ## ProseCorollariesFootnote14 -/
 section
 
 set_option autoImplicit false
@@ -21512,7 +21519,7 @@ end BayesOptimal.ProseCorollaries.Footnote14
 
 end
 
-/-! ## 125. Footnote14Scale -/
+/-! ## Footnote14Scale -/
 section
 
 open Filter Asymptotics
@@ -21561,7 +21568,7 @@ end BayesOptimal.Footnote14Scale
 
 end
 
-/-! ## 126. UniformSamplingTail -/
+/-! ## UniformSamplingTail -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter
@@ -21681,7 +21688,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 127. Footnote14Characterization -/
+/-! ## Footnote14Characterization -/
 section
 
 set_option autoImplicit false
@@ -21949,7 +21956,7 @@ end BayesOptimal.Footnote14Characterization
 
 end
 
-/-! ## 128. InitialOptimalHistory -/
+/-! ## InitialOptimalHistory -/
 section
 
 set_option linter.unusedSectionVars false
@@ -22159,7 +22166,7 @@ end BayesOptimal.HistoryPolicy
 
 end
 
-/-! ## 129. RealPrecisionPolicy -/
+/-! ## RealPrecisionPolicy -/
 section
 
 set_option autoImplicit false
@@ -22365,7 +22372,7 @@ end BayesOptimal.RealPrecisionPolicy
 
 end
 
-/-! ## 130. GeneralOptimalityHistory -/
+/-! ## GeneralOptimalityHistory -/
 section
 
 set_option autoImplicit false
@@ -22502,7 +22509,7 @@ end BayesOptimal.GeneralOptimality
 
 end
 
-/-! ## 131. GeneralOptimality -/
+/-! ## GeneralOptimality -/
 section
 
 set_option autoImplicit false
@@ -22666,7 +22673,7 @@ end BayesOptimal.GeneralOptimality
 
 end
 
-/-! ## 132. GeneralOptimalityProper -/
+/-! ## GeneralOptimalityProper -/
 section
 
 set_option autoImplicit false
@@ -22828,7 +22835,7 @@ end BayesOptimal.GeneralOptimality.ProperDomain
 
 end
 
-/-! ## 133. GeneralOptimalityFinite -/
+/-! ## GeneralOptimalityFinite -/
 section
 
 set_option autoImplicit false
@@ -23012,7 +23019,7 @@ end BayesOptimal.GeneralOptimality.FiniteHorizon
 
 end
 
-/-! ## 134. PosteriorStateHistory -/
+/-! ## PosteriorStateHistory -/
 section
 
 set_option autoImplicit false
@@ -23170,7 +23177,7 @@ end BayesOptimal.PosteriorStateHistory
 
 end
 
-/-! ## 135. InitialHistoryMain -/
+/-! ## InitialHistoryMain -/
 section
 
 open Filter
@@ -23237,7 +23244,7 @@ end BayesOptimal.InitialHistoryMain
 
 end
 
-/-! ## 136. InitialOptimalTrace -/
+/-! ## InitialOptimalTrace -/
 section
 
 open MeasureTheory ProbabilityTheory
@@ -23492,7 +23499,7 @@ end BayesOptimal.InitialOptimal
 
 end
 
-/-! ## 137. LemmaRates -/
+/-! ## LemmaRates -/
 section
 
 open Filter Asymptotics
@@ -23570,7 +23577,7 @@ end BayesOptimal.PolicyChoice
 
 end
 
-/-! ## 138. MarginalRates -/
+/-! ## MarginalRates -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter Asymptotics
@@ -23760,7 +23767,7 @@ end BayesOptimal.Marginal
 
 end
 
-/-! ## 139. MarginalCounts -/
+/-! ## MarginalCounts -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter Asymptotics
@@ -23904,7 +23911,7 @@ end BayesOptimal.Marginal
 
 end
 
-/-! ## 140. MarginalStrict -/
+/-! ## MarginalStrict -/
 section
 
 open MeasureTheory ProbabilityTheory Set
@@ -24009,28 +24016,28 @@ end BayesOptimal.Marginal
 
 end
 
-/-! ## 141. MarginalAudit -/
+/-! ## MarginalAudit -/
 section
 
 
 
 end
 
-/-! ## 142. MockAudit -/
+/-! ## MockAudit -/
 section
 
 
 
 end
 
-/-! ## 143. PolicyAEAudit -/
+/-! ## PolicyAEAudit -/
 section
 
 
 
 end
 
-/-! ## 144. ProseCorollariesErrorRate -/
+/-! ## ProseCorollariesErrorRate -/
 section
 
 set_option autoImplicit false
@@ -24259,7 +24266,7 @@ end BayesOptimal.ProseCorollaries
 
 end
 
-/-! ## 145. ProseCorollariesExclusion -/
+/-! ## ProseCorollariesExclusion -/
 section
 
 set_option autoImplicit false
@@ -24345,7 +24352,7 @@ end BayesOptimal.ProseCorollaries
 
 end
 
-/-! ## 146. ProseCorollariesRemark3 -/
+/-! ## ProseCorollariesRemark3 -/
 section
 
 set_option autoImplicit false
@@ -24482,7 +24489,7 @@ end BayesOptimal.ProseCorollaries
 
 end
 
-/-! ## 147. RateComparison -/
+/-! ## RateComparison -/
 section
 
 set_option autoImplicit false
@@ -24593,7 +24600,7 @@ end BayesOptimal.ComparisonChecks.RateChecks
 
 end
 
-/-! ## 148. RealPrecisionMain -/
+/-! ## RealPrecisionMain -/
 section
 
 set_option autoImplicit false
@@ -24770,14 +24777,14 @@ end BayesOptimal.RealPrecisionMain
 
 end
 
-/-! ## 149. TwoArmAudit -/
+/-! ## TwoArmAudit -/
 section
 
 
 
 end
 
-/-! ## 150. UniformSamplingModel -/
+/-! ## UniformSamplingModel -/
 section
 
 set_option linter.unusedSectionVars false
@@ -24909,7 +24916,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 151. UniformSamplingProbability -/
+/-! ## UniformSamplingProbability -/
 section
 
 set_option linter.unusedSectionVars false
@@ -25019,7 +25026,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 152. UniformSamplingRate -/
+/-! ## UniformSamplingRate -/
 section
 
 set_option linter.unusedSectionVars false
@@ -25157,7 +25164,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 153. UniformSamplingConclusion -/
+/-! ## UniformSamplingConclusion -/
 section
 
 set_option linter.unusedSectionVars false
@@ -25292,7 +25299,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 154. UniformSamplingRounding -/
+/-! ## UniformSamplingRounding -/
 section
 
 set_option linter.unusedSectionVars false
@@ -25395,7 +25402,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 155. UniformSampling -/
+/-! ## UniformSampling -/
 section
 
 open MeasureTheory ProbabilityTheory Set Filter
@@ -25450,7 +25457,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## 156. UniformSamplingObservation -/
+/-! ## UniformSamplingObservation -/
 section
 
 set_option linter.unusedSectionVars false
@@ -25571,7 +25578,7 @@ end BayesOptimal.UniformSampling
 
 end
 
-/-! ## Numbered results and the corrected Gaussian-tail equivalence -/
+/-! ## Paper-ordered result signatures -/
 #check BayesOptimal.FinitePosterior.theorem1_global_bayes_optimality
 #check BayesOptimal.FinitePosterior.theorem1_randomized_bayes_optimality
 #check BayesOptimal.GeneralOptimality.MinimizesHistoryRisk
@@ -25587,10 +25594,17 @@ end
 #check BayesOptimal.DecisionRules.optimal_action_iff_EBI_max
 #check BayesOptimal.DecisionRules.terminal_recommendation_iff
 #check BayesOptimal.DecisionRules.optimal_posterior_loss
+-- Theorem 2: complete initialization-only and frequentist-law endpoints
+#check BayesOptimal.RealPrecisionMain.theorem2
+#check BayesOptimal.RealPrecisionMain.theorem2_paper_exponent
+#check BayesOptimal.RealPrecisionMain.theorem2_exponential_rate
 #check BayesOptimal.Main.theorem2
 #check BayesOptimal.Main.theorem2_paper_exponent
 #check BayesOptimal.Main.theorem2_real_exponent
 #check BayesOptimal.Main.theorem2_exponential_rate
+-- Remark 2 and Equation (26)
+#check BayesOptimal.RealPrecisionMain.remark2
+#check BayesOptimal.Main.regret_eq
 #check BayesOptimal.RegretRatio.remark2
 #check BayesOptimal.Probability.lemma3_eventually
 #check BayesOptimal.Probability.lemma4

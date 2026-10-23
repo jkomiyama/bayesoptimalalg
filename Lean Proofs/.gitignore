@@ -1,0 +1,6 @@
+.lake/
+*.olean
+*.ilean
+*.log
+.DS_Store
+Thumbs.db
